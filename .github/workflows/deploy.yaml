@@ -65,7 +65,7 @@ jobs:
         run: NODE_ENV=production pnpm run build
 
       - name: Upload artifact — Demo (dist)
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./dist
 
