@@ -2,11 +2,14 @@
 /* eslint max-lines: 'off' */
 
 // import { asset } from '../lib/data.js';
-import zamIcon from '../images/zam.ico';
-
 import ColorModeSwitcher from '../components/ColorModeSwitcher.astro';
 // import GitHubButton from '../components/GitHubButton.astro';
 // import SearchInput from '../components/SearchInput.astro';
+
+function getAssetPath(path) {
+  const base = import.meta.env.BASE_URL;
+  return `${base}${path}`.replace(/\/\//g, '/');
+}
 ---
 
 <nav
@@ -44,9 +47,9 @@ import ColorModeSwitcher from '../components/ColorModeSwitcher.astro';
 							clip-rule="evenodd"></path></svg
 					>
 				</button>
-				<a href="/" class="flex ml-2 md:mr-24">
+				<a href={getAssetPath("/")} class="flex ml-2 md:mr-24">
 					<img
-						src={zamIcon}
+						src={getAssetPath("/images/zam.ico")}
 						class="h-8 mr-3"
 						alt=""
 					/>
