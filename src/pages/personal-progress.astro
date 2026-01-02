@@ -1,0 +1,1275 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+// Load JSON data directly (same as overview page)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+let killData;
+try {
+  const jsonPath = resolve(__dirname, '../../public/data/data.json');
+  const fs = await import('fs/promises');
+  const fileContents = await fs.readFile(jsonPath, 'utf-8');
+  killData = JSON.parse(fileContents);
+} catch (error) {
+  console.error('Error loading JSON:', error);
+  killData = {
+    meta: { generated_at: new Date().toISOString(), count: 0 },
+    records: []
+  };
+}
+
+// Process unique players
+const playersMap = {};
+killData.records.forEach(record => {
+  const playerName = record.members[0]?.name || 'Unknown';
+  if (!playersMap[playerName]) {
+    playersMap[playerName] = [];
+  }
+  playersMap[playerName].push(record);
+});
+
+const uniquePlayers = Object.keys(playersMap).sort();
+const totalPlayers = uniquePlayers.length;
+
+// Prepare data for client-side
+const playersData = {
+  players: playersMap,
+  uniquePlayers: uniquePlayers
+};
+---
+
+<LayoutSidebar>
+  <!-- Page Header -->
+  <div class="px-4 pt-4 mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Personal Progress Tracker</h1>
+    <p class="text-gray-600 dark:text-gray-300">Track individual player performance and milestones</p>
+  </div>
+
+  <!-- Player Selection Row -->
+  <div class="px-4 mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Main Player Selection -->
+    <div>
+      <label for="player-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Select Player
+      </label>
+      <select 
+        id="player-select"
+        class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 dark:focus:border-blue-600 text-gray-900 dark:text-white transition-colors"
+      >
+        <option value="">-- Choose a player --</option>
+        {uniquePlayers.map(player => (
+          <option value={player}>{player}</option>
+        ))}
+      </select>
+      <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+        {totalPlayers} unique players in dataset
+      </p>
+    </div>
+
+    <!-- Comparison Player Selection -->
+    <div>
+      <label for="compare-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Compare with (Optional)
+      </label>
+      <select 
+        id="compare-select"
+        class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-600 dark:focus:border-green-600 text-gray-900 dark:text-white transition-colors"
+      >
+        <option value="">-- None --</option>
+        {uniquePlayers.map(player => (
+          <option value={player}>{player}</option>
+        ))}
+      </select>
+      <div class="mt-2 flex items-center">
+        <input type="checkbox" id="show-difference" class="mr-2 h-4 w-4 text-blue-600 rounded focus:ring-blue-500">
+        <label for="show-difference" class="text-sm text-gray-700 dark:text-gray-300">
+          Show enrage difference
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards (Hidden until player selected) -->
+  <div id="stats-cards" class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 hidden">
+    <!-- Highest Enrage Card -->
+    <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 p-6 rounded-xl shadow-lg border border-red-200 dark:border-red-900/30">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-red-500 to-red-600 dark:from-red-700 dark:to-red-800 text-white mr-4 shadow">
+          🔥
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+          <p id="highest-enrage" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0%</p>
+          <p id="enrage-date" class="text-xs text-gray-500 dark:text-gray-400 mt-2">--</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Kills Card -->
+    <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 p-6 rounded-xl shadow-lg border border-blue-200 dark:border-blue-900/30">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-700 dark:to-blue-800 text-white mr-4 shadow">
+          ⚔️
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Total Kills</p>
+          <p id="total-kills" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">All time record</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Highest Kills in 24h Card -->
+    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20 p-6 rounded-xl shadow-lg border border-green-200 dark:border-green-900/30">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 dark:from-green-700 dark:to-green-800 text-white mr-4 shadow">
+          ⚡
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Most kills within 24h</p>
+          <p id="most-24h" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0</p>
+          <p id="most-24h-date" class="text-xs text-gray-500 dark:text-gray-400 mt-2">--</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity Card -->
+    <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20 p-6 rounded-xl shadow-lg border border-purple-200 dark:border-purple-900/30">
+      <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-700 dark:to-purple-800 text-white mr-4 shadow">
+          🔄
+        </div>
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Recent Activity</p>
+          <p id="recent-activity" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--</p>
+          <p id="last-kill-details" class="text-xs text-gray-500 dark:text-gray-400 mt-2">Select a player</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Width Graph Section -->
+  <div id="graph-section" class="px-4 mb-8 hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Progress Over Time</h2>
+          <div id="chart-legend" class="flex items-center space-x-4">
+            <!-- Legend will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+      <div class="p-6">
+        <div class="h-96">
+          <canvas id="progress-chart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kill History + Bracket Stats Section -->
+  <div id="kill-table-stats-section" class="px-4 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 hidden">
+    <!-- Personal Kill History Table (2/3 width) -->
+    <div class="lg:col-span-2">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-100 to-gray-100 dark:from-gray-800 dark:to-gray-800">
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Personal Kill History</h2>
+            <span id="table-count" class="text-sm text-gray-600 dark:text-gray-300">0 kills</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-900">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                  Rank
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                  Enrage
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                  Date
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                  Kill Time
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                  Time Since
+                </th>
+              </tr>
+            </thead>
+            <tbody id="kill-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
+              <!-- Will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+          <div class="flex justify-between items-center">
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+              Showing <span id="visible-kills">0</span> kills
+            </div>
+            <div class="flex space-x-2">
+              <button id="prev-page" class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded-lg disabled:opacity-50" disabled>Previous</button>
+              <button id="next-page" class="px-3 py-1 text-sm bg-blue-600 text-white rounded-lg disabled:opacity-50" disabled>Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enrage Bracket Stats (1/3 width) -->
+    <div class="lg:col-span-1">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden h-full">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Bracket Performance</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">Stats by enrage range</p>
+        </div>
+        <div class="p-6">
+          <div id="bracket-stats-container" class="space-y-4">
+            <p class="text-gray-500 dark:text-gray-400 text-center py-8">
+              Select a player to see bracket statistics
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Selection State -->
+  <div id="no-selection-state" class="px-4 text-center py-16">
+    <div class="max-w-md mx-auto">
+      <div class="text-gray-300 dark:text-gray-600 text-6xl mb-6">👤</div>
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Select a Player</h3>
+      <p class="text-gray-600 dark:text-gray-300 mb-8">
+        Choose a player from the dropdown above to view their personal progress, statistics, and insights.
+      </p>
+      <div class="text-sm text-gray-500 dark:text-gray-400">
+        <p>{totalPlayers} players available in dataset</p>
+        <p class="mt-1">Data last updated: {new Date(killData.meta.generated_at).toLocaleString()}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript for interactivity -->
+  <script define:vars={{ playersData }}>
+    // Store all data for client-side processing
+    const allPlayersData = playersData.players;
+    const playersList = playersData.uniquePlayers;
+
+    console.log('Players list loaded:', playersList);
+
+    let themeChangeObserver = null;
+    let currentKillsForChart = null;
+    let comparisonPlayer = '';
+    let comparisonKills = null;
+
+    // Current state
+    let currentPlayer = '';
+    let currentChart = null;
+    let currentPage = 1;
+    const pageSize = 15;
+
+    // Helper functions
+    function formatKillTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = (seconds % 60).toFixed(1);
+        return `${mins}:${secs.padStart(4, '0')}`;
+    }
+
+    function timeAgoDetailed(timestamp) {
+        const now = Math.floor(Date.now() / 1000);
+        const secondsAgo = now - timestamp;
+        
+        const days = Math.floor(secondsAgo / 86400);
+        const hours = Math.floor((secondsAgo % 86400) / 3600);
+        const minutes = Math.floor((secondsAgo % 3600) / 60);
+        
+        if (days > 0) {
+            if (hours > 0) {
+                return `${days}d ${hours}h ago`;
+            }
+            return `${days}d ago`;
+        }
+        if (hours > 0) {
+            if (minutes > 0) {
+                return `${hours}h ${minutes}m ago`;
+            }
+            return `${hours}h ago`;
+        }
+        return `${minutes}m ago`;
+    }
+
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    function formatDateTime(timestamp) {
+        const date = new Date(timestamp * 1000);
+        return date.toLocaleDateString('en-US', {
+            timezone: userTimezone,
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    // Calculate most kills in 24h period
+    function calculateMostKills24h(kills) {
+        if (kills.length === 0) return { count: 0, date: '--' };
+        
+        // Sort by time
+        const sortedKills = [...kills].sort((a, b) => a.timeOfKill - b.timeOfKill);
+        let maxKills = 0;
+        let bestDate = '';
+        
+        for (let i = 0; i < sortedKills.length; i++) {
+            const startTime = sortedKills[i].timeOfKill;
+            const endTime = startTime + 86400; // 24 hours in seconds
+            
+            let j = i;
+            while (j < sortedKills.length && sortedKills[j].timeOfKill <= endTime) {
+                j++;
+            }
+            
+            const killsIn24h = j - i;
+            if (killsIn24h > maxKills) {
+                maxKills = killsIn24h;
+                bestDate = formatDateTime(startTime);
+            }
+        }
+        
+        return {
+            count: maxKills,
+            date: bestDate
+        };
+    }
+
+    // Process player kills data
+    function processPlayerKills(playerRecords) {
+        return playerRecords.map(record => ({
+            enrage: record.enrage,
+            timeOfKill: record.timeOfKill,
+            killTimeSeconds: record.killTimeSeconds,
+            formattedDate: formatDateTime(record.timeOfKill),
+            formattedKillTime: formatKillTime(record.killTimeSeconds),
+            timeAgoDetailed: timeAgoDetailed(record.timeOfKill),
+            date: new Date(record.timeOfKill * 1000)
+        })).sort((a, b) => a.timeOfKill - b.timeOfKill); // Sort by time for proper chart display
+    }
+
+    // Handle player selection
+    function handlePlayerSelect(playerName) {
+        console.log('Selected player:', playerName);
+        
+        currentPlayer = playerName;
+        currentPage = 1;
+        
+        if (!playerName) {
+            showNoSelectionState();
+            return;
+        }
+        
+        // Get player data
+        const playerRecords = allPlayersData[playerName];
+        console.log('Player records found:', playerRecords ? playerRecords.length : 0);
+        
+        if (!playerRecords || playerRecords.length === 0) {
+            alert('Player data not found');
+            return;
+        }
+        
+        // Process the records into kills format
+        const playerKills = processPlayerKills(playerRecords);
+
+        // Store kills globally for theme changes
+        currentKillsForChart = playerKills;
+        
+        console.log('Processed kills:', playerKills.length);
+        
+        processPlayerStats(playerKills, playerName);
+        showPlayerContent();
+        renderKillTable(playerKills);
+        renderBracketStats(playerKills);
+        initializeChart(playerKills);
+    }
+
+    // Handle comparison player selection
+    function handleComparisonSelect(comparePlayerName) {
+        console.log('Comparison player selected:', comparePlayerName);
+        
+        comparisonPlayer = comparePlayerName;
+        
+        if (!comparePlayerName) {
+            comparisonKills = null;
+            // Reinitialize chart without comparison
+            if (currentKillsForChart) {
+                initializeChart(currentKillsForChart);
+            }
+            return;
+        }
+        
+        // Get comparison player data
+        const compareRecords = allPlayersData[comparePlayerName];
+        
+        if (!compareRecords || compareRecords.length === 0) {
+            alert('Comparison player data not found');
+            return;
+        }
+        
+        // Process comparison kills
+        comparisonKills = processPlayerKills(compareRecords);
+        
+        // Update chart with comparison
+        if (currentKillsForChart) {
+            initializeChart(currentKillsForChart);
+        }
+    }
+
+    function processPlayerStats(kills, playerName) {
+        if (kills.length === 0) return;
+        
+        // Simple client-side stats calculation
+        const totalKills = kills.length;
+        const highestEnrage = Math.max(...kills.map(k => k.enrage));
+        const mostRecent = kills[kills.length - 1]; // Last one after time sort
+        const most24h = calculateMostKills24h(kills);
+        
+        // Update DOM
+        document.getElementById('total-kills').textContent = totalKills;
+        document.getElementById('highest-enrage').textContent = highestEnrage.toLocaleString() + '%';
+        document.getElementById('most-24h').textContent = most24h.count;
+        document.getElementById('most-24h-date').textContent = most24h.date !== '--' ? `On ${most24h.date}` : '--';
+        
+        // Recent activity with hours/minutes if <24h
+        const now = Math.floor(Date.now() / 1000);
+        const secondsAgo = now - mostRecent.timeOfKill;
+        const hours = Math.floor(secondsAgo / 3600);
+        const minutes = Math.floor((secondsAgo % 3600) / 60);
+        
+        if (hours < 24) {
+            document.getElementById('recent-activity').textContent = `${hours}h ${minutes}m ago`;
+        } else {
+            const days = Math.floor(hours / 24);
+            document.getElementById('recent-activity').textContent = `${days}d ago`;
+        }
+        
+        document.getElementById('enrage-date').textContent = `Latest: ${mostRecent.formattedDate}`;
+        document.getElementById('last-kill-details').textContent = `Last kill: ${mostRecent.formattedKillTime}`;
+    }
+
+    function showNoSelectionState() {
+        console.log('Showing no selection state');
+        
+        // Hide all content sections safely
+        const sectionsToHide = ['stats-cards', 'graph-section', 'kill-table-stats-section'];
+        sectionsToHide.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.add('hidden');
+            } else {
+                console.warn(`Element with id "${id}" not found`);
+            }
+        });
+        
+        // Show no selection state
+        const noSelectElement = document.getElementById('no-selection-state');
+        if (noSelectElement) {
+            noSelectElement.classList.remove('hidden');
+        } else {
+            console.error('Element with id "no-selection-state" not found');
+        }
+    }
+
+    function showPlayerContent() {
+        console.log('Showing player content');
+        
+        // Hide no selection state
+        const noSelectElement = document.getElementById('no-selection-state');
+        if (noSelectElement) {
+            noSelectElement.classList.add('hidden');
+        }
+        
+        // Show all content sections safely
+        const sectionsToShow = ['stats-cards', 'graph-section', 'kill-table-stats-section'];
+        sectionsToShow.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.remove('hidden');
+            } else {
+                console.warn(`Element with id "${id}" not found`);
+            }
+        });
+    }
+
+    function renderKillTable(kills) {
+        // Sort kills by date descending for table display
+        const tableKills = [...kills].sort((a, b) => b.timeOfKill - a.timeOfKill);
+        
+        const tableBody = document.getElementById('kill-table-body');
+        const visibleKillsSpan = document.getElementById('visible-kills');
+        const tableCountSpan = document.getElementById('table-count');
+        
+        if (!tableBody || !visibleKillsSpan || !tableCountSpan) {
+            console.error('Required table elements not found');
+            return;
+        }
+        
+        // Clear existing rows
+        tableBody.innerHTML = '';
+        
+        // Update counts
+        tableCountSpan.textContent = `${tableKills.length} kills`;
+        
+        // Calculate pagination
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = Math.min(startIndex + pageSize, tableKills.length);
+        const pageKills = tableKills.slice(startIndex, endIndex);
+        
+        visibleKillsSpan.textContent = `${startIndex + 1}-${endIndex} of ${tableKills.length}`;
+        
+        // Update pagination buttons
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+        if (prevBtn) prevBtn.disabled = currentPage === 1;
+        if (nextBtn) nextBtn.disabled = endIndex >= tableKills.length;
+        
+        // Render rows
+        pageKills.forEach((kill, index) => {
+            const globalIndex = startIndex + index + 1;
+            
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150';
+            
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                    ${globalIndex}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-lg font-bold ${getEnrageColorClass(kill.enrage)}">
+                        ${kill.enrage.toLocaleString()}%
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+                    ${kill.formattedDate}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="font-mono font-semibold text-gray-900 dark:text-white">
+                        ${kill.formattedKillTime}
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                        ${kill.killTimeSeconds.toFixed(1)} seconds
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                        ${kill.timeAgoDetailed}
+                    </div>
+                </td>
+            `;
+            
+            tableBody.appendChild(row);
+        });
+        
+        // Add pagination event listeners
+        if (prevBtn) {
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderKillTable(kills);
+                }
+            };
+        }
+        
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                if (endIndex < tableKills.length) {
+                    currentPage++;
+                    renderKillTable(kills);
+                }
+            };
+        }
+    }
+
+    function getEnrageColorClass(enrage) {
+        if (enrage >= 40000) return 'text-purple-700 dark:text-purple-400';
+        if (enrage >= 30000) return 'text-red-700 dark:text-red-400';
+        if (enrage >= 20000) return 'text-orange-700 dark:text-orange-400';
+        if (enrage >= 10000) return 'text-yellow-700 dark:text-yellow-400';
+        if (enrage >= 5000) return 'text-green-700 dark:text-green-400';
+        return 'text-blue-700 dark:text-blue-400';
+    }
+
+    function renderBracketStats(kills) {
+        const container = document.getElementById('bracket-stats-container');
+        if (!container) {
+            console.error('Bracket stats container not found');
+            return;
+        }
+        
+        if (kills.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No bracket data available</p>';
+            return;
+        }
+        
+        // Define brackets
+        const bracketRanges = [
+            { min: 0, max: 4999, label: '0-5k', color: 'blue' },
+            { min: 5000, max: 9999, label: '5-10k', color: 'green' },
+            { min: 10000, max: 14999, label: '10-15k', color: 'yellow' },
+            { min: 15000, max: 19999, label: '15-20k', color: 'orange' },
+            { min: 20000, max: 24999, label: '20-25k', color: 'red' },
+            { min: 25000, max: 29999, label: '25-30k', color: 'purple' },
+            { min: 30000, max: Infinity, label: '30k+', color: 'pink' }
+        ];
+        
+        const bracketData = bracketRanges.map(range => {
+            const bracketKills = kills.filter(k => k.enrage >= range.min && k.enrage <= range.max);
+            
+            if (bracketKills.length === 0) return null;
+            
+            const avgTime = bracketKills.reduce((sum, k) => sum + k.killTimeSeconds, 0) / bracketKills.length;
+            const fastest = bracketKills.reduce((fastest, k) => 
+                k.killTimeSeconds < fastest.killTimeSeconds ? k : fastest
+            );
+            
+            // Format the date and time for the fastest kill
+            const fastestDate = new Date(fastest.timeOfKill * 1000);
+            const formattedFastestDate = fastestDate.toLocaleDateString('en-US', {
+                timeZone: userTimezone,
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            const formattedFastestTime = fastestDate.toLocaleTimeString('en-US', {
+                timeZone: userTimezone,
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            
+            return {
+                ...range,
+                kills: bracketKills.length,
+                avgTime: formatKillTime(avgTime),
+                fastestTime: formatKillTime(fastest.killTimeSeconds),
+                fastestKill: fastest,
+                formattedFastestDate: formattedFastestDate,
+                formattedFastestTime: formattedFastestTime,
+                fastestEnrage: fastest.enrage
+            };
+        }).filter(b => b !== null);
+        
+        if (bracketData.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No kills in standard brackets</p>';
+            return;
+        }
+        
+        container.innerHTML = bracketData.map(bracket => `
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="font-bold text-gray-900 dark:text-white">${bracket.label}</h4>
+                    <span class="px-2 py-1 text-xs font-semibold ${getBracketColorClass(bracket.min)} rounded">
+                        ${bracket.kills} kill${bracket.kills !== 1 ? 's' : ''}
+                    </span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 text-sm mb-3">
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">Avg Time</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">${bracket.avgTime}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">Fastest</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">${bracket.fastestTime}</p>
+                    </div>
+                </div>
+                
+                <!-- Fastest Kill Details -->
+                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Fastest Kill Details:</p>
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-xs text-gray-600 dark:text-gray-400">Date:</span>
+                            <span class="text-xs font-medium text-gray-900 dark:text-white">${bracket.formattedFastestDate}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-xs text-gray-600 dark:text-gray-400">Time:</span>
+                            <span class="text-xs font-medium text-gray-900 dark:text-white">${bracket.formattedFastestTime}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-xs text-gray-600 dark:text-gray-400">Enrage:</span>
+                            <span class="text-xs font-medium ${getEnrageColorClass(bracket.fastestEnrage)}">
+                                ${bracket.fastestEnrage.toLocaleString()}%
+                            </span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-xs text-gray-600 dark:text-gray-400">Time Since:</span>
+                            <span class="text-xs font-medium text-blue-600 dark:text-blue-400">
+                                ${timeAgoDetailed(bracket.fastestKill.timeOfKill)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress bar showing bracket completion -->
+                ${bracket.kills > 1 ? `
+                    <div class="mt-3">
+                        <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
+                            <span>Bracket Range:</span>
+                            <span>${bracket.min.toLocaleString()}% - ${bracket.max === Infinity ? '∞' : bracket.max.toLocaleString() + '%'}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                            <div class="h-1.5 rounded-full ${getBracketProgressColor(bracket.min)}" 
+                                style="width: ${calculateBracketProgress(bracket)}%"></div>
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+        `).join('');
+    }
+
+    // Helper function to get bracket progress color
+    function getBracketProgressColor(minEnrage) {
+        if (minEnrage >= 30000) return 'bg-purple-600';
+        if (minEnrage >= 25000) return 'bg-red-600';
+        if (minEnrage >= 20000) return 'bg-orange-600';
+        if (minEnrage >= 15000) return 'bg-yellow-600';
+        if (minEnrage >= 10000) return 'bg-green-600';
+        if (minEnrage >= 5000) return 'bg-blue-600';
+        return 'bg-gray-600';
+    }
+
+    // Helper function to calculate bracket progress (simplified)
+    function calculateBracketProgress(bracket) {
+        // This is a simplified progress calculation - you might want to adjust this
+        if (bracket.kills === 0) return 0;
+        
+        // More kills = more progress, capped at 100%
+        const progress = Math.min(bracket.kills * 10, 100);
+        return progress;
+    }
+
+    function getBracketColorClass(minEnrage) {
+        if (minEnrage >= 30000) return 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300';
+        if (minEnrage >= 25000) return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+        if (minEnrage >= 20000) return 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300';
+        if (minEnrage >= 15000) return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300';
+        if (minEnrage >= 10000) return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
+        if (minEnrage >= 5000) return 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300';
+        return 'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300';
+    }
+
+    function isDark() {
+        return document.documentElement.classList.contains('dark');
+    }
+
+    function setupThemeChangeListener() {
+        // Remove existing observer if any
+        if (themeChangeObserver) {
+            themeChangeObserver.disconnect();
+        }
+        
+        // Create a mutation observer to watch for class changes on html element
+        themeChangeObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    console.log('Theme changed, updating chart...');
+                    // If we have current kills data, recreate the chart
+                    if (currentKillsForChart && currentPlayer) {
+                        // Small delay to ensure theme is fully applied
+                        setTimeout(() => {
+                            initializeChart(currentKillsForChart);
+                        }, 100);
+                    }
+                }
+            });
+        });
+        
+        // Start observing the html element for class changes
+        themeChangeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+        
+        console.log('Theme change listener set up');
+    }
+
+    // Helper function to interpolate data points for comparison
+    function interpolateDataPoints(mainKills, comparisonKills) {
+        if (!comparisonKills || comparisonKills.length === 0) return [];
+        
+        const result = [];
+        
+        mainKills.forEach(mainKill => {
+            // Find the closest comparison kill within a reasonable time window
+            let closest = null;
+            let minTimeDiff = Infinity;
+            
+            comparisonKills.forEach(compareKill => {
+                const timeDiff = Math.abs(mainKill.timeOfKill - compareKill.timeOfKill);
+                // Consider kills within 7 days as comparable
+                if (timeDiff < 604800 && timeDiff < minTimeDiff) {
+                    minTimeDiff = timeDiff;
+                    closest = compareKill;
+                }
+            });
+            
+            if (closest) {
+                result.push(mainKill.enrage - closest.enrage);
+            } else {
+                result.push(null);
+            }
+        });
+        
+        return result;
+    }
+
+    function initializeChart(kills) {
+        console.log('Initializing chart with', kills.length, 'data points');
+        
+        currentKillsForChart = kills;
+
+        const isDarkMode = isDark();
+        const canvas = document.getElementById('progress-chart');
+        if (!canvas) {
+            console.error('Canvas element not found');
+            return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+
+        console.log('Creating chart with isDarkMode:', isDarkMode);
+                
+        // Define colors based on mode
+        const textColor = isDarkMode ? '#D1D5DB' : '#374151';
+        const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
+        const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
+        
+        // Destroy existing chart
+        if (currentChart) {
+            currentChart.destroy();
+        }
+        
+        // Sort kills by date for chart (already sorted by processPlayerKills)
+        const sortedKills = kills;
+        
+        console.log('Sorted kills by time:', sortedKills.length);
+        
+        if (sortedKills.length === 0) {
+            console.error('No sorted kills data');
+            return;
+        }
+        
+        // Function to determine point styling based on data density
+        function getPointStyle(totalPoints, isComparison = false) {
+            // For very dense data, we need minimal styling
+            if (totalPoints > 2000) {
+                return {
+                    pointRadius: 0, // No points at all
+                    pointHoverRadius: 2,
+                    pointBorderWidth: 0,
+                    borderWidth: isComparison ? 1.5 : 2,
+                    pointStyle: 'circle',
+                    showLine: true
+                };
+            } else if (totalPoints > 1000) {
+                return {
+                    pointRadius: isComparison ? 0.5 : 1,
+                    pointHoverRadius: 3,
+                    pointBorderWidth: 0,
+                    borderWidth: isComparison ? 1.5 : 2,
+                    pointStyle: 'circle',
+                    showLine: true
+                };
+            } else if (totalPoints > 500) {
+                return {
+                    pointRadius: isComparison ? 1 : 1.5,
+                    pointHoverRadius: 4,
+                    pointBorderWidth: isComparison ? 0.5 : 1,
+                    borderWidth: isComparison ? 1.5 : 2,
+                    pointStyle: 'circle',
+                    showLine: true
+                };
+            } else if (totalPoints > 200) {
+                return {
+                    pointRadius: isComparison ? 1.5 : 2,
+                    pointHoverRadius: 5,
+                    pointBorderWidth: isComparison ? 0.5 : 1,
+                    borderWidth: isComparison ? 2 : 2.5,
+                    pointStyle: 'circle',
+                    showLine: true
+                };
+            } else if (totalPoints > 50) {
+                return {
+                    pointRadius: isComparison ? 2 : 2.5,
+                    pointHoverRadius: 6,
+                    pointBorderWidth: isComparison ? 1 : 1.5,
+                    borderWidth: isComparison ? 2 : 3,
+                    pointStyle: 'circle',
+                    showLine: true
+                };
+            } else {
+                // For sparse data, show nice points
+                return {
+                    pointRadius: isComparison ? 3 : 4,
+                    pointHoverRadius: isComparison ? 5 : 7,
+                    pointBorderWidth: isComparison ? 1.5 : 2,
+                    borderWidth: isComparison ? 2.5 : 3,
+                    pointStyle: 'circle',
+                    showLine: true
+                };
+            }
+        }
+        
+        // Get styles for main dataset
+        const mainStyle = getPointStyle(sortedKills.length, false);
+        
+        // Create date labels for X-axis with dynamic density
+        const dateLabels = sortedKills.map(kill => {
+            const date = new Date(kill.timeOfKill * 1000);
+            const now = new Date();
+            const killDate = new Date(kill.timeOfKill * 1000);
+            const diffDays = Math.floor((now - killDate) / (1000 * 60 * 60 * 24));
+            
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+        });
+        
+        // Prepare datasets
+        const datasets = [
+            {
+                label: currentPlayer,
+                data: sortedKills.map(kill => kill.enrage),
+                borderColor: 'rgb(59, 130, 246)', // Blue for main player
+                backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4, // Smooth curve
+                pointBackgroundColor: 'rgb(59, 130, 246)',
+                pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+                pointBorderWidth: mainStyle.pointBorderWidth,
+                borderWidth: mainStyle.borderWidth,
+                pointRadius: mainStyle.pointRadius,
+                pointHoverRadius: mainStyle.pointHoverRadius,
+                pointStyle: mainStyle.pointStyle,
+                showLine: mainStyle.showLine
+            }
+        ];
+        
+        // Add comparison dataset if selected
+        if (comparisonPlayer && comparisonKills) {
+            const showDifference = document.getElementById('show-difference')?.checked || false;
+            const comparisonStyle = getPointStyle(sortedKills.length, true);
+            
+            if (showDifference) {
+                // Calculate and show difference
+                const differenceData = interpolateDataPoints(sortedKills, comparisonKills);
+                const validDifferences = differenceData.filter(d => d !== null);
+                
+                if (validDifferences.length > 0) {
+                    // For difference line, use thinner styling
+                    const diffStyle = getPointStyle(validDifferences.length, true);
+                    datasets.push({
+                        label: `Difference (${currentPlayer} - ${comparisonPlayer})`,
+                        data: differenceData,
+                        borderColor: 'rgb(239, 68, 68)', // Red for difference
+                        backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        borderDash: [5, 5],
+                        pointBackgroundColor: 'rgb(239, 68, 68)',
+                        pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+                        pointBorderWidth: diffStyle.pointBorderWidth,
+                        borderWidth: diffStyle.borderWidth,
+                        pointRadius: diffStyle.pointRadius,
+                        pointHoverRadius: diffStyle.pointHoverRadius,
+                        pointStyle: diffStyle.pointStyle,
+                        showLine: diffStyle.showLine
+                    });
+                }
+            } else {
+                // Show comparison player's actual data
+                // We need to align the comparison data with the main player's timeline
+                const alignedComparisonData = [];
+                
+                sortedKills.forEach(mainKill => {
+                    // Find comparison kill closest in time
+                    let closest = null;
+                    let minDiff = Infinity;
+                    
+                    comparisonKills.forEach(compareKill => {
+                        const diff = Math.abs(mainKill.timeOfKill - compareKill.timeOfKill);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closest = compareKill;
+                        }
+                    });
+                    
+                    if (closest && minDiff < 604800) { // Within 7 days
+                        alignedComparisonData.push(closest.enrage);
+                    } else {
+                        alignedComparisonData.push(null);
+                    }
+                });
+                
+                datasets.push({
+                    label: comparisonPlayer,
+                    data: alignedComparisonData,
+                    borderColor: 'rgb(16, 185, 129)', // Green for comparison player
+                    backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    pointBackgroundColor: 'rgb(16, 185, 129)',
+                    pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+                    pointBorderWidth: comparisonStyle.pointBorderWidth,
+                    borderWidth: comparisonStyle.borderWidth,
+                    pointRadius: comparisonStyle.pointRadius,
+                    pointHoverRadius: comparisonStyle.pointHoverRadius,
+                    pointStyle: comparisonStyle.pointStyle,
+                    showLine: comparisonStyle.showLine
+                });
+            }
+        }
+        
+        console.log('Creating chart with', datasets.length, 'datasets');
+        
+        try {
+            // Calculate appropriate tick density
+            const xTickDensity = Math.max(1, Math.floor(sortedKills.length / 15));
+            
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dateLabels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Enrage %',
+                                color: titleColor,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: textColor,
+                                font: {
+                                    size: 12
+                                },
+                                callback: function(value) {
+                                    return value.toLocaleString() + '%';
+                                },
+                                padding: 10
+                            },
+                            grid: {
+                                color: gridColor,
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: sortedKills.length,
+                                text: 'Date',
+                                color: titleColor,
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: textColor,
+                                font: {
+                                    size: sortedKills.length > 500 ? 11 : 11
+                                },
+                                maxRotation: sortedKills.length > 200 ? 30 : 30,
+                                minRotation: sortedKills.length > 200 ? 30 : 30,
+                                padding: 10,
+                                callback: function(value, index) {
+                                    // Show fewer labels for dense data
+                                    // if (sortedKills.length > 200 && index % xTickDensity !== 0) {
+                                    //     return '';
+                                    // }
+                                    return dateLabels[index];
+                                },
+                                autoSkip: true,
+                                maxTicksLimit: sortedKills.length > 500 ? 30 : 30
+                            },
+                            grid: {
+                                color: gridColor,
+                                drawBorder: false,
+                                display: sortedKills.length
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: textColor,
+                                font: {
+                                    size: sortedKills.length > 1000 ? 12 : 14,
+                                    weight: '600'
+                                },
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                            titleColor: isDarkMode ? '#F3F4F6' : '#111827',
+                            bodyColor: isDarkMode ? '#D1D5DB' : '#374151',
+                            borderColor: isDarkMode ? '#4B5563' : '#E5E7EB',
+                            borderWidth: 1,
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const index = tooltipItems[0].dataIndex;
+                                    const kill = sortedKills[index];
+                                    if (kill) {
+                                        const date = new Date(kill.timeOfKill * 1000);
+                                        return date.toLocaleDateString('en-US', {
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        });
+                                    }
+                                    return '';
+                                },
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    
+                                    if (value === null) return `${label}: No comparable data`;
+                                    
+                                    if (label.includes('Difference')) {
+                                        return `${label}: ${value > 0 ? '+' : ''}${value.toLocaleString()}%`;
+                                    }
+                                    
+                                    return `${label}: ${value.toLocaleString()}%`;
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest'
+                    },
+                    elements: {
+                        line: {
+                            fill: false
+                        },
+                        point: {
+                            // Adjust point rendering for dense data
+                            hitRadius: sortedKills.length > 500 ? 5 : 10,
+                            hoverRadius: sortedKills.length > 500 ? 6 : 12
+                        }
+                    },
+                    // Performance optimizations for large datasets
+                    animation: {
+                        duration: sortedKills.length > 1000 ? 0 : 1000, // No animation for very large datasets
+                    },
+                    transitions: {
+                        active: {
+                            animation: {
+                                duration: 0 // Disable transitions for large datasets
+                            }
+                        }
+                    }
+                }
+            });
+            
+            console.log('Chart created successfully with dynamic styling');
+        } catch (error) {
+            console.error('Error creating chart:', error);
+            alert('Error creating chart. Check console for details.');
+        }
+
+        // Set up theme change listener on first chart creation
+        if (!themeChangeObserver) {
+            setupThemeChangeListener();
+        }
+    }
+
+    // Initialize page
+    function initializePage() {
+        console.log('Initializing page...');
+        
+        // Check if required elements exist
+        const requiredElements = [
+            'no-selection-state',
+            'stats-cards',
+            'graph-section',
+            'kill-table-stats-section',
+            'player-select',
+            'compare-select',
+            'show-difference'
+        ];
+        
+        requiredElements.forEach(id => {
+            const element = document.getElementById(id);
+            if (!element) {
+                console.warn(`Element with id "${id}" not found`);
+            } else {
+                console.log(`Element "${id}" found`);
+            }
+        });
+        
+        // Set up initial state
+        showNoSelectionState();
+        
+        // Add event listener to main dropdown
+        const playerSelect = document.getElementById('player-select');
+        if (playerSelect) {
+            playerSelect.addEventListener('change', function() {
+                handlePlayerSelect(this.value);
+            });
+            console.log('Player select event listener added');
+        }
+        
+        // Add event listener to comparison dropdown
+        const compareSelect = document.getElementById('compare-select');
+        if (compareSelect) {
+            compareSelect.addEventListener('change', function() {
+                handleComparisonSelect(this.value);
+            });
+            console.log('Comparison select event listener added');
+        }
+        
+        // Add event listener to show difference checkbox
+        const showDifferenceCheckbox = document.getElementById('show-difference');
+        if (showDifferenceCheckbox) {
+            showDifferenceCheckbox.addEventListener('change', function() {
+                if (currentKillsForChart && currentPlayer && comparisonPlayer && comparisonKills) {
+                    initializeChart(currentKillsForChart);
+                }
+            });
+            console.log('Show difference checkbox listener added');
+        }
+        
+        console.log('Page initialized, players available:', playersList.length);
+    }
+
+    // Run initialization when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializePage);
+    } else {
+        initializePage();
+    }
+  </script>
+
+  <!-- Load Chart.js only - no date adapters -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</LayoutSidebar>

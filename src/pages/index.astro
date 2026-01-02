@@ -1,0 +1,654 @@
+---
+import LayoutSidebar from '../app/LayoutSidebar.astro';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+// Get current directory for path resolution
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load JSON data
+let killData;
+try {
+  const jsonPath = resolve(__dirname, '../../public/data/data.json');
+  const fs = await import('fs/promises');
+  const fileContents = await fs.readFile(jsonPath, 'utf-8');
+  killData = JSON.parse(fileContents);
+} catch (error) {
+  console.error('Error loading JSON:', error);
+  killData = {
+    meta: { generated_at: new Date().toISOString(), count: 0 },
+    records: []
+  };
+}
+
+// Helper functions
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp * 1000);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+function formatKillTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = (seconds % 60).toFixed(1);
+  return `${mins}:${secs.padStart(4, '0')}`;
+}
+
+function timeAgo(timestamp) {
+  const now = Math.floor(Date.now() / 1000);
+  const secondsAgo = now - timestamp;
+  
+  if (secondsAgo < 60) return 'Just now';
+  
+  const hours = Math.floor(secondsAgo / 3600);
+  const minutes = Math.floor((secondsAgo % 3600) / 60);
+  
+  if (hours > 0) {
+    if (hours >= 72) {
+      // For 72+ hours, show days
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    }
+    return `${hours}h ${minutes}m ago`;
+  }
+  return `${minutes}m ago`;
+}
+
+function hoursAgo(timestamp) {
+  const now = Math.floor(Date.now() / 1000);
+  return Math.floor((now - timestamp) / 3600);
+}
+
+// Calculate statistics for header cards
+let stats = {
+  totalKills: killData.meta.count || 0,
+  highestEnrage: 0,
+  killsLast24h: 0,
+  mostRecentKill: null,
+  lastUpdated: killData.meta.generated_at ? new Date(killData.meta.generated_at).toLocaleString() : 'Never'
+};
+
+// Calculate if we have data
+if (killData.records && killData.records.length > 0) {
+  const now = Math.floor(Date.now() / 1000);
+  const twentyFourHoursAgo = now - (24 * 3600);
+  
+  // Sort by most recent first for recent kill
+  const sortedByRecent = [...killData.records].sort((a, b) => b.timeOfKill - a.timeOfKill);
+  
+  stats = {
+    ...stats,
+    highestEnrage: Math.max(...killData.records.map(r => r.enrage)),
+    killsLast24h: killData.records.filter(r => r.timeOfKill >= twentyFourHoursAgo).length,
+    mostRecentKill: sortedByRecent[0]
+  };
+}
+
+// Process data for ranking table (top 15 unique members by highest enrage)
+const processedRecords = killData.records.map(record => ({
+  ...record,
+  playerName: record.members[0]?.name || 'Unknown'
+}));
+
+// Group by player and get their highest enrage kill
+const playerBestKills = {};
+processedRecords.forEach(record => {
+  const playerName = record.playerName;
+  if (!playerBestKills[playerName] || record.enrage > playerBestKills[playerName].enrage) {
+    playerBestKills[playerName] = record;
+  }
+});
+
+// Convert to array, sort by enrage (highest first), and take top 15
+const topPlayers = Object.values(playerBestKills)
+  .sort((a, b) => b.enrage - a.enrage)
+  .slice(0, 15);
+
+// Get latest 5 kills for recent activity (sorted by most recent)
+const latestKills = [...killData.records]
+  .sort((a, b) => b.timeOfKill - a.timeOfKill)
+  .slice(0, 5);
+---
+
+<LayoutSidebar>
+  <!-- Page Header -->
+  <div class="px-4 pt-4">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Zamorak Kills Leaderboard</h1>
+    <!-- <p class="text-gray-500 dark:text-gray-400">Top 15 players by highest enrage achieved</p> -->
+  </div>
+
+  <!-- Header Cards -->
+    <div class="px-4 pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Highest Enrage Card -->
+    <div class="bg-gradient-to-br from-red-50 to-red-100 
+                dark:bg-gradient-to-br dark:from-red-900/30 dark:to-red-800/20 
+                p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+                border border-red-200 dark:border-red-900/30">
+        <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-red-500 to-red-600 
+                    dark:bg-gradient-to-r dark:from-red-700 dark:to-red-800 
+                    text-white mr-4 shadow dark:shadow-gray-900/50">
+            👑
+        </div>
+        <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+            {stats.highestEnrage > 0 ? stats.highestEnrage.toLocaleString() + '%' : 'N/A'}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            {stats.highestEnrage > 0 ? 'All-time record' : 'No data available'}
+            </p>
+        </div>
+        </div>
+        {stats.highestEnrage > 0 && (
+        <div class="mt-4 pt-4 border-t border-red-200 dark:border-red-900/30">
+            <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-300">Enrage Progress</span>
+            <span class="font-semibold text-gray-900 dark:text-white">Max: 60,000%</span>
+            </div>
+            <div class="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div 
+                class="bg-gradient-to-r from-green-400 via-yellow-400 to-red-600 
+                    dark:bg-gradient-to-r dark:from-green-600 dark:via-yellow-600 dark:to-red-700 
+                    h-2 rounded-full" 
+                style={`width: ${Math.min(stats.highestEnrage / 60000 * 100, 100)}%`}
+            ></div>
+            </div>
+        </div>
+        )}
+    </div>
+
+    <!-- Last 24 Hours Card -->
+    <div class="bg-gradient-to-br from-blue-50 to-blue-100 
+                dark:bg-gradient-to-br dark:from-blue-900/30 dark:to-blue-800/20 
+                p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+                border border-blue-200 dark:border-blue-900/30">
+        <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 
+                    dark:bg-gradient-to-r dark:from-blue-700 dark:to-blue-800 
+                    text-white mr-4 shadow dark:shadow-gray-900/50">
+            ⏱️
+        </div>
+        <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Last 24 Hours</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+            {stats.killsLast24h}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            {stats.killsLast24h === 1 ? 'kill in past day' : 'kills in past day'}
+            </p>
+        </div>
+        </div>
+        {stats.killsLast24h > 0 && (
+        <div class="mt-4 pt-4 border-t border-blue-200 dark:border-blue-900/30">
+            <div class="flex items-center text-sm">
+            <div class="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full mr-2 animate-pulse"></div>
+            <span class="text-gray-600 dark:text-gray-300">Active today</span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            {stats.killsLast24h > 1 ? `${stats.killsLast24h} kills recorded` : '1 kill recorded'}
+            </p>
+        </div>
+        )}
+    </div>
+
+    <!-- Most Recent Kill Card -->
+    <div class="bg-gradient-to-br from-green-50 to-green-100 
+                dark:bg-gradient-to-br dark:from-green-900/30 dark:to-green-800/20 
+                p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+                border border-green-200 dark:border-green-900/30">
+        <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 
+                    dark:bg-gradient-to-r dark:from-green-700 dark:to-green-800 
+                    text-white mr-4 shadow dark:shadow-gray-900/50">
+            ⭐
+        </div>
+        <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Most Recent Kill</p>
+            {stats.mostRecentKill ? (
+            <>
+                <p class="text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">
+                {stats.mostRecentKill.members[0]?.name || 'Unknown'}
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                {timeAgo(stats.mostRecentKill.timeOfKill)}
+                </p>
+            </>
+            ) : (
+            <p class="text-lg text-gray-500 dark:text-gray-400 mt-1">No recent kills</p>
+            )}
+        </div>
+        </div>
+        {stats.mostRecentKill && (
+        <div class="mt-4 pt-4 border-t border-green-200 dark:border-green-900/30 space-y-2">
+            <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-300">Enrage</span>
+            <span class="font-semibold text-gray-900 dark:text-white">{stats.mostRecentKill.enrage.toLocaleString()}%</span>
+            </div>
+            <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-300">Kill Time</span>
+            <span class="font-mono font-semibold text-gray-900 dark:text-white">{formatKillTime(stats.mostRecentKill.killTimeSeconds)}</span>
+            </div>
+        </div>
+        )}
+    </div>
+
+    <!-- Last Update Card -->
+    <div class="bg-gradient-to-br from-purple-50 to-purple-100 
+                dark:bg-gradient-to-br dark:from-purple-900/30 dark:to-purple-800/20 
+                p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+                border border-purple-200 dark:border-purple-900/30">
+        <div class="flex items-center">
+        <div class="p-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 
+                    dark:bg-gradient-to-r dark:from-purple-700 dark:to-purple-800 
+                    text-white mr-4 shadow dark:shadow-gray-900/50">
+            🔄
+        </div>
+        <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Last Update</p>
+            <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">
+            {stats.lastUpdated === 'Never' ? 'Never' : new Date(stats.lastUpdated).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            {stats.lastUpdated === 'Never' ? 'Data not loaded' : new Date(stats.lastUpdated).toLocaleDateString()}
+            </p>
+        </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/30">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+            {(() => {
+                const lastUpdate = new Date(stats.lastUpdated);
+                const now = new Date();
+                const hoursSinceUpdate = (now - lastUpdate) / (1000 * 60 * 60);
+                
+                let statusColor = 'bg-green-500 dark:bg-green-400';
+                let statusText = 'Fresh';
+                
+                if (hoursSinceUpdate > 6) {
+                statusColor = 'bg-yellow-500 dark:bg-yellow-400';
+                statusText = 'Stale';
+                }
+                if (hoursSinceUpdate > 24) {
+                statusColor = 'bg-red-500 dark:bg-red-400';
+                statusText = 'Outdated';
+                }
+                if (stats.lastUpdated === 'Never') {
+                statusColor = 'bg-gray-500 dark:bg-gray-400';
+                statusText = 'No data';
+                }
+                
+                return (
+                <>
+                    <div class={`w-2 h-2 ${statusColor} rounded-full mr-2 ${hoursSinceUpdate < 6 ? 'animate-pulse' : ''}`}></div>
+                    <span class="text-sm text-gray-600 dark:text-gray-300">{statusText}</span>
+                </>
+                );
+            })()}
+            </div>
+            <div class="text-sm">
+            {stats.lastUpdated !== 'Never' && (
+                <span class="text-gray-600 dark:text-gray-300">
+                {Math.floor((new Date() - new Date(stats.lastUpdated)) / (1000 * 60 * 60))}h ago
+                </span>
+            )}
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+  <!-- Main Content Grid -->
+    <div class="px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Ranking Table (2/3 width) -->
+    <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-100 to-gray-100 dark:from-gray-800 dark:to-gray-800">
+            <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 dark:text-white">Top 15 Players Ranking</h2>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full">
+                {topPlayers.length} players
+                </span>
+            </div>
+            </div>
+        </div>
+        
+        {topPlayers.length === 0 ? (
+            <div class="p-12 text-center">
+            <div class="text-gray-300 dark:text-gray-600 text-6xl mb-4">🏆</div>
+            <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-2">No Player Data Available</h3>
+            <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
+                No kill records found to generate the leaderboard.
+            </p>
+            </div>
+        ) : (
+            <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Rank
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Player
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Highest Enrage
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Kill Time
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Time
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                {topPlayers.map((record, index) => {
+                    const playerName = record.playerName;
+                    const enragePercent = record.enrage;
+                    const killTime = record.killTimeSeconds;
+                    const killDate = record.timeOfKill;
+                    const hoursAgoValue = hoursAgo(killDate);
+                    
+                    // Determine tier based on enrage (removed but keeping for reference)
+                    let tierColor = 'bg-gray-100 text-gray-800';
+                    let tierText = 'Novice';
+                    
+                    if (enragePercent >= 40000) {
+                    tierColor = 'bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800';
+                    tierText = 'Godlike';
+                    } else if (enragePercent >= 30000) {
+                    tierColor = 'bg-gradient-to-r from-red-100 to-red-200 text-red-800';
+                    tierText = 'Master';
+                    } else if (enragePercent >= 20000) {
+                    tierColor = 'bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800';
+                    tierText = 'Expert';
+                    } else if (enragePercent >= 10000) {
+                    tierColor = 'bg-gradient-to-r from-yellow-100 to-yellow-200 text-yellow-800';
+                    tierText = 'Veteran';
+                    } else if (enragePercent >= 5000) {
+                    tierColor = 'bg-gradient-to-r from-green-100 to-green-200 text-green-800';
+                    tierText = 'Intermediate';
+                    }
+                    
+                    // Enrage styling
+                    let enrageClass = 'font-bold ';
+                    if (enragePercent >= 40000) {
+                    enrageClass += 'text-purple-700 dark:text-purple-400';
+                    } else if (enragePercent >= 30000) {
+                    enrageClass += 'text-red-700 dark:text-red-400';
+                    } else if (enragePercent >= 20000) {
+                    enrageClass += 'text-orange-700 dark:text-orange-400';
+                    } else if (enragePercent >= 10000) {
+                    enrageClass += 'text-yellow-700 dark:text-yellow-400';
+                    } else if (enragePercent >= 5000) {
+                    enrageClass += 'text-green-700 dark:text-green-400';
+                    } else {
+                    enrageClass += 'text-blue-700 dark:text-blue-400';
+                    }
+                    
+                    return (
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                        <!-- Rank -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <span class={`inline-flex items-center justify-center w-10 h-10 rounded-full ${
+                            index === 0 
+                                ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 dark:from-yellow-500 dark:to-yellow-600 text-white text-lg font-bold shadow' 
+                                : index === 1
+                                ? 'bg-gradient-to-r from-gray-300 to-gray-400 dark:from-gray-500 dark:to-gray-600 text-white text-lg font-bold'
+                                : index === 2
+                                ? 'bg-gradient-to-r from-orange-300 to-orange-400 dark:from-orange-500 dark:to-orange-600 text-white text-lg font-bold'
+                                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            }`}>
+                            {index === 0 ? '👑' : index + 1}
+                            </span>
+                        </div>
+                        </td>
+                        
+                        <!-- Player -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            {/* <div class="flex-shrink-0 h-12 w-12 bg-gradient-to-br from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-full flex items-center justify-center text-white font-bold text-lg shadow dark:shadow-gray-900/50">
+                            {playerName.charAt(0)}
+                            </div> */}
+                            {/* <div class="ml-4"> */}
+                            <div class="text-lg font-bold text-gray-900 dark:text-white">{playerName}</div>
+                            {/* </div> */}
+                        </div>
+                        </td>
+                        
+                        <!-- Highest Enrage -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                        <div class={`${enrageClass} text-2xl`}>
+                            {enragePercent.toLocaleString()}%
+                        </div>
+                        <div class="mt-1 w-32">
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div 
+                                class="bg-gradient-to-r from-green-400 via-yellow-400 to-red-600 
+                                    dark:from-green-500 dark:via-yellow-500 dark:to-red-500 
+                                    h-2 rounded-full" 
+                                style={`width: ${Math.min(enragePercent / 60000 * 100, 100)}%`}
+                            ></div>
+                            </div>
+                        </div>
+                        </td>
+                        
+                        <!-- Kill Time -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="font-mono font-semibold text-gray-900 dark:text-white text-lg">
+                            {formatKillTime(killTime)}
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                            {killTime.toFixed(1)} seconds
+                        </div>
+                        </td>
+                        
+                        <!-- When -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900 dark:text-gray-300 font-medium">
+                            {formatTimestamp(killDate)}
+                        </div>
+                        <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                            {timeAgo(killDate)}
+                        </div>
+                        </td>
+                    </tr>
+                    );
+                })}
+                </tbody>
+            </table>
+            </div>
+        )}
+        
+        <!-- Table Footer -->
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+            <div class="flex justify-between items-center">
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+                Showing top 15 of {Object.keys(playerBestKills).length} unique players
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+                Data updated: {stats.lastUpdated}
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Sidebar -->
+    <div class="space-y-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden h-fit">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Recent Activity</h2>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">Latest 5 kills recorded</p>
+        </div>
+        
+        {latestKills.length === 0 ? (
+            <div class="p-8 text-center">
+            <div class="text-gray-300 dark:text-gray-600 text-4xl mb-4">📭</div>
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No Recent Activity</h3>
+            <p class="text-gray-600 dark:text-gray-400">No kills recorded recently.</p>
+            </div>
+        ) : (
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            {latestKills.map((record, index) => {
+                const playerName = record.members[0]?.name || 'Unknown';
+                const enragePercent = record.enrage;
+                const killTime = record.killTimeSeconds;
+                const killDate = record.timeOfKill;
+                
+                return (
+                <div class="p-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
+                    {/* <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 dark:from-blue-500 dark:to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow dark:shadow-gray-900/50">
+                        {playerName.charAt(0)}
+                        </div>
+                    </div> */}
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">{playerName}</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            {formatTimestamp(killDate)}
+                            </p>
+                        </div>
+                        <span class="text-sm font-bold text-gray-900 dark:text-white">
+                            {enragePercent.toLocaleString()}%
+                        </span>
+                        </div>
+                        
+                        <div class="mt-3 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <span class="mr-1">⏱️</span>
+                            <span class="font-mono font-semibold">{formatKillTime(killTime)}</span>
+                            </div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                            {killTime.toFixed(1)}s
+                            </div>
+                        </div>
+                        <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                            {timeAgo(killDate)}
+                        </div>
+                        </div>
+                        
+                        {/* Enrage indicator */}
+                        <div class="mt-3">
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Enrage level</div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                            <div 
+                            class="bg-gradient-to-r from-green-400 via-yellow-400 to-red-600 
+                                    dark:from-green-500 dark:via-yellow-500 dark:to-red-500 
+                                    h-1.5 rounded-full" 
+                            style={`width: ${Math.min(enragePercent / 60000 * 100, 100)}%`}
+                            ></div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                );
+            })}
+            </div>
+        )}
+        
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+            <div class="text-sm text-gray-600 dark:text-gray-400">
+            {latestKills.length} of {stats.totalKills} total kills shown
+            </div>
+        </div>
+        </div>
+        
+        <!-- Stats Summary Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-white">Quick Stats</h2>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+            <div class="flex justify-between items-center">
+                <span class="text-gray-600 dark:text-gray-300">Unique Players</span>
+                <span class="font-bold text-gray-900 dark:text-white">{Object.keys(playerBestKills).length}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-gray-600 dark:text-gray-300">Total Kills</span>
+                <span class="font-bold text-gray-900 dark:text-white">{stats.totalKills}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-gray-600 dark:text-gray-300">Avg Enrage</span>
+                <span class="font-bold text-gray-900 dark:text-white">
+                {killData.records.length > 0 
+                    ? Math.round(killData.records.reduce((sum, r) => sum + r.enrage, 0) / killData.records.length).toLocaleString() + '%'
+                    : 'N/A'
+                }
+                </span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-gray-600 dark:text-gray-300">Avg Kill Time</span>
+                <span class="font-bold text-gray-900 dark:text-white">
+                {killData.records.length > 0 
+                    ? formatKillTime(killData.records.reduce((sum, r) => sum + r.killTimeSeconds, 0) / killData.records.length)
+                    : 'N/A'
+                }
+                </span>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+</LayoutSidebar>
+
+<style>
+/* Custom styles */
+/* th {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  box-shadow: 0 1px 0 #e5e7eb;
+} */
+
+/* tr {
+  transition: all 0.2s ease;
+} */
+
+/* Pulse animation for fresh data */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Custom scrollbar */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+</style>
