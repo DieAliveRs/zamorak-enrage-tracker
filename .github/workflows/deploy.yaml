@@ -42,7 +42,7 @@ jobs:
       - name: Setup PNPM 7
         uses: pnpm/action-setup@v4
         with:
-          version: 7.18.1
+          version: 7.30.0
           run_install: false
 
       - name: Get PNPM store directory
