@@ -1,4 +1,4 @@
-name: Flowbite Admin Dashboard — Deploy to Demo to GitHub Pages
+name: Flowbite Admin Dashboard — Deploy to GitHub Pages
 
 on:
   push:
@@ -12,8 +12,11 @@ on:
 env:
   CI: true
   FORCE_COLOR: true
+  NODE_ENV: production
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -27,48 +30,55 @@ jobs:
     permissions:
       pages: write
       id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+          fetch-depth: 0
 
-      - name: Setup Node.js 18
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20'
+          cache: 'pnpm'
 
-      - name: Setup PNPM 7
-        uses: pnpm/action-setup@v2.2.2
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
         with:
-          version: 7.18.1
+          version: '9'
           run_install: false
 
       - name: Get PNPM store directory
         id: pnpm-cache
+        shell: bash
         run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
 
       - name: Setup PNPM cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install Node dependencies
-        run: NODE_ENV=production pnpm install
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Build demo website (dist)
-        run: NODE_ENV=production pnpm run build
+      - name: Build demo website
+        run: pnpm run build
 
-      - name: Upload artifact — Demo (dist)
-        uses: actions/upload-pages-artifact@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
-      - name: Deploy to GitHub Pages — Demo (dist)
+      - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
