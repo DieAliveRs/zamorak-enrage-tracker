@@ -1,29 +1,23 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind";
+import sitemap from "@astrojs/sitemap";
 
-import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
+const DEV_PORT = 4321;
+const isCI = process.env.CI === "true";
 
-const DEV_PORT = 2121;
-
-// https://astro.build/config
 export default defineConfig({
-	site: process.env.CI
-		? 'https://themesberg.github.io'
-		: `http://localhost:${DEV_PORT}`,
-	base: process.env.CI ? '/test' : undefined,
+  site: isCI
+    ? "https://diealivers.github.io"
+    : `http://localhost:${DEV_PORT}`,
 
-	// output: 'server',
+  base: isCI ? "/zamorak-enrage-tracker" : "/",
 
-	/* Like Vercel, Netlify,… Mimicking for dev. server */
-	// trailingSlash: 'always',
+  server: {
+    port: DEV_PORT,
+  },
 
-	server: {
-		/* Dev. server only */
-		port: DEV_PORT,
-	},
-
-	integrations: [
-		//
-		sitemap(),
-		tailwind(),
-	],
+  integrations: [
+    sitemap(),
+    tailwind(),
+  ],
+});
