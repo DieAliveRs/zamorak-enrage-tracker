@@ -1,25 +1,27 @@
 ---
 import LayoutSidebar from '../app/LayoutSidebar.astro';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import killData from '../data/data.json';
 
-// Load JSON data directly (same as overview page)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// import { fileURLToPath } from 'url';
+// import { dirname, resolve } from 'path';
 
-let killData;
-try {
-  const jsonPath = resolve(__dirname, '../../public/data/data.json');
-  const fs = await import('fs/promises');
-  const fileContents = await fs.readFile(jsonPath, 'utf-8');
-  killData = JSON.parse(fileContents);
-} catch (error) {
-  console.error('Error loading JSON:', error);
-  killData = {
-    meta: { generated_at: new Date().toISOString(), count: 0 },
-    records: []
-  };
-}
+// // Load JSON data directly (same as overview page)
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
+
+// let killData;
+// try {
+//   const jsonPath = resolve(__dirname, '../../public/data/data.json');
+//   const fs = await import('fs/promises');
+//   const fileContents = await fs.readFile(jsonPath, 'utf-8');
+//   killData = JSON.parse(fileContents);
+// } catch (error) {
+//   console.error('Error loading JSON:', error);
+//   killData = {
+//     meta: { generated_at: new Date().toISOString(), count: 0 },
+//     records: []
+//   };
+// }
 
 // Process unique players
 const playersMap = {};

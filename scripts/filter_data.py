@@ -137,7 +137,7 @@ def filter_data(originalDataPath):
     return newKills
 
 if __name__ == "__main__":
-    originalDataPath = "public/data/data.json"
+    originalDataPath = "src/data/data.json"
 
     print(f"Enrage tracking started at: {datetime.now()}")
     newKills = filter_data(originalDataPath)
