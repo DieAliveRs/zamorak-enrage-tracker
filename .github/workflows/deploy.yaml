@@ -18,7 +18,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   deploy:
     name: Deploy demo
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     environment:
       name: github-pages

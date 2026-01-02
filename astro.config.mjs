@@ -7,7 +7,7 @@ const isCI = process.env.CI === "true";
 
 export default defineConfig({
   site: isCI
-    ? "https://diealivers.github.io"
+    ? "https://diealivers.github.io/zamorak-enrage-tracker"
     : `http://localhost:${DEV_PORT}`,
 
   base: isCI ? "/zamorak-enrage-tracker" : "/",
