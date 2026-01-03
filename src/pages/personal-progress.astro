@@ -2,14 +2,28 @@
 import LayoutSidebar from '../app/LayoutSidebar.astro';
 import killData from '../data/data.json';
 
+function normalizePlayerName(name) {
+  if (!name) return name;
+  
+  // Replace non-breaking spaces and other whitespace characters with regular spaces
+  return name
+    .replace(/\u00A0/g, ' ')  // Non-breaking space
+    .replace(/\u2007/g, ' ')  // Figure space
+    .replace(/\u202F/g, ' ')  // Narrow non-breaking space
+    .replace(/\u3000/g, ' ')  // Ideographic space
+    .replace(/\s+/g, ' ')     // Multiple spaces to single space
+    .trim();
+}
+
 // Process unique players
 const playersMap = {};
 killData.records.forEach(record => {
   const playerName = record.members[0]?.name || 'Unknown';
-  if (!playersMap[playerName]) {
-    playersMap[playerName] = [];
+  const normalizedName = normalizePlayerName(playerName);
+  if (!playersMap[normalizedName]) {
+    playersMap[normalizedName] = [];
   }
-  playersMap[playerName].push(record);
+  playersMap[normalizedName].push(record);
 });
 
 const uniquePlayers = Object.keys(playersMap).sort();
@@ -76,21 +90,25 @@ const playersData = {
   <!-- Stats Cards (Hidden until player selected) -->
   <div id="stats-cards" class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 hidden">
     <!-- Highest Enrage Card -->
-    <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 p-6 rounded-xl shadow-lg border border-red-200 dark:border-red-900/30">
-      <div class="flex items-center">
-        <div class="p-3 rounded-full bg-gradient-to-r from-red-500 to-red-600 dark:from-red-700 dark:to-red-800 text-white mr-4 shadow">
-          🔥
+    <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 p-6 rounded-xl shadow-lg border-2 border-red-200 dark:border-red-900/30">
+    <div class="flex items-center">
+        <div id="highest-enrage-icon" class="mr-4">
+        <!-- Icon will be dynamically updated -->
+        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-red-600 dark:from-red-700 dark:to-red-800 flex items-center justify-center text-white shadow">
+            🔥
+        </div>
         </div>
         <div>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
-          <p id="highest-enrage" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0%</p>
-          <p id="enrage-date" class="text-xs text-gray-500 dark:text-gray-400 mt-2">--</p>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+        <p id="highest-enrage" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0%</p>
+        <p id="enrage-player" class="text-sm font-semibold text-gray-900 dark:text-white truncate max-w-[200px]">--</p>
+        <p id="enrage-date" class="text-xs text-gray-500 dark:text-gray-400 mt-1">--</p>
         </div>
-      </div>
+    </div>
     </div>
 
     <!-- Total Kills Card -->
-    <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 p-6 rounded-xl shadow-lg border border-blue-200 dark:border-blue-900/30">
+    <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 p-6 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-900/30">
       <div class="flex items-center">
         <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-700 dark:to-blue-800 text-white mr-4 shadow">
           ⚔️
@@ -104,7 +122,7 @@ const playersData = {
     </div>
 
     <!-- Highest Kills in 24h Card -->
-    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20 p-6 rounded-xl shadow-lg border border-green-200 dark:border-green-900/30">
+    <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20 p-6 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-900/30">
       <div class="flex items-center">
         <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 dark:from-green-700 dark:to-green-800 text-white mr-4 shadow">
           ⚡
@@ -118,7 +136,7 @@ const playersData = {
     </div>
 
     <!-- Recent Activity Card -->
-    <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20 p-6 rounded-xl shadow-lg border border-purple-200 dark:border-purple-900/30">
+    <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20 p-6 rounded-xl shadow-lg border-2 border-purple-200 dark:border-purple-900/30">
       <div class="flex items-center">
         <div class="p-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-700 dark:to-purple-800 text-white mr-4 shadow">
           🔄
@@ -237,6 +255,18 @@ const playersData = {
 
   <!-- JavaScript for interactivity -->
   <script define:vars={{ playersData }}>
+    // Avatar helper function
+    function getRSIconUrl(playerName) {
+    // Handle edge cases
+    if (!playerName || playerName === 'Unknown') {
+        return null;
+    }
+    
+    // Encode the player name for URL
+    const encodedName = encodeURIComponent(playerName);
+    return `https://secure.runescape.com/m=avatar-rs/${encodedName}/chat.png`;
+    }
+    
     // Store all data for client-side processing
     const allPlayersData = playersData.players;
     const playersList = playersData.uniquePlayers;
@@ -413,10 +443,12 @@ const playersData = {
     function processPlayerStats(kills, playerName) {
         if (kills.length === 0) return;
         
-        // Simple client-side stats calculation
         const totalKills = kills.length;
-        const highestEnrage = Math.max(...kills.map(k => k.enrage));
-        const mostRecent = kills[kills.length - 1]; // Last one after time sort
+        const highestEnrageRecord = kills.reduce((prev, current) => 
+            (prev.enrage > current.enrage) ? prev : current
+        );
+        const highestEnrage = highestEnrageRecord.enrage;
+        const mostRecent = kills[kills.length - 1];
         const most24h = calculateMostKills24h(kills);
         
         // Update DOM
@@ -425,7 +457,16 @@ const playersData = {
         document.getElementById('most-24h').textContent = most24h.count;
         document.getElementById('most-24h-date').textContent = most24h.date !== '--' ? `On ${most24h.date}` : '--';
         
-        // Recent activity with hours/minutes if <24h
+        // Update highest enrage details
+        document.getElementById('enrage-player').textContent = playerName;
+        const highestDate = new Date(highestEnrageRecord.timeOfKill * 1000);
+        document.getElementById('enrage-date').textContent = `Achieved: ${mostRecent.formattedDate}`;
+        
+        // Add tooltip with more details
+        const enrageElement = document.getElementById('highest-enrage');
+        enrageElement.title = `Kill Time: ${formatKillTime(highestEnrageRecord.killTimeSeconds)}\nDate: ${highestEnrageRecord.formattedDate}`;
+        
+        // Recent activity
         const now = Math.floor(Date.now() / 1000);
         const secondsAgo = now - mostRecent.timeOfKill;
         const hours = Math.floor(secondsAgo / 3600);
@@ -438,8 +479,63 @@ const playersData = {
             document.getElementById('recent-activity').textContent = `${days}d ago`;
         }
         
-        document.getElementById('enrage-date').textContent = `Latest: ${mostRecent.formattedDate}`;
         document.getElementById('last-kill-details').textContent = `Last kill: ${mostRecent.formattedKillTime}`;
+        
+        // Update player icon
+        updatePlayerIcon(playerName);
+    }
+
+    function updatePlayerIcon(playerName) {
+        const iconContainer = document.getElementById('highest-enrage-icon');
+        if (!iconContainer) return;
+        
+        const avatarUrl = getRSIconUrl(playerName);
+        
+        // Create icon HTML
+        const iconHTML = avatarUrl ? `
+            <div class="relative group">
+                <img 
+                    src="${avatarUrl}" 
+                    alt="${playerName}"
+                    class="w-12 h-12 rounded-full border-2 border-red-500 dark:border-red-600 
+                        bg-white dark:bg-gray-800 shadow-lg group-hover:scale-110 
+                        transition-transform duration-200"
+                />
+                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-red-500 dark:bg-red-600 
+                            rounded-full flex items-center justify-center text-white text-xs">
+                    👑
+                </div>
+                <div class="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-900 
+                            text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 
+                            transition-opacity duration-200 whitespace-nowrap z-10">
+                    ${playerName}
+                </div>
+            </div>
+        ` : `
+            <div class="relative group">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-red-600 
+                        dark:from-red-700 dark:to-red-800 flex items-center justify-center 
+                        text-white shadow">
+                    👑
+                </div>
+                <div class="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-900 
+                            text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 
+                            transition-opacity duration-200 whitespace-nowrap z-10">
+                    ${playerName}
+                </div>
+            </div>
+        `;
+        
+        iconContainer.innerHTML = iconHTML;
+        
+        // Add error handling for the image if needed
+        const img = iconContainer.querySelector('img');
+        if (img) {
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23DC2626"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
+            };
+        }
     }
 
     function showNoSelectionState() {

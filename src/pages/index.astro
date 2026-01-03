@@ -5,14 +5,30 @@ import killData from '../data/data.json';
 // Read data but don't do time calculations
 const totalKills = killData.meta.count || 0;
 
+function normalizePlayerName(name) {
+  if (!name) return name;
+  
+  // Replace non-breaking spaces and other whitespace characters with regular spaces
+  return name
+    .replace(/\u00A0/g, ' ')  // Non-breaking space
+    .replace(/\u2007/g, ' ')  // Figure space
+    .replace(/\u202F/g, ' ')  // Narrow non-breaking space
+    .replace(/\u3000/g, ' ')  // Ideographic space
+    .replace(/\s+/g, ' ')     // Multiple spaces to single space
+    .trim();
+}
+
 // Process unique players for initial render (static data only)
 const playerBestKills = {};
 killData.records.forEach(record => {
   const playerName = record.members[0]?.name || 'Unknown';
-  if (!playerBestKills[playerName] || record.enrage > playerBestKills[playerName].enrage) {
-    playerBestKills[playerName] = {
+  const normalizedName = normalizePlayerName(playerName);
+  
+  // Use normalized name as key for deduplication
+  if (!playerBestKills[normalizedName] || record.enrage > playerBestKills[normalizedName].enrage) {
+    playerBestKills[normalizedName] = {
       ...record,
-      playerName: playerName
+      playerName: normalizedName  // Store normalized name
     };
   }
 });
@@ -187,6 +203,19 @@ const pageData = {
 
     <!-- JavaScript for ALL dynamic content -->
   <script define:vars={{ pageData }}>
+    
+    // Avatar helper function
+    function getRSIconUrl(playerName) {
+    // Handle edge cases
+    if (!playerName || playerName === 'Unknown') {
+        return null;
+    }
+    
+    // Encode the player name for URL
+    const encodedName = encodeURIComponent(playerName);
+    return `https://secure.runescape.com/m=avatar-rs/${encodedName}/chat.png`;
+    }
+
     console.log('Page data loaded:', pageData);
     
     const { killData, topPlayers, latestKills, highestEnrage, uniquePlayersCount, totalKills } = pageData;
@@ -289,12 +318,25 @@ const pageData = {
         <div class="bg-gradient-to-br from-red-50 to-red-100 
                     dark:bg-gradient-to-br dark:from-red-900/30 dark:to-red-800/20 
                     p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
-                    border border-red-200 dark:border-red-900/30">
+                    border-2 border-red-200 dark:border-red-900/30">
           <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-r from-red-500 to-red-600 
-                        dark:bg-gradient-to-r dark:from-red-700 dark:to-red-800 
-                        text-white mr-4 shadow dark:shadow-gray-900/50">
-              👑
+            <div class="mr-4">
+              ${(() => {
+                if (highestEnrage <= 0) return 'N/A';
+                
+                // Find the player with highest enrage
+                const highestEnrageRecord = killData.records.reduce((prev, current) => {
+                    return (prev.enrage > current.enrage) ? prev : current;
+                });
+                const highestPlayer = highestEnrageRecord.members[0]?.name || 'Unknown';
+                const avatarUrl = getRSIconUrl(highestPlayer);
+                
+                if (avatarUrl) {
+                    return `<img src="${avatarUrl}" alt="${highestPlayer}" class="w-12 h-12 rounded-full border-2 border-yellow-400 dark:border-yellow-600
+                    bg-white dark:bg-gray-800 shadow-lg transform hover:scale-105 transition-transform duration-200">`;
+                }
+                return '👑';
+                })()}
             </div>
             <div>
               <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
@@ -327,7 +369,7 @@ const pageData = {
         <div class="bg-gradient-to-br from-blue-50 to-blue-100 
                     dark:bg-gradient-to-br dark:from-blue-900/30 dark:to-blue-800/20 
                     p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
-                    border border-blue-200 dark:border-blue-900/30">
+                    border-2 border-blue-200 dark:border-blue-900/30">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 
                         dark:bg-gradient-to-r dark:from-blue-700 dark:to-blue-800 
@@ -361,12 +403,24 @@ const pageData = {
         <div class="bg-gradient-to-br from-green-50 to-green-100 
                     dark:bg-gradient-to-br dark:from-green-900/30 dark:to-green-800/20 
                     p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
-                    border border-green-200 dark:border-green-900/30">
+                    border-2 border-green-200 dark:border-green-900/30">
           <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 
-                        dark:bg-gradient-to-r dark:from-green-700 dark:to-green-800 
-                        text-white mr-4 shadow dark:shadow-gray-900/50">
-              ⭐
+            <div class="mr-4">
+            ${mostRecentKill ? (() => {
+                const playerName = mostRecentKill.members[0]?.name || 'Unknown';
+                const avatarUrl = getRSIconUrl(playerName);
+                
+                if (avatarUrl) {
+                return `<img src="${avatarUrl}" alt="${playerName}" 
+                            class="w-12 h-12 rounded-full border-2 border-green-500 dark:border-green-600
+                                bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/50">`;
+                }
+                return `<div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 
+                                    dark:bg-gradient-to-r dark:from-green-700 dark:to-green-800 
+                                    text-white shadow dark:shadow-gray-900/50">
+                        ⭐
+                        </div>`;
+            })() : '⭐'}
             </div>
             <div>
               <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Most Recent Kill</p>
@@ -400,7 +454,7 @@ const pageData = {
         <div class="bg-gradient-to-br from-purple-50 to-purple-100 
                     dark:bg-gradient-to-br dark:from-purple-900/30 dark:to-purple-800/20 
                     p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
-                    border border-purple-200 dark:border-purple-900/30">
+                    border-2 border-purple-200 dark:border-purple-900/30">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 
                         dark:bg-gradient-to-r dark:from-purple-700 dark:to-purple-800 
@@ -508,15 +562,30 @@ const pageData = {
                       ? 'bg-gradient-to-r from-orange-300 to-orange-400 dark:from-orange-500 dark:to-orange-600 text-white text-lg font-bold'
                       : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                   }">
-                    ${index === 0 ? '👑' : index + 1}
+                    ${index === 0 ? 1 : index + 1}
                   </span>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="text-lg font-bold text-gray-900 dark:text-white">${playerName}</div>
+                <div class="flex items-center space-x-3">
+                    ${(() => {
+                    const avatarUrl = getRSIconUrl(playerName);
+                    if (avatarUrl) {
+                        return `<img src="${avatarUrl}" alt="${playerName}" 
+                                class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600
+                                        flex-shrink-0">`;
+                    }
+                    return `<div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 
+                                        flex items-center justify-center text-gray-500 dark:text-gray-400
+                                        flex-shrink-0">
+                                👤
+                            </div>`;
+                    })()}
+                    <div class="text-lg font-bold text-gray-900 dark:text-white truncate max-w-[180px]">
+                    ${playerName}
+                    </div>
                 </div>
-              </td>
+                </td>
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="${enrageClass} text-2xl">
                   ${enragePercent.toLocaleString()}%
@@ -534,9 +603,6 @@ const pageData = {
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="font-mono font-semibold text-gray-900 dark:text-white text-lg">
                   ${formatKillTime(killTime)}
-                </div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">
-                  ${killTime.toFixed(1)} seconds
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
@@ -577,25 +643,37 @@ const pageData = {
           <div class="p-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">
             <div class="flex-1">
               <div class="flex justify-between items-start">
-                <div>
-                  <h4 class="font-bold text-gray-900 dark:text-white">${playerName}</h4>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    ${formatTimestamp(killDate)}
-                  </p>
+                <div class="flex items-start space-x-3">
+                    ${(() => {
+                    const avatarUrl = getRSIconUrl(playerName);
+                    if (avatarUrl) {
+                        return `<img src="${avatarUrl}" alt="${playerName}" 
+                                class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600
+                                        flex-shrink-0 mt-1">`;
+                    }
+                    return `<div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 
+                                        flex items-center justify-center text-gray-500 dark:text-gray-400
+                                        flex-shrink-0 mt-1">
+                                👤
+                            </div>`;
+                    })()}
+                    <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white">${playerName}</h4>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        ${formatTimestamp(killDate)}
+                    </p>
+                    </div>
                 </div>
                 <span class="text-sm font-bold text-gray-900 dark:text-white">
-                  ${enragePercent.toLocaleString()}%
+                    ${enragePercent.toLocaleString()}%
                 </span>
-              </div>
+                </div>
               
               <div class="mt-3 flex items-center justify-between">
                 <div class="flex items-center space-x-4">
                   <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
                     <span class="mr-1">⏱️</span>
                     <span class="font-mono font-semibold">${formatKillTime(killTime)}</span>
-                  </div>
-                  <div class="text-sm text-gray-600 dark:text-gray-400">
-                    ${killTime.toFixed(1)}s
                   </div>
                 </div>
                 <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
