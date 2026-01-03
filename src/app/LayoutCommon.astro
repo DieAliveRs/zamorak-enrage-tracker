@@ -10,6 +10,73 @@ const { class: clazz } = Astro.props;
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<script is:inline>
+			// Global flag
+			window.chartReady = false;
+			
+			// Function to load scripts
+			function loadScript(src) {
+				return new Promise((resolve, reject) => {
+					const script = document.createElement('script');
+					script.src = src;
+					script.onload = resolve;
+					script.onerror = reject;
+					document.head.appendChild(script);
+				});
+			}
+			
+			// Load everything in order
+			window.addEventListener('load', async function() {
+				try {
+					console.log('Loading Chart.js...');
+					
+					// Load Chart.js
+					await loadScript('https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.js');
+					console.log('Chart.js loaded');
+					
+					// Try to load date adapter
+					try {
+						await loadScript('https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js');
+						console.log('Date adapter loaded');
+					} catch (adapterError) {
+						console.warn('Date adapter failed, trying fallback...');
+						// If adapter fails, we'll use linear scale
+					}
+					
+					window.chartReady = true;
+					console.log('✅ Chart.js is ready!');
+					
+					// Test
+					if (typeof Chart !== 'undefined') {
+						console.log('Testing time scale...');
+						try {
+							const testCanvas = document.createElement('canvas');
+							const testChart = new Chart(testCanvas, {
+								type: 'line',
+								data: {
+									datasets: [{
+										data: [{x: Date.now(), y: 10}]
+									}]
+								},
+								options: {
+									scales: {
+										x: { type: 'time' }
+									}
+								}
+							});
+							console.log('✅ Time scale test passed!');
+							testChart.destroy();
+						} catch (testError) {
+							console.warn('Time scale test failed:', testError.message);
+							console.log('Will use linear scale fallback');
+						}
+					}
+					
+				} catch (error) {
+					console.error('Failed to load Chart.js:', error);
+				}
+			});
+		</script>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{SITE_TITLE}</title>

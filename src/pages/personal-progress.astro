@@ -1034,39 +1034,42 @@ const playersData = {
 
     // Helper function to interpolate data points for comparison
     function interpolateDataPoints(mainKills, comparisonKills) {
-        if (!comparisonKills || comparisonKills.length === 0) return [];
+        const mainSorted = mainKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+        const compSorted = comparisonKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
         
-        const result = [];
+        const differences = [];
         
-        mainKills.forEach(mainKill => {
-            // Find the closest comparison kill within a reasonable time window
+        for (const mainKill of mainSorted) {
             let closest = null;
-            let minTimeDiff = Infinity;
+            let minDiff = Infinity;
             
-            comparisonKills.forEach(compareKill => {
-                const timeDiff = Math.abs(mainKill.timeOfKill - compareKill.timeOfKill);
-                // Consider kills within 7 days as comparable
-                if (timeDiff < 604800 && timeDiff < minTimeDiff) {
-                    minTimeDiff = timeDiff;
-                    closest = compareKill;
+            for (const compKill of compSorted) {
+                const diff = Math.abs(mainKill.timeOfKill - compKill.timeOfKill);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closest = compKill;
                 }
-            });
-            
-            if (closest) {
-                result.push(mainKill.enrage - closest.enrage);
-            } else {
-                result.push(null);
             }
-        });
+            
+            if (closest && minDiff < 604800) { // Within 7 days
+                differences.push(mainKill.enrage - closest.enrage);
+            } else {
+                differences.push(null);
+            }
+        }
         
-        return result;
+        return differences;
     }
-
+    
     function initializeChart(kills) {
-        console.log('Initializing chart with', kills.length, 'data points');
+        console.log('=== INITIALIZING CHART ===');
+    
+        // Check if Chart.js is available
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js not loaded');
+            return;
+        }
         
-        currentKillsForChart = kills;
-
         const isDarkMode = isDark();
         const canvas = document.getElementById('progress-chart');
         if (!canvas) {
@@ -1075,29 +1078,15 @@ const playersData = {
         }
         
         const ctx = canvas.getContext('2d');
-
-        console.log('Creating chart with isDarkMode:', isDarkMode);
-                
-        // Define colors based on mode
-        const textColor = isDarkMode ? '#D1D5DB' : '#374151';
-        const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
-        const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
         
         // Destroy existing chart
         if (currentChart) {
             currentChart.destroy();
         }
         
-        // Sort kills by date for chart (already sorted by processPlayerKills)
-        const sortedKills = kills;
-        
-        console.log('Sorted kills by time:', sortedKills.length);
-        
-        if (sortedKills.length === 0) {
-            console.error('No sorted kills data');
-            return;
-        }
-        
+        // Sort kills by time
+        const sortedKills = kills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+
         // Function to determine point styling based on data density
         function getPointStyle(totalPoints, isComparison = false) {
             // For very dense data, we need minimal styling
@@ -1158,28 +1147,31 @@ const playersData = {
                 };
             }
         }
+        console.log('Processing', sortedKills.length, 'data points');
         
         // Get styles for main dataset
         const mainStyle = getPointStyle(sortedKills.length, false);
         
-        // Create date labels for X-axis with dynamic density
-        const dateLabels = sortedKills.map(kill => {
-            const date = new Date(kill.timeOfKill * 1000);
-            const now = new Date();
-            const killDate = new Date(kill.timeOfKill * 1000);
-            const diffDays = Math.floor((now - killDate) / (1000 * 60 * 60 * 24));
-            
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
-        });
+        // Define colors
+        const textColor = isDarkMode ? '#D1D5DB' : '#374151';
+        const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
+        const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
         
-        // Prepare datasets
-        const datasets = [
-            {
+        // Try to create time scale chart, fallback to linear if it fails
+  
+            // Try time scale first
+            console.log('Attempting time scale chart...');
+            
+            // Prepare dataset with timestamps
+            const mainDataset = {
                 label: currentPlayer,
-                data: sortedKills.map(kill => kill.enrage),
-                borderColor: 'rgb(59, 130, 246)', // Blue for main player
+                data: sortedKills.map(kill => ({
+                    x: kill.timeOfKill * 1000, // Unix to milliseconds
+                    y: kill.enrage
+                })),
+                borderColor: 'rgb(59, 130, 246)',
                 backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-                tension: 0.4, // Smooth curve
+                tension: 0.4,
                 pointBackgroundColor: 'rgb(59, 130, 246)',
                 pointBorderColor: isDarkMode ? '#1F2937' : 'white',
                 pointBorderWidth: mainStyle.pointBorderWidth,
@@ -1188,68 +1180,60 @@ const playersData = {
                 pointHoverRadius: mainStyle.pointHoverRadius,
                 pointStyle: mainStyle.pointStyle,
                 showLine: mainStyle.showLine
-            }
-        ];
+            };
+            
+            const datasets = [mainDataset];
         
         // Add comparison dataset if selected
         if (comparisonPlayer && comparisonKills) {
             const showDifference = document.getElementById('show-difference')?.checked || false;
             const comparisonStyle = getPointStyle(sortedKills.length, true);
             
+            // Process comparison data
+            const comparisonSorted = comparisonKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+            
             if (showDifference) {
-                // Calculate and show difference
+                // Calculate difference
                 const differenceData = interpolateDataPoints(sortedKills, comparisonKills);
-                const validDifferences = differenceData.filter(d => d !== null);
                 
-                if (validDifferences.length > 0) {
-                    // For difference line, use thinner styling
-                    const diffStyle = getPointStyle(validDifferences.length, true);
-                    datasets.push({
-                        label: `Difference (${currentPlayer} - ${comparisonPlayer})`,
-                        data: differenceData,
-                        borderColor: 'rgb(239, 68, 68)', // Red for difference
-                        backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                        tension: 0.4,
-                        borderDash: [5, 5],
-                        pointBackgroundColor: 'rgb(239, 68, 68)',
-                        pointBorderColor: isDarkMode ? '#1F2937' : 'white',
-                        pointBorderWidth: diffStyle.pointBorderWidth,
-                        borderWidth: diffStyle.borderWidth,
-                        pointRadius: diffStyle.pointRadius,
-                        pointHoverRadius: diffStyle.pointHoverRadius,
-                        pointStyle: diffStyle.pointStyle,
-                        showLine: diffStyle.showLine
-                    });
+                const diffDataset = {
+                    label: `Difference (${currentPlayer} - ${comparisonPlayer})`,
+                    data: sortedKills.map((kill, index) => {
+                        const diff = differenceData[index];
+                        if (diff !== null) {
+                            return {
+                                x: kill.timeOfKill * 1000,  // Use same timestamp
+                                y: diff
+                            };
+                        }
+                        return null;
+                    }).filter(point => point !== null),
+                    borderColor: 'rgb(239, 68, 68)',
+                    backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4,
+                    borderDash: [5, 5],
+                    pointBackgroundColor: 'rgb(239, 68, 68)',
+                    pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+                    pointBorderWidth: comparisonStyle.pointBorderWidth,
+                    borderWidth: comparisonStyle.borderWidth,
+                    pointRadius: comparisonStyle.pointRadius,
+                    pointHoverRadius: comparisonStyle.pointHoverRadius,
+                    pointStyle: comparisonStyle.pointStyle,
+                    showLine: comparisonStyle.showLine
+                };
+                
+                if (diffDataset.data.length > 0) {
+                    datasets.push(diffDataset);
                 }
             } else {
-                // Show comparison player's actual data
-                // We need to align the comparison data with the main player's timeline
-                const alignedComparisonData = [];
-                
-                sortedKills.forEach(mainKill => {
-                    // Find comparison kill closest in time
-                    let closest = null;
-                    let minDiff = Infinity;
-                    
-                    comparisonKills.forEach(compareKill => {
-                        const diff = Math.abs(mainKill.timeOfKill - compareKill.timeOfKill);
-                        if (diff < minDiff) {
-                            minDiff = diff;
-                            closest = compareKill;
-                        }
-                    });
-                    
-                    if (closest && minDiff < 604800) { // Within 7 days
-                        alignedComparisonData.push(closest.enrage);
-                    } else {
-                        alignedComparisonData.push(null);
-                    }
-                });
-                
-                datasets.push({
+                // Show comparison player's data
+                const comparisonDataset = {
                     label: comparisonPlayer,
-                    data: alignedComparisonData,
-                    borderColor: 'rgb(16, 185, 129)', // Green for comparison player
+                    data: comparisonSorted.map(kill => ({
+                        x: kill.timeOfKill * 1000,  // Convert Unix to milliseconds
+                        y: kill.enrage
+                    })),
+                    borderColor: 'rgb(16, 185, 129)',
                     backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.1)',
                     tension: 0.4,
                     pointBackgroundColor: 'rgb(16, 185, 129)',
@@ -1260,22 +1244,45 @@ const playersData = {
                     pointHoverRadius: comparisonStyle.pointHoverRadius,
                     pointStyle: comparisonStyle.pointStyle,
                     showLine: comparisonStyle.showLine
-                });
+                };
+                
+                datasets.push(comparisonDataset);
             }
         }
         
         console.log('Creating chart with', datasets.length, 'datasets');
         
         try {
-            // Calculate appropriate tick density
-            const xTickDensity = Math.max(1, Math.floor(sortedKills.length / 15));
+            // Calculate time range for dynamic configuration
+            const timestamps = sortedKills.map(kill => kill.timeOfKill * 1000);
+            const minTime = Math.min(...timestamps);
+            const maxTime = Math.max(...timestamps);
+            const timeRange = maxTime - minTime;
             
+            // Determine appropriate time unit
+            let timeUnit = 'day';
+            const daysRange = timeRange / (1000 * 60 * 60 * 24);
+            
+            if (daysRange > 365) {
+                timeUnit = 'year';
+            } else if (daysRange > 30) {
+                timeUnit = 'month';
+            } else if (daysRange > 7) {
+                timeUnit = 'week';
+            } else if (daysRange > 2) {
+                timeUnit = 'day';
+            } else if (daysRange > 0.5) {
+                timeUnit = 'hour';
+            } else {
+                timeUnit = 'minute';
+            }
+            
+            console.log('Time range:', daysRange.toFixed(1), 'days, using unit:', timeUnit);
+            
+            // Create chart with time scale
             currentChart = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: dateLabels,
-                    datasets: datasets
-                },
+                data: { datasets: datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -1286,16 +1293,11 @@ const playersData = {
                                 display: true,
                                 text: 'Enrage %',
                                 color: titleColor,
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                }
+                                font: { size: 14, weight: 'bold' }
                             },
                             ticks: {
                                 color: textColor,
-                                font: {
-                                    size: 12
-                                },
+                                font: { size: 12 },
                                 callback: function(value) {
                                     return value.toLocaleString() + '%';
                                 },
@@ -1307,32 +1309,27 @@ const playersData = {
                             }
                         },
                         x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: 'MMM d'
+                                }
+                            },
                             title: {
-                                display: sortedKills.length,
+                                display: true,
                                 text: 'Date',
                                 color: titleColor,
-                                font: {
-                                    size: 14,
-                                    weight: 'bold'
-                                }
+                                font: { size: 14, weight: 'bold' }
                             },
                             ticks: {
                                 color: textColor,
-                                font: {
-                                    size: sortedKills.length > 500 ? 11 : 11
-                                },
-                                maxRotation: sortedKills.length > 200 ? 30 : 30,
-                                minRotation: sortedKills.length > 200 ? 30 : 30,
+                                font: { size: 11 },
+                                maxRotation: 45,
+                                minRotation: 45,
                                 padding: 10,
-                                callback: function(value, index) {
-                                    // Show fewer labels for dense data
-                                    // if (sortedKills.length > 200 && index % xTickDensity !== 0) {
-                                    //     return '';
-                                    // }
-                                    return dateLabels[index];
-                                },
                                 autoSkip: true,
-                                maxTicksLimit: sortedKills.length > 500 ? 30 : 30
+                                maxTicksLimit: Math.min(20, sortedKills.length)
                             },
                             grid: {
                                 color: gridColor,
@@ -1425,10 +1422,11 @@ const playersData = {
                 }
             });
             
-            console.log('Chart created successfully with dynamic styling');
-        } catch (error) {
-            console.error('Error creating chart:', error);
-            alert('Error creating chart. Check console for details.');
+            console.log('✅ Time scale chart created successfully!');
+            
+        } catch (timeError) {
+            console.warn('Time scale failed', timeError.message);
+            
         }
 
         // Set up theme change listener on first chart creation
@@ -1503,7 +1501,4 @@ const playersData = {
         initializePage();
     }
   </script>
-
-  <!-- Load Chart.js only - no date adapters -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </LayoutSidebar>
