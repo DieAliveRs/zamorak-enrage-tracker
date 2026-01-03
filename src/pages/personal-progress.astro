@@ -158,13 +158,16 @@ const playersData = {
     </div>
   </div>
 
-  <!-- Full Width Graph Section -->
-  <div id="graph-section" class="px-4 mb-8 hidden">
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
-      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+  <!-- Replace the existing graph-section div with this: -->
+<div id="graph-section" class="px-4 mb-8 hidden">
+  <!-- Add a wrapper div with dynamic grid classes -->
+  <div id="charts-container" class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+    <!-- Main Enrage Progress Chart -->
+    <div id="main-chart-container" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-800">
         <div class="flex justify-between items-center">
           <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Progress Over Time</h2>
-          <div id="chart-legend" class="flex items-center space-x-4">
+          <div id="main-chart-legend" class="flex items-center space-x-4">
             <!-- Legend will be populated by JavaScript -->
           </div>
         </div>
@@ -175,7 +178,30 @@ const playersData = {
         </div>
       </div>
     </div>
+
+    <!-- Difference Chart (Hidden by default) -->
+    <div id="difference-chart-container" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden hidden">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Difference</h2>
+          <div id="difference-chart-legend" class="flex items-center space-x-4">
+            <!-- Legend will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+      <div class="p-6">
+        <div class="h-96">
+          <canvas id="difference-chart"></canvas>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- Single chart view message (shown when only main chart is visible) -->
+  <div id="single-chart-message" class="text-center text-gray-500 dark:text-gray-400 text-sm mt-4">
+    <p>Toggle "Show enrage difference" to compare players side-by-side</p>
+  </div>
+</div>
 
   <!-- Kill History + Bracket Stats Section -->
   <div id="kill-table-stats-section" class="px-4 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 hidden">
@@ -419,7 +445,33 @@ const playersData = {
         initializeChart(playerKills);
     }
 
-    // Handle comparison player selection
+    // Add these variables at the top with your other state variables
+    let differenceChart = null;
+    let showDifferenceMode = false;
+
+    function updateChartLayout() {
+        const chartsContainer = document.getElementById('charts-container');
+        const diffContainer = document.getElementById('difference-chart-container');
+        const singleMsg = document.getElementById('single-chart-message');
+        
+        if (!chartsContainer || !diffContainer) return;
+        
+        if (showDifferenceMode && comparisonPlayer && comparisonKills) {
+            // Show both charts side by side
+            chartsContainer.classList.remove('lg:grid-cols-1');
+            chartsContainer.classList.add('lg:grid-cols-2');
+            diffContainer.classList.remove('hidden');
+            if (singleMsg) singleMsg.classList.add('hidden');
+        } else {
+            // Show only main chart, full width
+            chartsContainer.classList.remove('lg:grid-cols-2');
+            chartsContainer.classList.add('lg:grid-cols-1');
+            diffContainer.classList.add('hidden');
+            if (singleMsg) singleMsg.classList.remove('hidden');
+        }
+    }
+
+    // Update the handleComparisonSelect function to reset difference chart
     function handleComparisonSelect(comparePlayerName) {
         console.log('Comparison player selected:', comparePlayerName);
         
@@ -427,10 +479,13 @@ const playersData = {
         
         if (!comparePlayerName) {
             comparisonKills = null;
-            // Reinitialize chart without comparison
+            // Hide difference chart
+            hideDifferenceChart();
+            // Reinitialize main chart without comparison
             if (currentKillsForChart) {
                 initializeChart(currentKillsForChart);
             }
+            updateChartLayout();
             return;
         }
         
@@ -445,9 +500,329 @@ const playersData = {
         // Process comparison kills
         comparisonKills = processPlayerKills(compareRecords);
         
-        // Update chart with comparison
+        // Update charts
         if (currentKillsForChart) {
-            initializeChart(currentKillsForChart);
+            if (showDifferenceMode) {
+                // Show both charts
+                initializeChart(currentKillsForChart);
+                initializeDifferenceChart(currentKillsForChart, comparisonKills);
+            } else {
+                // Show only main chart with comparison line
+                initializeChart(currentKillsForChart);
+            }
+            updateChartLayout();
+        }
+    }
+
+    // Function to hide the difference chart
+    function hideDifferenceChart() {
+        const diffContainer = document.getElementById('difference-chart-container');
+        const singleMsg = document.getElementById('single-chart-message');
+        
+        if (diffContainer) diffContainer.classList.add('hidden');
+        if (singleMsg) singleMsg.classList.remove('hidden');
+        
+        // Update layout
+        updateChartLayout();
+        
+        // Destroy difference chart if it exists
+        if (differenceChart) {
+            differenceChart.destroy();
+            differenceChart = null;
+        }
+    }
+
+    // Function to show the difference chart
+    function showDifferenceChart() {
+        const diffContainer = document.getElementById('difference-chart-container');
+        const singleMsg = document.getElementById('single-chart-message');
+        
+        if (diffContainer) diffContainer.classList.remove('hidden');
+        if (singleMsg) singleMsg.classList.add('hidden');
+    }
+
+    // NEW FUNCTION: Initialize the difference chart
+    function initializeDifferenceChart(mainKills, comparisonKills) {
+        console.log('=== INITIALIZING DIFFERENCE CHART ===');
+        
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js not loaded');
+            return;
+        }
+        
+        const isDarkMode = isDark();
+        const canvas = document.getElementById('difference-chart');
+        if (!canvas) {
+            console.error('Difference canvas element not found');
+            return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        
+        // Destroy existing difference chart
+        if (differenceChart) {
+            differenceChart.destroy();
+        }
+        
+        // Sort kills by time
+        const sortedMainKills = mainKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+        const sortedComparisonKills = comparisonKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+        
+        // Calculate differences
+        const differences = interpolateDataPoints(sortedMainKills, sortedComparisonKills);
+        
+        // Filter out null values and prepare data points
+        const differenceData = sortedMainKills
+            .map((kill, index) => {
+                const diff = differences[index];
+                if (diff !== null) {
+                    return {
+                        x: kill.timeOfKill * 1000,
+                        y: diff
+                    };
+                }
+                return null;
+            })
+            .filter(point => point !== null);
+        
+        if (differenceData.length === 0) {
+            console.warn('No valid difference data to display');
+            hideDifferenceChart();
+            return;
+        }
+        
+        console.log('Difference data points:', differenceData.length);
+        
+        // Function to determine point styling for difference chart
+        function getDifferencePointStyle(totalPoints) {
+            if (totalPoints > 2000) {
+                return { pointRadius: 0, pointHoverRadius: 2, pointBorderWidth: 0, borderWidth: 1.5 };
+            } else if (totalPoints > 1000) {
+                return { pointRadius: 0.5, pointHoverRadius: 3, pointBorderWidth: 0, borderWidth: 1.5 };
+            } else if (totalPoints > 500) {
+                return { pointRadius: 1, pointHoverRadius: 4, pointBorderWidth: 0.5, borderWidth: 1.5 };
+            } else if (totalPoints > 200) {
+                return { pointRadius: 1.5, pointHoverRadius: 5, pointBorderWidth: 0.5, borderWidth: 2 };
+            } else if (totalPoints > 50) {
+                return { pointRadius: 2, pointHoverRadius: 6, pointBorderWidth: 1, borderWidth: 2 };
+            } else {
+                return { pointRadius: 3, pointHoverRadius: 7, pointBorderWidth: 1.5, borderWidth: 2.5 };
+            }
+        }
+        
+        const diffStyle = getDifferencePointStyle(differenceData.length);
+        
+        // Define colors
+        const textColor = isDarkMode ? '#D1D5DB' : '#374151';
+        const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
+        const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
+        
+        // Calculate time range for dynamic configuration
+        const timestamps = differenceData.map(point => point.x);
+        const minTime = Math.min(...timestamps);
+        const maxTime = Math.max(...timestamps);
+        const timeRange = maxTime - minTime;
+        
+        // Determine appropriate time unit
+        let timeUnit = 'day';
+        const daysRange = timeRange / (1000 * 60 * 60 * 24);
+        
+        if (daysRange > 365) {
+            timeUnit = 'year';
+        } else if (daysRange > 30) {
+            timeUnit = 'month';
+        } else if (daysRange > 7) {
+            timeUnit = 'week';
+        } else if (daysRange > 2) {
+            timeUnit = 'day';
+        } else if (daysRange > 0.5) {
+            timeUnit = 'hour';
+        } else {
+            timeUnit = 'minute';
+        }
+        
+        // Prepare dataset
+        const diffDataset = {
+            label: `Difference (${currentPlayer} - ${comparisonPlayer})`,
+            data: differenceData,
+            borderColor: 'rgb(239, 68, 68)', // Red for negative, will customize below
+            backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+            tension: 0.4,
+            pointBackgroundColor: function(context) {
+                // Color points based on whether difference is positive or negative
+                const value = context.raw.y;
+                return value >= 0 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)';
+            },
+            pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+            pointBorderWidth: diffStyle.pointBorderWidth,
+            borderWidth: diffStyle.borderWidth,
+            pointRadius: diffStyle.pointRadius,
+            pointHoverRadius: diffStyle.pointHoverRadius,
+            pointStyle: 'circle',
+            showLine: true,
+            segment: {
+                borderColor: function(context) {
+                    // Color line segments based on whether difference is positive or negative
+                    const value = context.p1.parsed.y;
+                    return value >= 0 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)';
+                }
+            }
+        };
+        
+        try {
+            // Create the difference chart
+            differenceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [diffDataset]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Enrage Difference %',
+                                color: titleColor,
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            ticks: {
+                                color: textColor,
+                                font: { size: 12 },
+                                callback: function(value) {
+                                    return (value > 0 ? '+' : '') + value.toLocaleString() + '%';
+                                },
+                                padding: 10
+                            },
+                            grid: {
+                                color: gridColor,
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: timeUnit,
+                                displayFormats: {
+                                    millisecond: 'HH:mm:ss.SSS',
+                                    second: 'HH:mm:ss',
+                                    minute: 'HH:mm',
+                                    hour: 'MMM d, HH:mm',
+                                    day: 'MMM d',
+                                    week: 'MMM d',
+                                    month: 'MMM yyyy',
+                                    year: 'yyyy'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date',
+                                color: titleColor,
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            ticks: {
+                                color: textColor,
+                                font: { size: 11 },
+                                maxRotation: 45,
+                                minRotation: 45,
+                                padding: 10,
+                                autoSkip: true,
+                                maxTicksLimit: Math.min(20, differenceData.length)
+                            },
+                            grid: {
+                                color: gridColor,
+                                drawBorder: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: textColor,
+                                font: {
+                                    size: differenceData.length > 1000 ? 12 : 14,
+                                    weight: '600'
+                                },
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                            titleColor: isDarkMode ? '#F3F4F6' : '#111827',
+                            bodyColor: isDarkMode ? '#D1D5DB' : '#374151',
+                            borderColor: isDarkMode ? '#4B5563' : '#E5E7EB',
+                            borderWidth: 1,
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const date = new Date(tooltipItems[0].parsed.x);
+                                    return date.toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    });
+                                },
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    return `${label}: ${value > 0 ? '+' : ''}${value.toLocaleString()}%`;
+                                },
+                                afterLabel: function(context) {
+                                    const value = context.parsed.y;
+                                    if (value > 0) {
+                                        return `${currentPlayer} leads by ${value.toLocaleString()}%`;
+                                    } else if (value < 0) {
+                                        return `${comparisonPlayer} leads by ${Math.abs(value).toLocaleString()}%`;
+                                    } else {
+                                        return 'Players are equal';
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest',
+                        axis: 'x'
+                    },
+                    elements: {
+                        line: {
+                            fill: false
+                        },
+                        point: {
+                            hitRadius: differenceData.length > 500 ? 5 : 10,
+                            hoverRadius: differenceData.length > 500 ? 6 : 12
+                        }
+                    },
+                    animation: {
+                        duration: differenceData.length > 1000 ? 0 : 1000,
+                    }
+                }
+            });
+            
+            // Show the difference chart container
+            updateChartLayout();
+            
+            console.log('✅ Difference chart created successfully!');
+            
+        } catch (error) {
+            console.error('❌ Error creating difference chart:', error);
+            hideDifferenceChart();
+        }
+        // Set up theme change listener on first chart creation
+        if (!themeChangeObserver) {
+            setupThemeChangeListener();
         }
     }
 
@@ -626,9 +1001,6 @@ const playersData = {
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="font-mono font-semibold text-gray-900 dark:text-white">
                         ${kill.formattedKillTime}
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                        ${kill.killTimeSeconds.toFixed(1)} seconds
                     </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -1010,6 +1382,7 @@ const playersData = {
                         // Small delay to ensure theme is fully applied
                         setTimeout(() => {
                             initializeChart(currentKillsForChart);
+                            initializeDifferenceChart(currentKillsForChart, comparisonKills);
                             // Also update card colors for theme change
                             if (currentKillsForChart.length > 0) {
                                 const highestEnrageRecord = currentKillsForChart.reduce((prev, current) => 
@@ -1063,8 +1436,7 @@ const playersData = {
     
     function initializeChart(kills) {
         console.log('=== INITIALIZING CHART ===');
-    
-        // Check if Chart.js is available
+        
         if (typeof Chart === 'undefined') {
             console.error('Chart.js not loaded');
             return;
@@ -1147,6 +1519,7 @@ const playersData = {
                 };
             }
         }
+        
         console.log('Processing', sortedKills.length, 'data points');
         
         // Get styles for main dataset
@@ -1157,100 +1530,61 @@ const playersData = {
         const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
         const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
         
-        // Try to create time scale chart, fallback to linear if it fails
-  
-            // Try time scale first
-            console.log('Attempting time scale chart...');
-            
-            // Prepare dataset with timestamps
-            const mainDataset = {
-                label: currentPlayer,
-                data: sortedKills.map(kill => ({
-                    x: kill.timeOfKill * 1000, // Unix to milliseconds
-                    y: kill.enrage
-                })),
-                borderColor: 'rgb(59, 130, 246)',
-                backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-                tension: 0.4,
-                pointBackgroundColor: 'rgb(59, 130, 246)',
-                pointBorderColor: isDarkMode ? '#1F2937' : 'white',
-                pointBorderWidth: mainStyle.pointBorderWidth,
-                borderWidth: mainStyle.borderWidth,
-                pointRadius: mainStyle.pointRadius,
-                pointHoverRadius: mainStyle.pointHoverRadius,
-                pointStyle: mainStyle.pointStyle,
-                showLine: mainStyle.showLine
-            };
-            
-            const datasets = [mainDataset];
+        // Prepare main dataset
+        const mainDataset = {
+            label: currentPlayer,
+            data: sortedKills.map(kill => ({
+                x: kill.timeOfKill * 1000,
+                y: kill.enrage
+            })),
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+            tension: 0.4,
+            pointBackgroundColor: 'rgb(59, 130, 246)',
+            pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+            pointBorderWidth: mainStyle.pointBorderWidth,
+            borderWidth: mainStyle.borderWidth,
+            pointRadius: mainStyle.pointRadius,
+            pointHoverRadius: mainStyle.pointHoverRadius,
+            pointStyle: mainStyle.pointStyle,
+            showLine: mainStyle.showLine
+        };
         
-        // Add comparison dataset if selected
+        // In the initializeChart function, update the comparison dataset logic:
+        const datasets = [mainDataset];
+
+        // Add comparison dataset if a comparison player is selected
+        // (regardless of showDifferenceMode, but only if difference chart is not being shown)
         if (comparisonPlayer && comparisonKills) {
-            const showDifference = document.getElementById('show-difference')?.checked || false;
             const comparisonStyle = getPointStyle(sortedKills.length, true);
             
             // Process comparison data
             const comparisonSorted = comparisonKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
             
-            if (showDifference) {
-                // Calculate difference
-                const differenceData = interpolateDataPoints(sortedKills, comparisonKills);
-                
-                const diffDataset = {
-                    label: `Difference (${currentPlayer} - ${comparisonPlayer})`,
-                    data: sortedKills.map((kill, index) => {
-                        const diff = differenceData[index];
-                        if (diff !== null) {
-                            return {
-                                x: kill.timeOfKill * 1000,  // Use same timestamp
-                                y: diff
-                            };
-                        }
-                        return null;
-                    }).filter(point => point !== null),
-                    borderColor: 'rgb(239, 68, 68)',
-                    backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                    tension: 0.4,
-                    borderDash: [5, 5],
-                    pointBackgroundColor: 'rgb(239, 68, 68)',
-                    pointBorderColor: isDarkMode ? '#1F2937' : 'white',
-                    pointBorderWidth: comparisonStyle.pointBorderWidth,
-                    borderWidth: comparisonStyle.borderWidth,
-                    pointRadius: comparisonStyle.pointRadius,
-                    pointHoverRadius: comparisonStyle.pointHoverRadius,
-                    pointStyle: comparisonStyle.pointStyle,
-                    showLine: comparisonStyle.showLine
-                };
-                
-                if (diffDataset.data.length > 0) {
-                    datasets.push(diffDataset);
-                }
-            } else {
-                // Show comparison player's data
-                const comparisonDataset = {
-                    label: comparisonPlayer,
-                    data: comparisonSorted.map(kill => ({
-                        x: kill.timeOfKill * 1000,  // Convert Unix to milliseconds
-                        y: kill.enrage
-                    })),
-                    borderColor: 'rgb(16, 185, 129)',
-                    backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-                    tension: 0.4,
-                    pointBackgroundColor: 'rgb(16, 185, 129)',
-                    pointBorderColor: isDarkMode ? '#1F2937' : 'white',
-                    pointBorderWidth: comparisonStyle.pointBorderWidth,
-                    borderWidth: comparisonStyle.borderWidth,
-                    pointRadius: comparisonStyle.pointRadius,
-                    pointHoverRadius: comparisonStyle.pointHoverRadius,
-                    pointStyle: comparisonStyle.pointStyle,
-                    showLine: comparisonStyle.showLine
-                };
-                
-                datasets.push(comparisonDataset);
-            }
+            // Show comparison player's data as a separate line
+            const comparisonDataset = {
+                label: comparisonPlayer,
+                data: comparisonSorted.map(kill => ({
+                    x: kill.timeOfKill * 1000,
+                    y: kill.enrage
+                })),
+                borderColor: 'rgb(16, 185, 129)',
+                backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                tension: 0.4,
+                pointBackgroundColor: 'rgb(16, 185, 129)',
+                pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+                pointBorderWidth: comparisonStyle.pointBorderWidth,
+                borderWidth: comparisonStyle.borderWidth,
+                pointRadius: comparisonStyle.pointRadius,
+                pointHoverRadius: comparisonStyle.pointHoverRadius,
+                pointStyle: comparisonStyle.pointStyle,
+                showLine: comparisonStyle.showLine
+            };
+            
+            datasets.push(comparisonDataset);
         }
         
-        console.log('Creating chart with', datasets.length, 'datasets');
+        console.log('Creating main chart with', datasets.length, 'datasets');
         
         try {
             // Calculate time range for dynamic configuration
@@ -1311,7 +1645,7 @@ const playersData = {
                         x: {
                             type: 'time',
                             time: {
-                                unit: 'day',
+                                unit: timeUnit,
                                 displayFormats: {
                                     day: 'MMM d'
                                 }
@@ -1333,8 +1667,7 @@ const playersData = {
                             },
                             grid: {
                                 color: gridColor,
-                                drawBorder: false,
-                                display: sortedKills.length
+                                drawBorder: false
                             }
                         }
                     },
@@ -1403,30 +1736,27 @@ const playersData = {
                             fill: false
                         },
                         point: {
-                            // Adjust point rendering for dense data
                             hitRadius: sortedKills.length > 500 ? 5 : 10,
                             hoverRadius: sortedKills.length > 500 ? 6 : 12
                         }
                     },
-                    // Performance optimizations for large datasets
                     animation: {
-                        duration: sortedKills.length > 1000 ? 0 : 1000, // No animation for very large datasets
+                        duration: sortedKills.length > 1000 ? 0 : 1000,
                     },
                     transitions: {
                         active: {
                             animation: {
-                                duration: 0 // Disable transitions for large datasets
+                                duration: 0
                             }
                         }
                     }
                 }
             });
             
-            console.log('✅ Time scale chart created successfully!');
+            console.log('✅ Main chart created successfully!');
             
         } catch (timeError) {
-            console.warn('Time scale failed', timeError.message);
-            
+            console.warn('Main chart creation failed', timeError.message);
         }
 
         // Set up theme change listener on first chart creation
@@ -1484,11 +1814,21 @@ const playersData = {
         const showDifferenceCheckbox = document.getElementById('show-difference');
         if (showDifferenceCheckbox) {
             showDifferenceCheckbox.addEventListener('change', function() {
-                if (currentKillsForChart && currentPlayer && comparisonPlayer && comparisonKills) {
-                    initializeChart(currentKillsForChart);
+                showDifferenceMode = this.checked;
+                
+                if (currentKillsForChart && currentPlayer) {
+                    if (showDifferenceMode && comparisonPlayer && comparisonKills) {
+                        // Show both charts
+                        initializeChart(currentKillsForChart);
+                        initializeDifferenceChart(currentKillsForChart, comparisonKills);
+                    } else {
+                        // Show only main chart with comparison line
+                        initializeChart(currentKillsForChart);
+                        hideDifferenceChart();
+                    }
+                    updateChartLayout();
                 }
             });
-            console.log('Show difference checkbox listener added');
         }
         
         console.log('Page initialized, players available:', playersList.length);

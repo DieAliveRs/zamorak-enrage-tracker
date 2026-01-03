@@ -482,7 +482,7 @@ const pageData = {
               🔄
             </div>
             <div>
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Last Update</p>
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Updated at:</p>
               ${lastUpdateTimestamp ? `
                 <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">
                   ${formatLocalTime(lastUpdateTimestamp)}
@@ -511,17 +511,17 @@ const pageData = {
                   const hoursSinceUpdate = (now - lastUpdateTimestamp) / 3600;
                   
                   let statusColor = 'bg-green-500';
-                  let statusText = 'Fresh';
+                  let statusText = 'Last data update:';
                   let shouldPulse = hoursSinceUpdate < 6;
                   
                   if (hoursSinceUpdate > 6) {
                     statusColor = 'bg-yellow-500';
-                    statusText = 'Stale';
+                    statusText = 'Last data update:';
                     shouldPulse = false;
                   }
                   if (hoursSinceUpdate > 24) {
                     statusColor = 'bg-red-500';
-                    statusText = 'Outdated';
+                    statusText = 'Last data update:';
                     shouldPulse = false;
                   }
                   
