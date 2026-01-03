@@ -63,7 +63,7 @@ const pageData = {
 <LayoutSidebar define:vars={{ pageData }}>
   <!-- Page Header -->
   <div class="px-4 pt-4">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Zamorak Kills Leaderboard</h1>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Zamorak Leaderboard</h1>
   </div>
 
   <!-- Header Cards Container -->
@@ -375,10 +375,30 @@ const pageData = {
                 <span class="font-semibold text-gray-900 dark:text-white">Max: 60,000%</span>
               </div>
               <div class="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div class="bg-gradient-to-r from-green-400 via-yellow-400 to-red-600 
-                            dark:from-green-600 dark:via-yellow-600 dark:to-red-700 
-                            h-2 rounded-full" 
-                     style="width: ${Math.min(highestEnrage / 60000 * 100, 100)}%">
+                <div class="bg-gradient-to-r
+                  from-blue-400
+                  via-cyan-400
+                  via-teal-300
+                  via-green-300
+                  via-green-500
+                  via-yellow-400
+                  via-yellow-500
+                  via-orange-400
+                  via-orange-600
+                  via-red-500
+                  to-red-800
+                  dark:from-blue-400
+                  dark:via-cyan-400
+                  dark:via-teal-300
+                  dark:via-green-300
+                  dark:via-yellow-400
+                  dark:via-yellow-500
+                  dark:via-orange-400
+                  dark:via-orange-600
+                  dark:via-red-500
+                  dark:to-red-800
+                  h-2 rounded-full"
+                  style="width: ${Math.min(highestEnrage / 60000 * 100, 100)}%">
                 </div>
               </div>
             </div>
@@ -555,12 +575,12 @@ const pageData = {
           const killDate = record.timeOfKill;
           
           let enrageClass = 'font-bold ';
-            if (enragePercent >= 55000){ enrageClass += 'text-red-900 dark:text-red-500';}       // 55-60k: Dark red
-            else if (enragePercent >= 50000) {enrageClass += 'text-red-800 dark:text-red-400';}       // 50-55k: Darker red
-            else if (enragePercent >= 45000) {enrageClass += 'text-red-700 dark:text-red-400';}       // 45-50k: Crimson
-            else if (enragePercent >= 40000) {enrageClass += 'text-orange-700 dark:text-orange-400';} // 40-45k: Orange red
+            if (enragePercent >= 55000){ enrageClass += 'text-red-900 dark:text-red-800';}       // 55-60k: Dark red
+            else if (enragePercent >= 50000) {enrageClass += 'text-red-800 dark:text-red-700';}       // 50-55k: Darker red
+            else if (enragePercent >= 45000) {enrageClass += 'text-red-700 dark:text-red-500';}       // 45-50k: Crimson
+            else if (enragePercent >= 40000) {enrageClass += 'text-orange-700 dark:text-orange-600';} // 40-45k: Orange red
             else if (enragePercent >= 35000) {enrageClass += 'text-orange-600 dark:text-orange-400';} // 35-40k: Dark orange
-            else if (enragePercent >= 30000) {enrageClass += 'text-yellow-600 dark:text-yellow-400';} // 30-35k: Orange/Yellow
+            else if (enragePercent >= 30000) {enrageClass += 'text-yellow-600 dark:text-yellow-500';} // 30-35k: Orange/Yellow
             else if (enragePercent >= 25000) {enrageClass += 'text-yellow-500 dark:text-yellow-400';} // 25-30k: Gold
             else if (enragePercent >= 20000) {enrageClass += 'text-green-500 dark:text-green-400';}   // 20-25k: Yellow green
             else if (enragePercent >= 15000) {enrageClass += 'text-green-400 dark:text-green-300';}   // 15-20k: Lime green
@@ -608,15 +628,6 @@ const pageData = {
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="${enrageClass} text-2xl">
                   ${enragePercent.toLocaleString()}%
-                </div>
-                <div class="mt-1 w-32">
-                  <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                    <div class="bg-gradient-to-r from-green-400 via-yellow-400 to-red-600 
-                                dark:from-green-500 dark:via-yellow-500 dark:to-red-500 
-                                h-2 rounded-full" 
-                         style="width: ${Math.min(enragePercent / 60000 * 100, 100)}%">
-                    </div>
-                  </div>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
@@ -697,17 +708,6 @@ const pageData = {
                 </div>
                 <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
                   ${timeAgo(killDate)}
-                </div>
-              </div>
-              
-              <div class="mt-3">
-                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Enrage level</div>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                  <div class="bg-gradient-to-r from-green-400 via-yellow-400 to-red-600 
-                              dark:from-green-500 dark:via-yellow-500 dark:to-red-500 
-                              h-1.5 rounded-full" 
-                       style="width: ${Math.min(enragePercent / 60000 * 100, 100)}%">
-                  </div>
                 </div>
               </div>
             </div>

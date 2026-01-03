@@ -1035,12 +1035,12 @@ const playersData = {
     }
 
     function getEnrageColorClass(enrage) {
-        if (enrage >= 55000) return 'text-red-900 dark:text-red-500';       // 55-60k: Dark red
-        if (enrage >= 50000) return 'text-red-800 dark:text-red-400';       // 50-55k: Darker red
-        if (enrage >= 45000) return 'text-red-700 dark:text-red-400';       // 45-50k: Crimson
-        if (enrage >= 40000) return 'text-orange-700 dark:text-orange-400'; // 40-45k: Orange red
+        if (enrage >= 55000) return 'text-red-900 dark:text-red-800';       // 55-60k: Dark red
+        if (enrage >= 50000) return 'text-red-800 dark:text-red-700';       // 50-55k: Darker red
+        if (enrage >= 45000) return 'text-red-700 dark:text-red-500';       // 45-50k: Crimson
+        if (enrage >= 40000) return 'text-orange-700 dark:text-orange-600'; // 40-45k: Orange red
         if (enrage >= 35000) return 'text-orange-600 dark:text-orange-400'; // 35-40k: Dark orange
-        if (enrage >= 30000) return 'text-yellow-600 dark:text-yellow-400'; // 30-35k: Orange/Yellow
+        if (enrage >= 30000) return 'text-yellow-600 dark:text-yellow-500'; // 30-35k: Orange/Yellow
         if (enrage >= 25000) return 'text-yellow-500 dark:text-yellow-400'; // 25-30k: Gold
         if (enrage >= 20000) return 'text-green-500 dark:text-green-400';   // 20-25k: Yellow green
         if (enrage >= 15000) return 'text-green-400 dark:text-green-300';   // 15-20k: Lime green
@@ -1105,12 +1105,12 @@ const playersData = {
 
     // Helper function for icon border
     function getBorderColor(enrageValue) {
-        if (enrageValue >= 55000) return 'border-red-900 dark:border-red-700';      // 55-60k: Dark red
-        if (enrageValue >= 50000) return 'border-red-800 dark:border-red-600';      // 50-55k: Darker red
+        if (enrageValue >= 55000) return 'border-red-900 dark:border-red-800';      // 55-60k: Dark red
+        if (enrageValue >= 50000) return 'border-red-800 dark:border-red-700';      // 50-55k: Darker red
         if (enrageValue >= 45000) return 'border-red-700 dark:border-red-500';      // 45-50k: Crimson
-        if (enrageValue >= 40000) return 'border-orange-700 dark:border-orange-500'; // 40-45k: Orange red
+        if (enrageValue >= 40000) return 'border-orange-700 dark:border-orange-600'; // 40-45k: Orange red
         if (enrageValue >= 35000) return 'border-orange-600 dark:border-orange-400'; // 35-40k: Dark orange
-        if (enrageValue >= 30000) return 'border-yellow-600 dark:border-yellow-400'; // 30-35k: Orange/Yellow
+        if (enrageValue >= 30000) return 'border-yellow-600 dark:border-yellow-500'; // 30-35k: Orange/Yellow
         if (enrageValue >= 25000) return 'border-yellow-500 dark:border-yellow-400'; // 25-30k: Gold
         if (enrageValue >= 20000) return 'border-green-500 dark:border-green-400';   // 20-25k: Yellow green
         if (enrageValue >= 15000) return 'border-green-400 dark:border-green-300';   // 15-20k: Lime green
