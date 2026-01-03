@@ -24,10 +24,13 @@ import killData from '../data/data.json';
 //   };
 // }
 
+const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 // Helper functions
 function formatTimestamp(timestamp) {
   const date = new Date(timestamp * 1000);
   return date.toLocaleDateString('en-US', {
+    timezone: userTimezone,
     year: 'numeric',
     month: 'short',
     day: 'numeric'
@@ -264,6 +267,15 @@ const latestKills = [...killData.records]
         <div class="flex items-center justify-between">
             <div class="flex items-center">
             {(() => {
+                if (stats.lastUpdated === 'Never') {
+                    return (
+                        <>
+                            <div class="w-2 h-2 bg-gray-500 dark:bg-gray-400 rounded-full mr-2"></div>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">No data</span>
+                        </>
+                    );
+                }
+                
                 const lastUpdate = new Date(stats.lastUpdated);
                 const now = new Date();
                 const hoursSinceUpdate = (now - lastUpdate) / (1000 * 60 * 60);
@@ -279,10 +291,6 @@ const latestKills = [...killData.records]
                 statusColor = 'bg-red-500 dark:bg-red-400';
                 statusText = 'Outdated';
                 }
-                if (stats.lastUpdated === 'Never') {
-                statusColor = 'bg-gray-500 dark:bg-gray-400';
-                statusText = 'No data';
-                }
                 
                 return (
                 <>
@@ -293,11 +301,17 @@ const latestKills = [...killData.records]
             })()}
             </div>
             <div class="text-sm">
-            {stats.lastUpdated !== 'Never' && (
-                <span class="text-gray-600 dark:text-gray-300">
-                {Math.floor((new Date() - new Date(stats.lastUpdated)) / (1000 * 60 * 60))}h ago
-                </span>
-            )}
+            {stats.lastUpdated !== 'Never' && (() => {
+                // Convert the date string to a timestamp for timeAgo function
+                const timestamp = Math.floor(new Date(stats.lastUpdated).getTime() / 1000);
+                const timeAgoText = timeAgo(timestamp);
+                
+                return (
+                    <span class="text-gray-600 dark:text-gray-300">
+                        {timeAgoText}
+                    </span>
+                );
+            })()}
             </div>
         </div>
         </div>
