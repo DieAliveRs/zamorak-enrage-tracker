@@ -320,33 +320,53 @@ const pageData = {
                     p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
                     border-2 border-red-200 dark:border-red-900/30">
           <div class="flex items-center">
-            <div class="mr-4">
-              ${(() => {
-                if (highestEnrage <= 0) return 'N/A';
+            ${(() => {
+                if (highestEnrage <= 0) {
+                // No enrage data case
+                return `
+                    <div class="mr-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                        N/A
+                    </div>
+                    </div>
+                    <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+                    <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">N/A</p>
+                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-1 truncate">--</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">No data available</p>
+                    </div>
+                `;
+                }
                 
                 // Find the player with highest enrage
                 const highestEnrageRecord = killData.records.reduce((prev, current) => {
-                    return (prev.enrage > current.enrage) ? prev : current;
+                return (prev.enrage > current.enrage) ? prev : current;
                 });
                 const highestPlayer = highestEnrageRecord.members[0]?.name || 'Unknown';
                 const avatarUrl = getRSIconUrl(highestPlayer);
                 
-                if (avatarUrl) {
-                    return `<img src="${avatarUrl}" alt="${highestPlayer}" class="w-12 h-12 rounded-full border-2 border-yellow-400 dark:border-yellow-600
-                    bg-white dark:bg-gray-800 shadow-lg transform hover:scale-105 transition-transform duration-200">`;
-                }
-                return '👑';
-                })()}
-            </div>
-            <div>
-              <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
-              <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
-                ${highestEnrage > 0 ? highestEnrage.toLocaleString() + '%' : 'N/A'}
-              </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                ${highestEnrage > 0 ? 'All-time record' : 'No data available'}
-              </p>
-            </div>
+                // Generate the entire content including both icon and text
+                return `
+                <div class="mr-4">
+                    ${avatarUrl ? 
+                    `<img src="${avatarUrl}" alt="${highestPlayer}" class="w-12 h-12 min-w-12 min-h-12 rounded-full border-2 border-yellow-400 dark:border-yellow-600 bg-white dark:bg-gray-800 shadow-lg transform hover:scale-105 transition-transform duration-200">` : 
+                    `<div class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 dark:from-yellow-700 dark:to-yellow-800 flex items-center justify-center text-white shadow">👑</div>`
+                    }
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+                    <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+                    ${highestEnrage.toLocaleString()}%
+                    </p>
+                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-1 truncate">
+                    ${highestPlayer}
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    All-time record
+                    </p>
+                </div>
+                `;
+            })()}
           </div>
           ${highestEnrage > 0 ? `
             <div class="mt-4 pt-4 border-t border-red-200 dark:border-red-900/30">
@@ -412,7 +432,7 @@ const pageData = {
                 
                 if (avatarUrl) {
                 return `<img src="${avatarUrl}" alt="${playerName}" 
-                            class="w-12 h-12 rounded-full border-2 border-green-500 dark:border-green-600
+                            class="w-12 h-12 min-w-12 min-h-12 rounded-full border-2 border-green-500 dark:border-green-600
                                 bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/50">`;
                 }
                 return `<div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 
@@ -535,19 +555,18 @@ const pageData = {
           const killDate = record.timeOfKill;
           
           let enrageClass = 'font-bold ';
-          if (enragePercent >= 40000) {
-            enrageClass += 'text-purple-700 dark:text-purple-400';
-          } else if (enragePercent >= 30000) {
-            enrageClass += 'text-red-700 dark:text-red-400';
-          } else if (enragePercent >= 20000) {
-            enrageClass += 'text-orange-700 dark:text-orange-400';
-          } else if (enragePercent >= 10000) {
-            enrageClass += 'text-yellow-700 dark:text-yellow-400';
-          } else if (enragePercent >= 5000) {
-            enrageClass += 'text-green-700 dark:text-green-400';
-          } else {
-            enrageClass += 'text-blue-700 dark:text-blue-400';
-          }
+            if (enragePercent >= 55000){ enrageClass += 'text-red-900 dark:text-red-500';}       // 55-60k: Dark red
+            else if (enragePercent >= 50000) {enrageClass += 'text-red-800 dark:text-red-400';}       // 50-55k: Darker red
+            else if (enragePercent >= 45000) {enrageClass += 'text-red-700 dark:text-red-400';}       // 45-50k: Crimson
+            else if (enragePercent >= 40000) {enrageClass += 'text-orange-700 dark:text-orange-400';} // 40-45k: Orange red
+            else if (enragePercent >= 35000) {enrageClass += 'text-orange-600 dark:text-orange-400';} // 35-40k: Dark orange
+            else if (enragePercent >= 30000) {enrageClass += 'text-yellow-600 dark:text-yellow-400';} // 30-35k: Orange/Yellow
+            else if (enragePercent >= 25000) {enrageClass += 'text-yellow-500 dark:text-yellow-400';} // 25-30k: Gold
+            else if (enragePercent >= 20000) {enrageClass += 'text-green-500 dark:text-green-400';}   // 20-25k: Yellow green
+            else if (enragePercent >= 15000) {enrageClass += 'text-green-400 dark:text-green-300';}   // 15-20k: Lime green
+            else if (enragePercent >= 10000) {enrageClass += 'text-teal-400 dark:text-teal-300';}     // 10-15k: Spring green
+            else if (enragePercent >= 5000) {enrageClass += 'text-cyan-500 dark:text-cyan-400';}      // 5-10k: Sea green
+            else if (enragePercent >= 0) {enrageClass += 'text-blue-600 dark:text-blue-400';}
           
           return `
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150">

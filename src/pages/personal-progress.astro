@@ -89,22 +89,30 @@ const playersData = {
 
   <!-- Stats Cards (Hidden until player selected) -->
   <div id="stats-cards" class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 hidden">
-    <!-- Highest Enrage Card -->
-    <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 p-6 rounded-xl shadow-lg border-2 border-red-200 dark:border-red-900/30">
-    <div class="flex items-center">
-        <div id="highest-enrage-icon" class="mr-4">
-        <!-- Icon will be dynamically updated -->
-        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-red-600 dark:from-red-700 dark:to-red-800 flex items-center justify-center text-white shadow">
-            🔥
+    <!-- Highest Enrage Card (Updated to use dynamic colors) -->
+    <div id="highest-enrage-card" class="p-6 rounded-xl shadow-lg border-2 bg-gradient-to-br">
+        <div class="flex items-center">
+            <div id="highest-enrage-icon" class="mr-4 relative">
+                <!-- Dynamic avatar/icon will go here -->
+                <div id="highest-enrage-icon-inner" class="w-12 h-12 rounded-full bg-gradient-to-r flex items-center justify-center text-white shadow">
+                    🔥
+                </div>
+                <!-- Avatar overlay (if available) -->
+                <div id="highest-enrage-avatar" class="absolute inset-0 rounded-full overflow-hidden hidden">
+                    <img id="player-avatar" class="w-full h-full object-cover" alt="Player Avatar">
+                </div>
+                <!-- Crown badge -->
+                <!-- <div id="crown-badge" class="absolute -bottom-1 -right-1 w-5 h-5 bg-red-500 dark:bg-red-600 rounded-full flex items-center justify-center text-white text-xs">
+                    👑
+                </div> -->
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+                <p id="highest-enrage" class="text-3xl font-bold mt-1">0%</p>
+                <p id="enrage-player" class="text-sm font-semibold text-gray-900 dark:text-white truncate max-w-[200px]">--</p>
+                <p id="enrage-date" class="text-xs text-gray-500 dark:text-gray-400 mt-1">--</p>
+            </div>
         </div>
-        </div>
-        <div>
-        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
-        <p id="highest-enrage" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0%</p>
-        <p id="enrage-player" class="text-sm font-semibold text-gray-900 dark:text-white truncate max-w-[200px]">--</p>
-        <p id="enrage-date" class="text-xs text-gray-500 dark:text-gray-400 mt-1">--</p>
-        </div>
-    </div>
     </div>
 
     <!-- Total Kills Card -->
@@ -401,6 +409,9 @@ const playersData = {
         
         console.log('Processed kills:', playerKills.length);
         
+        // Reset the card first to ensure clean state
+        resetHighestEnrageCard();
+
         processPlayerStats(playerKills, playerName);
         showPlayerContent();
         renderKillTable(playerKills);
@@ -460,7 +471,10 @@ const playersData = {
         // Update highest enrage details
         document.getElementById('enrage-player').textContent = playerName;
         const highestDate = new Date(highestEnrageRecord.timeOfKill * 1000);
-        document.getElementById('enrage-date').textContent = `Achieved: ${mostRecent.formattedDate}`;
+        document.getElementById('enrage-date').textContent = `Achieved: ${highestEnrageRecord.formattedDate}`;
+        
+        // ADD THIS LINE to update the card colors:
+        updateHighestEnrageCardColors(highestEnrage);
         
         // Add tooltip with more details
         const enrageElement = document.getElementById('highest-enrage');
@@ -486,55 +500,31 @@ const playersData = {
     }
 
     function updatePlayerIcon(playerName) {
-        const iconContainer = document.getElementById('highest-enrage-icon');
-        if (!iconContainer) return;
+        const avatarContainer = document.getElementById('highest-enrage-avatar');
+        const avatarImg = document.getElementById('player-avatar');
+        const crownBadge = document.getElementById('crown-badge');
+        
+        if (!avatarContainer || !avatarImg) return;
         
         const avatarUrl = getRSIconUrl(playerName);
         
-        // Create icon HTML
-        const iconHTML = avatarUrl ? `
-            <div class="relative group">
-                <img 
-                    src="${avatarUrl}" 
-                    alt="${playerName}"
-                    class="w-12 h-12 rounded-full border-2 border-red-500 dark:border-red-600 
-                        bg-white dark:bg-gray-800 shadow-lg group-hover:scale-110 
-                        transition-transform duration-200"
-                />
-                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-red-500 dark:bg-red-600 
-                            rounded-full flex items-center justify-center text-white text-xs">
-                    👑
-                </div>
-                <div class="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-900 
-                            text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 
-                            transition-opacity duration-200 whitespace-nowrap z-10">
-                    ${playerName}
-                </div>
-            </div>
-        ` : `
-            <div class="relative group">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-red-600 
-                        dark:from-red-700 dark:to-red-800 flex items-center justify-center 
-                        text-white shadow">
-                    👑
-                </div>
-                <div class="absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-900 
-                            text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 
-                            transition-opacity duration-200 whitespace-nowrap z-10">
-                    ${playerName}
-                </div>
-            </div>
-        `;
-        
-        iconContainer.innerHTML = iconHTML;
-        
-        // Add error handling for the image if needed
-        const img = iconContainer.querySelector('img');
-        if (img) {
-            img.onerror = function() {
+        if (avatarUrl) {
+            // Show avatar overlay
+            avatarContainer.classList.remove('hidden');
+            avatarImg.src = avatarUrl;
+            avatarImg.alt = playerName;
+            
+            // Add hover tooltip
+            avatarContainer.title = playerName;
+            
+            // Add error handling
+            avatarImg.onerror = function() {
                 this.onerror = null;
                 this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23DC2626"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
             };
+        } else {
+            // Hide avatar overlay
+            avatarContainer.classList.add('hidden');
         }
     }
 
@@ -672,12 +662,157 @@ const playersData = {
     }
 
     function getEnrageColorClass(enrage) {
-        if (enrage >= 40000) return 'text-purple-700 dark:text-purple-400';
-        if (enrage >= 30000) return 'text-red-700 dark:text-red-400';
-        if (enrage >= 20000) return 'text-orange-700 dark:text-orange-400';
-        if (enrage >= 10000) return 'text-yellow-700 dark:text-yellow-400';
-        if (enrage >= 5000) return 'text-green-700 dark:text-green-400';
-        return 'text-blue-700 dark:text-blue-400';
+        if (enrage >= 55000) return 'text-red-900 dark:text-red-500';       // 55-60k: Dark red
+        if (enrage >= 50000) return 'text-red-800 dark:text-red-400';       // 50-55k: Darker red
+        if (enrage >= 45000) return 'text-red-700 dark:text-red-400';       // 45-50k: Crimson
+        if (enrage >= 40000) return 'text-orange-700 dark:text-orange-400'; // 40-45k: Orange red
+        if (enrage >= 35000) return 'text-orange-600 dark:text-orange-400'; // 35-40k: Dark orange
+        if (enrage >= 30000) return 'text-yellow-600 dark:text-yellow-400'; // 30-35k: Orange/Yellow
+        if (enrage >= 25000) return 'text-yellow-500 dark:text-yellow-400'; // 25-30k: Gold
+        if (enrage >= 20000) return 'text-green-500 dark:text-green-400';   // 20-25k: Yellow green
+        if (enrage >= 15000) return 'text-green-400 dark:text-green-300';   // 15-20k: Lime green
+        if (enrage >= 10000) return 'text-teal-400 dark:text-teal-300';     // 10-15k: Spring green
+        if (enrage >= 5000) return 'text-cyan-500 dark:text-cyan-400';      // 5-10k: Sea green
+        return 'text-blue-600 dark:text-blue-400';                          // 0-5k: Steel blue
+    }
+
+    // Function to update highest enrage card colors
+    function updateHighestEnrageCardColors(enrage) {
+        const card = document.getElementById('highest-enrage-card');
+        const icon = document.getElementById('highest-enrage-icon-inner');
+        const enrageText = document.getElementById('highest-enrage');
+        // const crownBadge = document.getElementById('crown-badge');
+        
+        if (card && icon && enrageText) {
+            // Get color classes based on enrage
+            const cardClass = getEnrageCardClass(enrage);
+            const iconClass = getIconGradient(enrage);
+            const borderColor = getBorderColor(enrage);
+            const textColor = getEnrageColorClass(enrage);
+            
+            // Update classes
+            card.className = `p-6 rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${cardClass}`;
+            icon.className = `w-12 h-12 rounded-full border-2 border-${borderColor} bg-gradient-to-r flex items-center justify-center text-white shadow ${iconClass}`;
+            enrageText.className = `text-3xl font-bold mt-1 ${textColor}`;
+            
+            // Update crown badge color based on enrage
+            // if (crownBadge) {
+            //     if (enrage >= 50000) {
+            //         crownBadge.className = 'absolute -bottom-1 -right-1 w-5 h-5 bg-red-500 dark:bg-red-600 rounded-full flex items-center justify-center text-white text-xs';
+            //     } else if (enrage >= 30000) {
+            //         crownBadge.className = 'absolute -bottom-1 -right-1 w-5 h-5 bg-orange-500 dark:bg-orange-600 rounded-full flex items-center justify-center text-white text-xs';
+            //     } else if (enrage >= 15000) {
+            //         crownBadge.className = 'absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 dark:bg-yellow-600 rounded-full flex items-center justify-center text-white text-xs';
+            //     } else {
+            //         crownBadge.className = 'absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 dark:bg-blue-600 rounded-full flex items-center justify-center text-white text-xs';
+            //     }
+            // }
+            
+            // Update icon emoji based on enrage
+            const iconEmoji = enrage >= 50000 ? '🔥' : enrage >= 30000 ? '⚡' : enrage >= 15000 ? '✨' : '⭐';
+            icon.textContent = iconEmoji;
+        }
+    }
+
+    // Helper function for card background gradient
+    function getEnrageCardClass(enrageValue) {
+        if (enrageValue >= 55000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 border-red-200 dark:border-red-900/30';
+        if (enrageValue >= 50000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-800/30 dark:to-red-700/20 border-red-200 dark:border-red-800/30';
+        if (enrageValue >= 45000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-700/30 dark:to-red-600/20 border-red-200 dark:border-red-700/30';
+        if (enrageValue >= 40000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-800/30 dark:to-orange-700/20 border-orange-200 dark:border-orange-800/30';
+        if (enrageValue >= 35000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-700/30 dark:to-orange-600/20 border-orange-200 dark:border-orange-700/30';
+        if (enrageValue >= 30000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-800/30 dark:to-yellow-700/20 border-yellow-200 dark:border-yellow-800/30';
+        if (enrageValue >= 25000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-700/30 dark:to-yellow-600/20 border-yellow-200 dark:border-yellow-700/30';
+        if (enrageValue >= 20000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-800/30 dark:to-green-700/20 border-green-200 dark:border-green-800/30';
+        if (enrageValue >= 15000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-700/30 dark:to-green-600/20 border-green-200 dark:border-green-700/30';
+        if (enrageValue >= 10000) return 'bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-800/30 dark:to-teal-700/20 border-teal-200 dark:border-teal-800/30';
+        if (enrageValue >= 5000) return 'bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-800/30 dark:to-cyan-700/20 border-cyan-200 dark:border-cyan-800/30';
+        return 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-800/30 dark:to-blue-700/20 border-blue-200 dark:border-blue-800/30';
+    }
+
+    // Helper function for icon border
+    function getBorderColor(enrageValue) {
+        if (enrageValue >= 55000) return 'border-red-900 dark:border-red-700';      // 55-60k: Dark red
+        if (enrageValue >= 50000) return 'border-red-800 dark:border-red-600';      // 50-55k: Darker red
+        if (enrageValue >= 45000) return 'border-red-700 dark:border-red-500';      // 45-50k: Crimson
+        if (enrageValue >= 40000) return 'border-orange-700 dark:border-orange-500'; // 40-45k: Orange red
+        if (enrageValue >= 35000) return 'border-orange-600 dark:border-orange-400'; // 35-40k: Dark orange
+        if (enrageValue >= 30000) return 'border-yellow-600 dark:border-yellow-400'; // 30-35k: Orange/Yellow
+        if (enrageValue >= 25000) return 'border-yellow-500 dark:border-yellow-400'; // 25-30k: Gold
+        if (enrageValue >= 20000) return 'border-green-500 dark:border-green-400';   // 20-25k: Yellow green
+        if (enrageValue >= 15000) return 'border-green-400 dark:border-green-300';   // 15-20k: Lime green
+        if (enrageValue >= 10000) return 'border-teal-400 dark:border-teal-300';     // 10-15k: Spring green
+        if (enrageValue >= 5000) return 'border-cyan-500 dark:border-cyan-400';      // 5-10k: Sea green
+        return 'border-blue-600 dark:border-blue-400';                              // 0-5k: Steel blue
+    }
+
+    // Helper function for icon gradient
+    function getIconGradient(enrageValue) {
+        if (enrageValue >= 55000) return 'from-red-500 to-red-600 dark:from-red-700 dark:to-red-800';
+        if (enrageValue >= 50000) return 'from-red-400 to-red-500 dark:from-red-600 dark:to-red-700';
+        if (enrageValue >= 45000) return 'from-red-300 to-red-400 dark:from-red-500 dark:to-red-600';
+        if (enrageValue >= 40000) return 'from-orange-400 to-orange-500 dark:from-orange-600 dark:to-orange-700';
+        if (enrageValue >= 35000) return 'from-orange-300 to-orange-400 dark:from-orange-500 dark:to-orange-600';
+        if (enrageValue >= 30000) return 'from-yellow-400 to-yellow-500 dark:from-yellow-600 dark:to-yellow-700';
+        if (enrageValue >= 25000) return 'from-yellow-300 to-yellow-400 dark:from-yellow-500 dark:to-yellow-600';
+        if (enrageValue >= 20000) return 'from-green-400 to-green-500 dark:from-green-600 dark:to-green-700';
+        if (enrageValue >= 15000) return 'from-green-300 to-green-400 dark:from-green-500 dark:to-green-600';
+        if (enrageValue >= 10000) return 'from-teal-400 to-teal-500 dark:from-teal-600 dark:to-teal-700';
+        if (enrageValue >= 5000) return 'from-cyan-400 to-cyan-500 dark:from-cyan-600 dark:to-cyan-700';
+        return 'from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700';
+    }
+
+    // Reset highest enrage card to default state
+    function resetHighestEnrageCard() {
+        const card = document.getElementById('highest-enrage-card');
+        const icon = document.getElementById('highest-enrage-icon-inner');
+        const enrageText = document.getElementById('highest-enrage');
+        const crownBadge = document.getElementById('crown-badge');
+        const avatarContainer = document.getElementById('highest-enrage-avatar');
+        
+        if (card && icon && enrageText) {
+            // Reset to default colors (for 0 enrage)
+            card.className = 'p-6 rounded-xl shadow-lg border-2 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-800/30 dark:to-blue-700/20 border-blue-200 dark:border-blue-800/30';
+            icon.className = 'w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center text-white shadow';
+            enrageText.className = 'text-3xl font-bold mt-1 text-blue-600 dark:text-blue-400';
+            icon.textContent = '⭐';
+            
+            // Reset crown badge
+            if (crownBadge) {
+                crownBadge.className = 'absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 dark:bg-blue-600 rounded-full flex items-center justify-center text-white text-xs';
+            }
+            
+            // Hide avatar
+            if (avatarContainer) {
+                avatarContainer.classList.add('hidden');
+            }
+        }
+    }
+
+    function showNoSelectionState() {
+        console.log('Showing no selection state');
+        
+        // Hide all content sections safely
+        const sectionsToHide = ['stats-cards', 'graph-section', 'kill-table-stats-section'];
+        sectionsToHide.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.add('hidden');
+            } else {
+                console.warn(`Element with id "${id}" not found`);
+            }
+        });
+        
+        // Reset the highest enrage card to default colors
+        resetHighestEnrageCard();
+        
+        // Show no selection state
+        const noSelectElement = document.getElementById('no-selection-state');
+        if (noSelectElement) {
+            noSelectElement.classList.remove('hidden');
+        } else {
+            console.error('Element with id "no-selection-state" not found');
+        }
     }
 
     function renderBracketStats(kills) {
@@ -694,13 +829,18 @@ const playersData = {
         
         // Define brackets
         const bracketRanges = [
-            { min: 0, max: 4999, label: '0-5k', color: 'blue' },
-            { min: 5000, max: 9999, label: '5-10k', color: 'green' },
-            { min: 10000, max: 14999, label: '10-15k', color: 'yellow' },
-            { min: 15000, max: 19999, label: '15-20k', color: 'orange' },
-            { min: 20000, max: 24999, label: '20-25k', color: 'red' },
-            { min: 25000, max: 29999, label: '25-30k', color: 'purple' },
-            { min: 30000, max: Infinity, label: '30k+', color: 'pink' }
+            { min: 55000, max: 59999, label: '55-60k', color: '#8B0000' }, // Dark red
+            { min: 50000, max: 54999, label: '50-55k', color: '#B22222' }, // Firebrick
+            { min: 45000, max: 49999, label: '45-50k', color: '#DC143C' }, // Crimson
+            { min: 40000, max: 44999, label: '40-45k', color: '#FF4500' }, // Orange red
+            { min: 35000, max: 39999, label: '35-40k', color: '#FF8C00' }, // Dark orange
+            { min: 30000, max: 35999, label: '30-35k', color: '#FFA500' }, // Orange
+            { min: 25000, max: 29999, label: '25-30k', color: '#FFD700' }, // Gold
+            { min: 20000, max: 24999, label: '20-25k', color: '#9ACD32' }, // Yellow green
+            { min: 15000, max: 19999, label: '15-20k', color: '#32CD32' }, // Lime green
+            { min: 10000, max: 14999, label: '10-15k', color: '#00FA9A' }, // Medium spring green
+            { min: 5000, max: 9999, label: '5-10k', color: '#20B2AA' }, // Light sea green
+            { min: 0, max: 4999, label: '0-5k', color: '#4682B4' } // Steel blue
         ];
         
         const bracketData = bracketRanges.map(range => {
@@ -748,7 +888,7 @@ const playersData = {
         container.innerHTML = bracketData.map(bracket => `
             <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                 <div class="flex justify-between items-center mb-2">
-                    <h4 class="font-bold text-gray-900 dark:text-white">${bracket.label}</h4>
+                    <h4 class="font-bold ${getEnrageColorClass(bracket.min)}">${bracket.label}</h4>
                     <span class="px-2 py-1 text-xs font-semibold ${getBracketColorClass(bracket.min)} rounded">
                         ${bracket.kills} kill${bracket.kills !== 1 ? 's' : ''}
                     </span>
@@ -809,35 +949,45 @@ const playersData = {
         `).join('');
     }
 
-    // Helper function to get bracket progress color
+    // Using standard Tailwind color palette
     function getBracketProgressColor(minEnrage) {
-        if (minEnrage >= 30000) return 'bg-purple-600';
-        if (minEnrage >= 25000) return 'bg-red-600';
-        if (minEnrage >= 20000) return 'bg-orange-600';
-        if (minEnrage >= 15000) return 'bg-yellow-600';
-        if (minEnrage >= 10000) return 'bg-green-600';
-        if (minEnrage >= 5000) return 'bg-blue-600';
-        return 'bg-gray-600';
+        if (minEnrage >= 55000) return 'bg-red-900';       // 55-60k: Dark red
+        if (minEnrage >= 50000) return 'bg-red-800';       // 50-55k: Darker red
+        if (minEnrage >= 45000) return 'bg-red-700';       // 45-50k: Crimson
+        if (minEnrage >= 40000) return 'bg-orange-700';    // 40-45k: Orange red
+        if (minEnrage >= 35000) return 'bg-orange-600';    // 35-40k: Dark orange
+        if (minEnrage >= 30000) return 'bg-yellow-600';    // 30-35k: Orange/Yellow
+        if (minEnrage >= 25000) return 'bg-yellow-500';    // 25-30k: Gold
+        if (minEnrage >= 20000) return 'bg-green-500';     // 20-25k: Yellow green
+        if (minEnrage >= 15000) return 'bg-green-400';     // 15-20k: Lime green
+        if (minEnrage >= 10000) return 'bg-teal-400';      // 10-15k: Spring green
+        if (minEnrage >= 5000) return 'bg-cyan-500';       // 5-10k: Sea green
+        return 'bg-blue-600';                              // 0-5k: Steel blue
     }
 
-    // Helper function to calculate bracket progress (simplified)
+    // Helper function to calculate bracket progress
     function calculateBracketProgress(bracket) {
-        // This is a simplified progress calculation - you might want to adjust this
         if (bracket.kills === 0) return 0;
         
-        // More kills = more progress, capped at 100%
-        const progress = Math.min(bracket.kills * 10, 100);
+        // More refined progress calculation based on kills
+        // Adjust the multiplier based on your needs
+        const progress = Math.min(bracket.kills * 8, 100);
         return progress;
     }
 
     function getBracketColorClass(minEnrage) {
-        if (minEnrage >= 30000) return 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300';
-        if (minEnrage >= 25000) return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
-        if (minEnrage >= 20000) return 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300';
-        if (minEnrage >= 15000) return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300';
-        if (minEnrage >= 10000) return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
-        if (minEnrage >= 5000) return 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300';
-        return 'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300';
+        if (minEnrage >= 55000) return 'bg-red-50 dark:bg-red-950/30 text-red-900 dark:text-red-300 border-red-200 dark:border-red-900';
+        if (minEnrage >= 50000) return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800';
+        if (minEnrage >= 45000) return 'bg-red-50 dark:bg-red-800/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
+        if (minEnrage >= 40000) return 'bg-orange-50 dark:bg-orange-800/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800';
+        if (minEnrage >= 35000) return 'bg-orange-50 dark:bg-orange-700/30 text-orange-600 dark:text-orange-300 border-orange-200 dark:border-orange-700';
+        if (minEnrage >= 30000) return 'bg-yellow-50 dark:bg-yellow-800/30 text-yellow-600 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800';
+        if (minEnrage >= 25000) return 'bg-yellow-50 dark:bg-yellow-700/30 text-yellow-500 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700';
+        if (minEnrage >= 20000) return 'bg-green-50 dark:bg-green-700/30 text-green-500 dark:text-green-300 border-green-200 dark:border-green-700';
+        if (minEnrage >= 15000) return 'bg-green-50 dark:bg-green-600/30 text-green-400 dark:text-green-300 border-green-200 dark:border-green-600';
+        if (minEnrage >= 10000) return 'bg-teal-50 dark:bg-teal-700/30 text-teal-400 dark:text-teal-300 border-teal-200 dark:border-teal-700';
+        if (minEnrage >= 5000) return 'bg-cyan-50 dark:bg-cyan-700/30 text-cyan-500 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700';
+        return 'bg-blue-50 dark:bg-blue-800/30 text-blue-600 dark:text-blue-300 border-blue-200 dark:border-blue-800';
     }
 
     function isDark() {
@@ -860,6 +1010,13 @@ const playersData = {
                         // Small delay to ensure theme is fully applied
                         setTimeout(() => {
                             initializeChart(currentKillsForChart);
+                            // Also update card colors for theme change
+                            if (currentKillsForChart.length > 0) {
+                                const highestEnrageRecord = currentKillsForChart.reduce((prev, current) => 
+                                    (prev.enrage > current.enrage) ? prev : current
+                                );
+                                updateHighestEnrageCardColors(highestEnrageRecord.enrage);
+                            }
                         }, 100);
                     }
                 }
