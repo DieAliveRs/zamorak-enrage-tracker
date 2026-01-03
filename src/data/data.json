@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-03T09:24:01.244878+00:00",
-    "count": 2895
+    "generated_at": "2026-01-03T09:42:26.992040+00:00",
+    "count": 2896
   },
   "records": [
     {
@@ -27273,6 +27273,16 @@
         }
       ],
       "killTimeSeconds": 949.2
+    },
+    {
+      "enrage": 7040,
+      "timeOfKill": 1767432648,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 770.4
     },
     {
       "enrage": 7040,
