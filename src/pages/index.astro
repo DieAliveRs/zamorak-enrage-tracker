@@ -256,10 +256,10 @@ const latestKills = [...killData.records]
         <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Last Update</p>
             <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">
-            {stats.lastUpdated === 'Never' ? 'Never' : new Date(stats.lastUpdated).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            {stats.lastUpdated === 'Never' ? 'Never' : new Date(stats.lastUpdated).toLocaleTimeString([], {timezone: userTimezone, hour: '2-digit', minute:'2-digit'})}
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            {stats.lastUpdated === 'Never' ? 'Data not loaded' : new Date(stats.lastUpdated).toLocaleDateString()}
+            {stats.lastUpdated === 'Never' ? 'Data not loaded' : new Date(stats.lastUpdated).toLocaleDateString({timezone: userTimezone})}
             </p>
         </div>
         </div>
