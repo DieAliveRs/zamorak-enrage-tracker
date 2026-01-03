@@ -88,7 +88,7 @@ def sort_records_by_enrage_and_time(data: Dict) -> List[Dict]:
 
 
 
-def filter_data(originalDataPath):
+def filter_new_data(originalDataPath):
     group_size = 1
     # Initialize lists to store results for each group size (2-5)
     enrage_data = {1: []}  # For storing highest enrage by group size
@@ -136,10 +136,10 @@ def filter_data(originalDataPath):
 
     return newKills
 
-if __name__ == "__main__":
-    originalDataPath = "src/data/data.json"
+# if __name__ == "__main__":
+#     originalDataPath = "src/data/data.json"
 
-    print(f"Enrage tracking started at: {datetime.now()}")
-    newKills = filter_data(originalDataPath)
-    print(f"Enrage tracking finished, saving data at: {datetime.now()}")
-    save_json(originalDataPath, newKills)
+#     print(f"Enrage tracking started at: {datetime.now()}")
+#     newKills = filter_new_data(originalDataPath)
+#     print(f"Enrage tracking finished, saving data at: {datetime.now()}")
+#     save_json(originalDataPath, newKills)

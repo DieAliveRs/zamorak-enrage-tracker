@@ -2,7 +2,7 @@ name: Update JSON Data
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -11,7 +11,10 @@ permissions:
 jobs:
   update-json:
     runs-on: ubuntu-latest
-
+    
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -27,7 +30,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run updater script
-        run: python scripts/filter_data.py
+        run: python scripts/run_update.py
 
       - name: Commit changes if any
         run: |

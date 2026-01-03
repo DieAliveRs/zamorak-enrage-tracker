@@ -1,19 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-01-03T05:09:13.340614+00:00",
-    "count": 2881
+    "generated_at": "2026-01-03T04:50:41.141019+00:00",
+    "count": 2883
   },
   "records": [
-    {
-      "enrage": 26330,
-      "timeOfKill": 1767416639,
-      "members": [
-        {
-          "name": "Chikorita"
-        }
-      ],
-      "killTimeSeconds": 783.60004
-    },
     {
       "enrage": 26320,
       "timeOfKill": 1767415782,
@@ -26,7 +16,7 @@
     },
     {
       "enrage": 26310,
-      "timeOfKill": 1767409589,
+      "timeOfKill": 1767409560,
       "members": [
         {
           "name": "Chikorita"
@@ -315,8 +305,18 @@
       "killTimeSeconds": 805.2
     },
     {
+      "enrage": 24120,
+      "timeOfKill": 1767372000,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 805.2
+    },
+    {
       "enrage": 24110,
-      "timeOfKill": 1767371090,
+      "timeOfKill": 1767371040,
       "members": [
         {
           "name": "Dyanne"
@@ -9126,16 +9126,6 @@
     },
     {
       "enrage": 15260,
-      "timeOfKill": 1767416678,
-      "members": [
-        {
-          "name": "NoxiousMinds"
-        }
-      ],
-      "killTimeSeconds": 536.4
-    },
-    {
-      "enrage": 15260,
       "timeOfKill": 1750421640,
       "members": [
         {
@@ -9157,6 +9147,16 @@
     {
       "enrage": 15240,
       "timeOfKill": 1767402753,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 528.60004
+    },
+    {
+      "enrage": 15240,
+      "timeOfKill": 1767402720,
       "members": [
         {
           "name": "NoxiousMinds"
@@ -9296,7 +9296,7 @@
     },
     {
       "enrage": 15170,
-      "timeOfKill": 1767398195,
+      "timeOfKill": 1767398160,
       "members": [
         {
           "name": "NoxiousMinds"
@@ -9316,7 +9316,7 @@
     },
     {
       "enrage": 15160,
-      "timeOfKill": 1767397325,
+      "timeOfKill": 1767397320,
       "members": [
         {
           "name": "NoxiousMinds"
@@ -9356,7 +9356,7 @@
     },
     {
       "enrage": 15140,
-      "timeOfKill": 1767395967,
+      "timeOfKill": 1767395940,
       "members": [
         {
           "name": "NoxiousMinds"
@@ -15186,6 +15186,16 @@
     },
     {
       "enrage": 11700,
+      "timeOfKill": 1767359460,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 736.80005
+    },
+    {
+      "enrage": 11700,
       "timeOfKill": 1746917400,
       "members": [
         {
@@ -15196,7 +15206,7 @@
     },
     {
       "enrage": 11690,
-      "timeOfKill": 1767358630,
+      "timeOfKill": 1767358620,
       "members": [
         {
           "name": "Draganothi"
@@ -15276,7 +15286,7 @@
     },
     {
       "enrage": 11650,
-      "timeOfKill": 1767354651,
+      "timeOfKill": 1767354600,
       "members": [
         {
           "name": "Draganothi"
@@ -15296,7 +15306,7 @@
     },
     {
       "enrage": 11640,
-      "timeOfKill": 1767353550,
+      "timeOfKill": 1767353520,
       "members": [
         {
           "name": "Draganothi"
@@ -15326,7 +15336,7 @@
     },
     {
       "enrage": 11630,
-      "timeOfKill": 1767352102,
+      "timeOfKill": 1767352080,
       "members": [
         {
           "name": "Draganothi"
@@ -15356,7 +15366,7 @@
     },
     {
       "enrage": 11620,
-      "timeOfKill": 1767351040,
+      "timeOfKill": 1767351000,
       "members": [
         {
           "name": "Draganothi"
@@ -15386,7 +15396,7 @@
     },
     {
       "enrage": 11610,
-      "timeOfKill": 1767349439,
+      "timeOfKill": 1767349380,
       "members": [
         {
           "name": "Draganothi"
@@ -27456,6 +27466,16 @@
     },
     {
       "enrage": 6920,
+      "timeOfKill": 1767410220,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 793.80005
+    },
+    {
+      "enrage": 6920,
       "timeOfKill": 1749237720,
       "members": [
         {
@@ -27486,7 +27506,7 @@
     },
     {
       "enrage": 6900,
-      "timeOfKill": 1767366111,
+      "timeOfKill": 1767366060,
       "members": [
         {
           "name": "Miner49er"
@@ -27516,7 +27536,7 @@
     },
     {
       "enrage": 6890,
-      "timeOfKill": 1767365246,
+      "timeOfKill": 1767365220,
       "members": [
         {
           "name": "Miner49er"
@@ -27566,7 +27586,7 @@
     },
     {
       "enrage": 6870,
-      "timeOfKill": 1767362243,
+      "timeOfKill": 1767362220,
       "members": [
         {
           "name": "Miner49er"
@@ -27586,7 +27606,7 @@
     },
     {
       "enrage": 6860,
-      "timeOfKill": 1767360608,
+      "timeOfKill": 1767360600,
       "members": [
         {
           "name": "Miner49er"
@@ -27626,7 +27646,7 @@
     },
     {
       "enrage": 6840,
-      "timeOfKill": 1767349717,
+      "timeOfKill": 1767349680,
       "members": [
         {
           "name": "Miner49er"
@@ -27646,7 +27666,7 @@
     },
     {
       "enrage": 6830,
-      "timeOfKill": 1767348591,
+      "timeOfKill": 1767348540,
       "members": [
         {
           "name": "Miner49er"
@@ -27686,7 +27706,7 @@
     },
     {
       "enrage": 6810,
-      "timeOfKill": 1767346712,
+      "timeOfKill": 1767346680,
       "members": [
         {
           "name": "Miner49er"
@@ -27706,7 +27726,7 @@
     },
     {
       "enrage": 6800,
-      "timeOfKill": 1767340987,
+      "timeOfKill": 1767340980,
       "members": [
         {
           "name": "Miner49er"
