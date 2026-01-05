@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-05T09:18:30.747070+00:00",
-    "count": 2995
+    "generated_at": "2026-01-05T09:50:31.484664+00:00",
+    "count": 2996
   },
   "records": [
     {
@@ -26720,6 +26720,16 @@
       "members": [
         {
           "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 804.60004
+    },
+    {
+      "enrage": 7520,
+      "timeOfKill": 1767605823,
+      "members": [
+        {
+          "name": "Miner49er"
         }
       ],
       "killTimeSeconds": 804.60004
