@@ -1,0 +1,52 @@
+---
+interface Props {
+  killData: any;
+  uniquePlayersCount: number;
+  totalKills: number;
+}
+
+const { killData, uniquePlayersCount, totalKills } = Astro.props;
+
+// Calculate stats
+const averageEnrage = killData.records.length > 0 
+  ? Math.round(killData.records.reduce((sum, r) => sum + r.enrage, 0) / killData.records.length)
+  : 0;
+
+const averageKillTime = killData.records.length > 0 
+  ? (() => {
+    const avgSeconds = killData.records.reduce((sum, r) => sum + r.killTimeSeconds, 0) / killData.records.length;
+    const mins = Math.floor(avgSeconds / 60);
+    const secs = (avgSeconds % 60).toFixed(1);
+    return `${mins}:${secs.padStart(4, '0')}`;
+  })()
+  : 'N/A';
+---
+
+<!-- Stats Summary Card -->
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+  <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20">
+    <h2 class="text-xl font-bold text-gray-800 dark:text-white">Quick Stats</h2>
+  </div>
+  <div class="p-6">
+    <div class="space-y-4">
+      <div class="flex justify-between items-center">
+        <span class="text-gray-600 dark:text-gray-300">Unique Players</span>
+        <span class="font-bold text-gray-900 dark:text-white">{uniquePlayersCount}</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-600 dark:text-gray-300">Total Kills</span>
+        <span class="font-bold text-gray-900 dark:text-white">{totalKills}</span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-600 dark:text-gray-300">Avg Enrage</span>
+        <span class="font-bold text-gray-900 dark:text-white">
+          {averageEnrage > 0 ? averageEnrage.toLocaleString() + '%' : 'N/A'}
+        </span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-600 dark:text-gray-300">Avg Kill Time</span>
+        <span class="font-bold text-gray-900 dark:text-white">{averageKillTime}</span>
+      </div>
+    </div>
+  </div>
+</div>

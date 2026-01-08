@@ -1,0 +1,373 @@
+---
+interface Props {
+  killData: any;
+  highestEnrage: number;
+}
+
+const { killData, highestEnrage } = Astro.props;
+
+// Calculate static values
+const killsLast24h = (() => {
+  const now = Math.floor(Date.now() / 1000);
+  const twentyFourHoursAgo = now - (24 * 3600);
+  return killData.records.filter((r: any) => r.timeOfKill >= twentyFourHoursAgo).length;
+})();
+
+const mostRecentKill = killData.records.length > 0 
+  ? [...killData.records].sort((a: any, b: any) => b.timeOfKill - a.timeOfKill)[0]
+  : null;
+
+const lastUpdateTimestamp = (() => {
+  if (!killData.meta.generated_at) return null;
+  
+  if (typeof killData.meta.generated_at === 'number') {
+    return killData.meta.generated_at;
+  } else if (typeof killData.meta.generated_at === 'string') {
+    const date = new Date(killData.meta.generated_at);
+    return Math.floor(date.getTime() / 1000);
+  }
+  return null;
+})();
+
+const highestEnrageRecord = highestEnrage > 0 
+  ? killData.records.reduce((prev: any, current: any) => (prev.enrage > current.enrage) ? prev : current)
+  : null;
+
+const highestPlayer = highestEnrageRecord?.members[0]?.name || 'Unknown';
+
+// Server-side helper function
+function getRSIconUrl(playerName: string): string | null {
+  if (!playerName || playerName === 'Unknown') {
+    return null;
+  }
+  
+  const encodedName = encodeURIComponent(playerName);
+  return `https://secure.runescape.com/m=avatar-rs/${encodedName}/chat.png`;
+}
+
+const highestPlayerAvatar = highestEnrageRecord ? getRSIconUrl(highestPlayer) : null;
+const mostRecentPlayerAvatar = mostRecentKill ? getRSIconUrl(mostRecentKill.members[0]?.name || 'Unknown') : null;
+
+// For client-side script
+const scriptData = {
+  mostRecentKill,
+  lastUpdateTimestamp,
+  killsLast24h
+};
+---
+
+<!-- Header Cards Container -->
+<div class="px-4 pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4" id="header-cards">
+  <!-- Highest Enrage Card -->
+  <div class="bg-gradient-to-br from-red-50 to-red-100 
+              dark:bg-gradient-to-br dark:from-red-900/30 dark:to-red-800/20 
+              p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+              border-2 border-red-200 dark:border-red-900/30">
+    <div class="flex items-center">
+      {highestEnrage <= 0 ? (
+        <!-- No enrage data case -->
+        <>
+          <div class="mr-4">
+            <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400 dark:text-gray-500">
+              N/A
+            </div>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">N/A</p>
+            <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-1 truncate">--</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">No data available</p>
+          </div>
+        </>
+      ) : (
+        <!-- Has enrage data -->
+        <>
+          <div class="mr-4">
+            {highestPlayerAvatar ? (
+              <img src={highestPlayerAvatar} alt={highestPlayer} 
+                   class="w-12 h-12 min-w-12 min-h-12 rounded-full border-2 border-yellow-400 dark:border-yellow-600 bg-white dark:bg-gray-800 shadow-lg transform hover:scale-105 transition-transform duration-200" />
+            ) : (
+              <div class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 dark:from-yellow-700 dark:to-yellow-800 flex items-center justify-center text-white shadow">👑</div>
+            )}
+          </div>
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+              {highestEnrage.toLocaleString()}%
+            </p>
+            <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-1 truncate">
+              {highestPlayer}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              All-time record
+            </p>
+          </div>
+        </>
+      )}
+    </div>
+    {highestEnrage > 0 && (
+      <div class="mt-4 pt-4 border-t border-red-200 dark:border-red-900/30">
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600 dark:text-gray-300">Enrage Progress</span>
+          <span class="font-semibold text-gray-900 dark:text-white">Max: 60,000%</span>
+        </div>
+        <div class="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div class="bg-gradient-to-r
+            from-blue-400
+            via-cyan-400
+            to-red-800
+            dark:from-blue-400
+            dark:via-cyan-400
+            dark:to-red-800
+            h-2 rounded-full"
+            style={`width: ${Math.min(highestEnrage / 60000 * 100, 100)}%`}>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+  
+  <!-- Last 24 Hours Card -->
+  <div class="bg-gradient-to-br from-blue-50 to-blue-100 
+              dark:bg-gradient-to-br dark:from-blue-900/30 dark:to-blue-800/20 
+              p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+              border-2 border-blue-200 dark:border-blue-900/30">
+    <div class="flex items-center">
+      <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 
+                  dark:bg-gradient-to-r dark:from-blue-700 dark:to-blue-800 
+                  text-white mr-4 shadow dark:shadow-gray-900/50">
+        ⏱️
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Last 24 Hours</p>
+        <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+          {killsLast24h}
+        </p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          {killsLast24h === 1 ? 'kill in past day' : 'kills in past day'}
+        </p>
+      </div>
+    </div>
+    {killsLast24h > 0 && (
+      <div class="mt-4 pt-4 border-t border-blue-200 dark:border-blue-900/30">
+        <div class="flex items-center text-sm">
+          <div class="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full mr-2 animate-pulse"></div>
+          <span class="text-gray-600 dark:text-gray-300">Active today</span>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          {killsLast24h > 1 ? `${killsLast24h} kills recorded` : '1 kill recorded'}
+        </p>
+      </div>
+    )}
+  </div>
+  
+  <!-- Most Recent Kill Card -->
+  <div class="bg-gradient-to-br from-green-50 to-green-100 
+              dark:bg-gradient-to-br dark:from-green-900/30 dark:to-green-800/20 
+              p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+              border-2 border-green-200 dark:border-green-900/30">
+    <div class="flex items-center">
+      <div class="mr-4">
+        {mostRecentKill ? (
+          mostRecentPlayerAvatar ? (
+            <img src={mostRecentPlayerAvatar} alt={mostRecentKill.members[0]?.name || 'Unknown'}
+                 class="w-12 h-12 min-w-12 min-h-12 rounded-full border-2 border-green-500 dark:border-green-600
+                        bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/50" />
+          ) : (
+            <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 
+                        dark:bg-gradient-to-r dark:from-green-700 dark:to-green-800 
+                        text-white shadow dark:shadow-gray-900/50">
+              ⭐
+            </div>
+          )
+        ) : (
+          <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 
+                      dark:bg-gradient-to-r dark:from-green-700 dark:to-green-800 
+                      text-white shadow dark:shadow-gray-900/50">
+            ⭐
+          </div>
+        )}
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Most Recent Kill</p>
+        {mostRecentKill ? (
+          <>
+            <p class="text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">
+              {mostRecentKill.members[0]?.name || 'Unknown'}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="most-recent-time">
+              <!-- Will be populated by JavaScript -->
+            </p>
+          </>
+        ) : (
+          <p class="text-lg text-gray-500 dark:text-gray-400 mt-1">No recent kills</p>
+        )}
+      </div>
+    </div>
+    {mostRecentKill && (
+      <div class="mt-4 pt-4 border-t border-green-200 dark:border-green-900/30 space-y-2">
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600 dark:text-gray-300">Enrage</span>
+          <span class="font-semibold text-gray-900 dark:text-white">{mostRecentKill.enrage.toLocaleString()}%</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600 dark:text-gray-300">Kill Time</span>
+          <span class="font-mono font-semibold text-gray-900 dark:text-white">
+            {(() => {
+              const mins = Math.floor(mostRecentKill.killTimeSeconds / 60);
+              const secs = (mostRecentKill.killTimeSeconds % 60).toFixed(1);
+              return `${mins}:${secs.padStart(4, '0')}`;
+            })()}
+          </span>
+        </div>
+      </div>
+    )}
+  </div>
+  
+  <!-- Last Update Card -->
+  <div class="bg-gradient-to-br from-purple-50 to-purple-100 
+              dark:bg-gradient-to-br dark:from-purple-900/30 dark:to-purple-800/20 
+              p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
+              border-2 border-purple-200 dark:border-purple-900/30">
+    <div class="flex items-center">
+      <div class="p-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 
+                  dark:bg-gradient-to-r dark:from-purple-700 dark:to-purple-800 
+                  text-white mr-4 shadow dark:shadow-gray-900/50">
+        🔄
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Updated at:</p>
+        {lastUpdateTimestamp ? (
+          <>
+            <p class="text-xl font-bold text-gray-900 dark:text-white mt-1" id="last-update-time">
+              <!-- Will be populated by JavaScript -->
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="last-update-date">
+              <!-- Will be populated by JavaScript -->
+            </p>
+          </>
+        ) : (
+          <>
+            <p class="text-xl font-bold text-gray-900 dark:text-white mt-1">Never</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Data not loaded</p>
+          </>
+        )}
+      </div>
+    </div>
+    {lastUpdateTimestamp && (
+      <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/30">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse" id="update-status-dot"></div>
+            <span class="text-sm text-gray-600 dark:text-gray-300" id="update-status-text">Last data update:</span>
+          </div>
+          <div class="text-sm">
+            <span class="text-gray-600 dark:text-gray-300" id="update-time-ago">
+              <!-- Will be populated by JavaScript -->
+            </span>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<script define:vars={{ scriptData }}>
+  // Helper functions (must be defined inline since they run in browser)
+  function getRSIconUrl(playerName) {
+    if (!playerName || playerName === 'Unknown') {
+      return null;
+    }
+    const encodedName = encodeURIComponent(playerName);
+    return `https://secure.runescape.com/m=avatar-rs/${encodedName}/chat.png`;
+  }
+
+  function formatLocalTime(timestamp) {
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+  
+  function formatLocalDate(timestamp) {
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+  
+  function timeAgo(timestamp) {
+    const now = Math.floor(Date.now() / 1000);
+    const secondsAgo = now - timestamp;
+    
+    if (secondsAgo < 60) return 'Just now';
+    
+    const hours = Math.floor(secondsAgo / 3600);
+    const minutes = Math.floor((secondsAgo % 3600) / 60);
+    
+    if (hours > 0) {
+      if (hours >= 72) {
+        const days = Math.floor(hours / 24);
+        return `${days}d ago`;
+      }
+      return `${hours}h ${minutes}m ago`;
+    }
+    return `${minutes}m ago`;
+  }
+
+  // Update time-sensitive elements
+  function updateTimeElements() {
+    const { mostRecentKill, lastUpdateTimestamp } = scriptData;
+    
+    // Update most recent kill time
+    const mostRecentTimeElement = document.getElementById('most-recent-time');
+    if (mostRecentTimeElement && mostRecentKill) {
+      mostRecentTimeElement.textContent = timeAgo(mostRecentKill.timeOfKill);
+    }
+    
+    // Update last update time
+    const lastUpdateTimeElement = document.getElementById('last-update-time');
+    const lastUpdateDateElement = document.getElementById('last-update-date');
+    const updateStatusDot = document.getElementById('update-status-dot');
+    const updateStatusText = document.getElementById('update-status-text');
+    const updateTimeAgoElement = document.getElementById('update-time-ago');
+    
+    if (lastUpdateTimeElement && lastUpdateDateElement && lastUpdateTimestamp) {
+      lastUpdateTimeElement.textContent = formatLocalTime(lastUpdateTimestamp);
+      lastUpdateDateElement.textContent = formatLocalDate(lastUpdateTimestamp);
+      
+      // Update status indicator
+      const now = Math.floor(Date.now() / 1000);
+      const hoursSinceUpdate = (now - lastUpdateTimestamp) / 3600;
+      
+      if (updateStatusDot) {
+        if (hoursSinceUpdate > 6) {
+          updateStatusDot.classList.remove('bg-green-500');
+          updateStatusDot.classList.add('bg-yellow-500');
+        }
+        if (hoursSinceUpdate > 24) {
+          updateStatusDot.classList.remove('bg-green-500', 'bg-yellow-500');
+          updateStatusDot.classList.add('bg-red-500');
+          updateStatusDot.classList.remove('animate-pulse');
+        }
+      }
+      
+      if (updateTimeAgoElement) {
+        updateTimeAgoElement.textContent = timeAgo(lastUpdateTimestamp);
+      }
+    }
+  }
+  
+  // Initialize immediately if DOM is ready, otherwise wait
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateTimeElements);
+  } else {
+    updateTimeElements();
+  }
+  
+  // Update every minute
+  setInterval(updateTimeElements, 60000);
+</script>
