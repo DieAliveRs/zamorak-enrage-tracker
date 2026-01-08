@@ -596,18 +596,12 @@ const playersData = {
         
         // Function to determine point styling for difference chart
         function getDifferencePointStyle(totalPoints) {
-            if (totalPoints > 2000) {
-                return { pointRadius: 0, pointHoverRadius: 2, pointBorderWidth: 0, borderWidth: 1.5 };
-            } else if (totalPoints > 1000) {
-                return { pointRadius: 0.5, pointHoverRadius: 3, pointBorderWidth: 0, borderWidth: 1.5 };
-            } else if (totalPoints > 500) {
-                return { pointRadius: 1, pointHoverRadius: 4, pointBorderWidth: 0.5, borderWidth: 1.5 };
-            } else if (totalPoints > 200) {
-                return { pointRadius: 1.5, pointHoverRadius: 5, pointBorderWidth: 0.5, borderWidth: 2 };
-            } else if (totalPoints > 50) {
-                return { pointRadius: 2, pointHoverRadius: 6, pointBorderWidth: 1, borderWidth: 2 };
-            } else {
-                return { pointRadius: 3, pointHoverRadius: 7, pointBorderWidth: 1.5, borderWidth: 2.5 };
+            return {pointRadius: 0,
+                pointHoverRadius: 2,
+                pointBorderWidth: 0,
+                borderWidth: 2,
+                pointStyle: 'circle',
+                showLine: true
             }
         }
         
@@ -654,7 +648,7 @@ const playersData = {
                 const value = context.raw.y;
                 return value >= 0 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)';
             },
-            pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+            pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
             pointBorderWidth: diffStyle.pointBorderWidth,
             borderWidth: diffStyle.borderWidth,
             pointRadius: diffStyle.pointRadius,
@@ -1463,61 +1457,13 @@ const playersData = {
         // Function to determine point styling based on data density
         function getPointStyle(totalPoints, isComparison = false) {
             // For very dense data, we need minimal styling
-            if (totalPoints > 2000) {
-                return {
-                    pointRadius: 0, // No points at all
-                    pointHoverRadius: 2,
-                    pointBorderWidth: 0,
-                    borderWidth: isComparison ? 1.5 : 2,
-                    pointStyle: 'circle',
-                    showLine: true
-                };
-            } else if (totalPoints > 1000) {
-                return {
-                    pointRadius: isComparison ? 0.5 : 1,
-                    pointHoverRadius: 3,
-                    pointBorderWidth: 0,
-                    borderWidth: isComparison ? 1.5 : 2,
-                    pointStyle: 'circle',
-                    showLine: true
-                };
-            } else if (totalPoints > 500) {
-                return {
-                    pointRadius: isComparison ? 1 : 1.5,
-                    pointHoverRadius: 4,
-                    pointBorderWidth: isComparison ? 0.5 : 1,
-                    borderWidth: isComparison ? 1.5 : 2,
-                    pointStyle: 'circle',
-                    showLine: true
-                };
-            } else if (totalPoints > 200) {
-                return {
-                    pointRadius: isComparison ? 1.5 : 2,
-                    pointHoverRadius: 5,
-                    pointBorderWidth: isComparison ? 0.5 : 1,
-                    borderWidth: isComparison ? 2 : 2.5,
-                    pointStyle: 'circle',
-                    showLine: true
-                };
-            } else if (totalPoints > 50) {
-                return {
-                    pointRadius: isComparison ? 2 : 2.5,
-                    pointHoverRadius: 6,
-                    pointBorderWidth: isComparison ? 1 : 1.5,
-                    borderWidth: isComparison ? 2 : 3,
-                    pointStyle: 'circle',
-                    showLine: true
-                };
-            } else {
-                // For sparse data, show nice points
-                return {
-                    pointRadius: isComparison ? 3 : 4,
-                    pointHoverRadius: isComparison ? 5 : 7,
-                    pointBorderWidth: isComparison ? 1.5 : 2,
-                    borderWidth: isComparison ? 2.5 : 3,
-                    pointStyle: 'circle',
-                    showLine: true
-                };
+            return {
+                pointRadius: 0,
+                pointHoverRadius: 2,
+                pointBorderWidth: 0,
+                borderWidth: 2,
+                pointStyle: 'circle',
+                showLine: true
             }
         }
         
@@ -1542,7 +1488,7 @@ const playersData = {
             backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)',
             tension: 0.4,
             pointBackgroundColor: 'rgb(59, 130, 246)',
-            pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+            pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
             pointBorderWidth: mainStyle.pointBorderWidth,
             borderWidth: mainStyle.borderWidth,
             pointRadius: mainStyle.pointRadius,
@@ -1573,7 +1519,7 @@ const playersData = {
                 backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.1)',
                 tension: 0.4,
                 pointBackgroundColor: 'rgb(16, 185, 129)',
-                pointBorderColor: isDarkMode ? '#1F2937' : 'white',
+                pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
                 pointBorderWidth: comparisonStyle.pointBorderWidth,
                 borderWidth: comparisonStyle.borderWidth,
                 pointRadius: comparisonStyle.pointRadius,
