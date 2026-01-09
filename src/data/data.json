@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-09T11:57:06.381590+00:00",
-    "count": 3209
+    "generated_at": "2026-01-09T13:01:01.421569+00:00",
+    "count": 3211
   },
   "records": [
     {
@@ -25406,6 +25406,16 @@
     },
     {
       "enrage": 8310,
+      "timeOfKill": 1767961295,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 732.0
+    },
+    {
+      "enrage": 8310,
       "timeOfKill": 1765672380,
       "members": [
         {
@@ -25443,6 +25453,16 @@
         }
       ],
       "killTimeSeconds": 841.80005
+    },
+    {
+      "enrage": 8300,
+      "timeOfKill": 1767960420,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 723.0
     },
     {
       "enrage": 8300,
