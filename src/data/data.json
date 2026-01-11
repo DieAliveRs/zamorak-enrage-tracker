@@ -1,9 +1,69 @@
 {
   "meta": {
-    "generated_at": "2026-01-10T23:57:03.143046+00:00",
-    "count": 3309
+    "generated_at": "2026-01-11T02:29:29.349496+00:00",
+    "count": 3318
   },
   "records": [
+    {
+      "enrage": 27180,
+      "timeOfKill": 1768097110,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 753.60004
+    },
+    {
+      "enrage": 27170,
+      "timeOfKill": 1768094400,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 703.2
+    },
+    {
+      "enrage": 27160,
+      "timeOfKill": 1768093560,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 735.60004
+    },
+    {
+      "enrage": 27150,
+      "timeOfKill": 1768091460,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 717.60004
+    },
+    {
+      "enrage": 27140,
+      "timeOfKill": 1768090500,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 678.0
+    },
+    {
+      "enrage": 27130,
+      "timeOfKill": 1768089720,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 705.60004
+    },
     {
       "enrage": 27120,
       "timeOfKill": 1768088858,
@@ -9256,6 +9316,16 @@
     },
     {
       "enrage": 16340,
+      "timeOfKill": 1768096586,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 555.60004
+    },
+    {
+      "enrage": 16340,
       "timeOfKill": 1752256200,
       "members": [
         {
@@ -9266,6 +9336,16 @@
     },
     {
       "enrage": 16330,
+      "timeOfKill": 1768095900,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 550.80005
+    },
+    {
+      "enrage": 16330,
       "timeOfKill": 1752255180,
       "members": [
         {
@@ -9273,6 +9353,16 @@
         }
       ],
       "killTimeSeconds": 772.2
+    },
+    {
+      "enrage": 16320,
+      "timeOfKill": 1768095300,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 549.0
     },
     {
       "enrage": 16320,
