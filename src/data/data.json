@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-11T17:50:44.888800+00:00",
-    "count": 3351
+    "generated_at": "2026-01-11T18:33:08.162266+00:00",
+    "count": 3353
   },
   "records": [
     {
@@ -17226,6 +17226,16 @@
     },
     {
       "enrage": 11990,
+      "timeOfKill": 1768154786,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 713.4
+    },
+    {
+      "enrage": 11990,
       "timeOfKill": 1747016820,
       "members": [
         {
@@ -17233,6 +17243,16 @@
         }
       ],
       "killTimeSeconds": 766.2
+    },
+    {
+      "enrage": 11980,
+      "timeOfKill": 1768153980,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 715.80005
     },
     {
       "enrage": 11980,
