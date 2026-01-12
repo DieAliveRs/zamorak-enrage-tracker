@@ -1,9 +1,19 @@
 {
   "meta": {
-    "generated_at": "2026-01-12T19:47:40.601969+00:00",
-    "count": 3439
+    "generated_at": "2026-01-12T19:58:52.347322+00:00",
+    "count": 3441
   },
   "records": [
+    {
+      "enrage": 27600,
+      "timeOfKill": 1768247765,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 679.80005
+    },
     {
       "enrage": 27590,
       "timeOfKill": 1768246942,
@@ -9533,6 +9543,16 @@
         }
       ],
       "killTimeSeconds": 732.60004
+    },
+    {
+      "enrage": 16610,
+      "timeOfKill": 1768247926,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 565.2
     },
     {
       "enrage": 16610,
