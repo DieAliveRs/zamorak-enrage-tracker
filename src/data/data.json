@@ -1,9 +1,39 @@
 {
   "meta": {
-    "generated_at": "2026-01-12T09:59:21.028368+00:00",
-    "count": 3399
+    "generated_at": "2026-01-12T10:36:14.266700+00:00",
+    "count": 3404
   },
   "records": [
+    {
+      "enrage": 27410,
+      "timeOfKill": 1768214024,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 762.60004
+    },
+    {
+      "enrage": 27400,
+      "timeOfKill": 1768213140,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 705.60004
+    },
+    {
+      "enrage": 27390,
+      "timeOfKill": 1768212300,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 697.80005
+    },
     {
       "enrage": 27380,
       "timeOfKill": 1768210750,
@@ -24276,6 +24306,16 @@
     },
     {
       "enrage": 8970,
+      "timeOfKill": 1768213614,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 762.60004
+    },
+    {
+      "enrage": 8970,
       "timeOfKill": 1766941560,
       "members": [
         {
@@ -24313,6 +24353,16 @@
         }
       ],
       "killTimeSeconds": 837.00006
+    },
+    {
+      "enrage": 8960,
+      "timeOfKill": 1768212720,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 737.4
     },
     {
       "enrage": 8960,
