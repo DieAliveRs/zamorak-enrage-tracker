@@ -96,7 +96,7 @@ const scriptData = {
               {highestEnrage.toLocaleString()}%
             </p>
             <a 
-              href={`/personal-progress/?player=${encodeURIComponent(highestPlayer)}`}
+              href={`${import.meta.env.BASE_URL}personal-progress/?player=${encodeURIComponent(highestPlayer)}`}
               class="text-sm font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate max-w-[180px] transition-colors duration-150 hover:underline"
               title={`View ${encodeURIComponent(highestPlayer)}'s detailed stats`}
             >
@@ -197,7 +197,7 @@ const scriptData = {
         {mostRecentKill ? (
           <>
             <a 
-              href={`/personal-progress/?player=${encodeURIComponent(mostRecentKill.members[0]?.name || 'Unknown')}`}
+              href={`${import.meta.env.BASE_URL}personal-progress/?player=${encodeURIComponent(mostRecentKill.members[0]?.name || 'Unknown')}`}
               class="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate max-w-[180px] transition-colors duration-150 hover:underline"
               title={`View ${encodeURIComponent(mostRecentKill.members[0]?.name || 'Unknown')}'s detailed stats`}
             >
