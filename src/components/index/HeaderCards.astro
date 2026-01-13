@@ -95,9 +95,13 @@ const scriptData = {
             <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
               {highestEnrage.toLocaleString()}%
             </p>
-            <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mt-1 truncate">
+            <a 
+              href={`/personal-progress/?player=${encodeURIComponent(highestPlayer)}`}
+              class="text-sm font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate max-w-[180px] transition-colors duration-150 hover:underline"
+              title={`View ${encodeURIComponent(highestPlayer)}'s detailed stats`}
+            >
               {highestPlayer}
-            </p>
+            </a>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
               All-time record
             </p>
@@ -192,9 +196,13 @@ const scriptData = {
         <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Most Recent Kill</p>
         {mostRecentKill ? (
           <>
-            <p class="text-xl font-bold text-gray-900 dark:text-white mt-1 truncate">
+            <a 
+              href={`/personal-progress/?player=${encodeURIComponent(mostRecentKill.members[0]?.name || 'Unknown')}`}
+              class="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate max-w-[180px] transition-colors duration-150 hover:underline"
+              title={`View ${encodeURIComponent(mostRecentKill.members[0]?.name || 'Unknown')}'s detailed stats`}
+            >
               {mostRecentKill.members[0]?.name || 'Unknown'}
-            </p>
+            </a>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="most-recent-time">
               <!-- Will be populated by JavaScript -->
             </p>

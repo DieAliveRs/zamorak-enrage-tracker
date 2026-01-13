@@ -67,7 +67,13 @@ const scriptData = {
                     </div>
                   )}
                   <div>
-                    <h4 class="font-bold text-gray-900 dark:text-white">{playerName}</h4>
+                    <a 
+                      href={`/personal-progress/?player=${encodeURIComponent(playerName)}`}
+                      class="font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate max-w-[180px] transition-colors duration-150 hover:underline"
+                      title={`View ${encodeURIComponent(playerName)}'s detailed stats`}
+                    >
+                      {playerName}
+                    </a>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" data-timestamp={killDate}>
                       <!-- Will be formatted by JavaScript -->
                     </p>

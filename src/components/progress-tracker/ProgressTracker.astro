@@ -88,15 +88,13 @@ const playersData = {
 
 <!-- Stats Cards (Hidden until player selected) -->
 <div id="stats-cards" class="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 hidden">
-  <!-- Highest Enrage Card (Updated to use dynamic colors) -->
+  <!-- Highest Enrage Card -->
   <div id="highest-enrage-card" class="p-6 rounded-xl shadow-lg border-2 bg-gradient-to-br">
       <div class="flex items-center">
           <div id="highest-enrage-icon" class="mr-4 relative">
-              <!-- Dynamic avatar/icon will go here -->
               <div id="highest-enrage-icon-inner" class="w-12 h-12 rounded-full bg-gradient-to-r flex items-center justify-center text-white shadow">
                   🔥
               </div>
-              <!-- Avatar overlay (if available) -->
               <div id="highest-enrage-avatar" class="absolute inset-0 rounded-full overflow-hidden hidden">
                   <img id="player-avatar" class="w-full h-full object-cover" alt="Player Avatar">
               </div>
@@ -153,54 +151,206 @@ const playersData = {
   </div>
 </div>
 
-<!-- Replace the existing graph-section div with this: -->
+<!-- Graph Section -->
 <div id="graph-section" class="px-4 mb-8 hidden">
-<!-- Add a wrapper div with dynamic grid classes -->
-<div id="charts-container" class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
-  <!-- Main Enrage Progress Chart -->
-  <div id="main-chart-container" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-800">
-      <div class="flex justify-between items-center">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Progress Over Time</h2>
-        <div id="main-chart-legend" class="flex items-center space-x-4">
-          <!-- Legend will be populated by JavaScript -->
+  <div id="charts-container" class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+    <!-- Main Enrage Progress Chart -->
+    <div id="main-chart-container" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-800">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Progress Over Time</h2>
+          <div id="main-chart-legend" class="flex items-center space-x-4"></div>
+        </div>
+      </div>
+      <div class="p-6">
+        <div class="h-96">
+          <canvas id="progress-chart"></canvas>
         </div>
       </div>
     </div>
-    <div class="p-6">
-      <div class="h-96">
-        <canvas id="progress-chart"></canvas>
+
+    <!-- Difference Chart (Hidden by default) -->
+    <div id="difference-chart-container" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden hidden">
+      <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Difference</h2>
+          <div id="difference-chart-legend" class="flex items-center space-x-4"></div>
+        </div>
+      </div>
+      <div class="p-6">
+        <div class="h-96">
+          <canvas id="difference-chart"></canvas>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Difference Chart (Hidden by default) -->
-  <div id="difference-chart-container" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden hidden">
-    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20">
-      <div class="flex justify-between items-center">
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">Enrage Difference</h2>
-        <div id="difference-chart-legend" class="flex items-center space-x-4">
-          <!-- Legend will be populated by JavaScript -->
-        </div>
-      </div>
-    </div>
-    <div class="p-6">
-      <div class="h-96">
-        <canvas id="difference-chart"></canvas>
-      </div>
-    </div>
+  <div id="single-chart-message" class="text-center text-gray-500 dark:text-gray-400 text-sm mt-4">
+    <p>Toggle "Show enrage difference" to compare players side-by-side</p>
   </div>
 </div>
 
-<!-- Single chart view message (shown when only main chart is visible) -->
-<div id="single-chart-message" class="text-center text-gray-500 dark:text-gray-400 text-sm mt-4">
-  <p>Toggle "Show enrage difference" to compare players side-by-side</p>
-</div>
+<!-- Weekly Summary Section -->
+<div id="weekly-summary-section" class="px-4 mb-8 hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-gray-800 dark:text-white">Weekly Summary</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-300">Track performance improvements week-over-week</p>
+        </div>
+        
+        <!-- Week Select Dropdown -->
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <label for="week-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Select Week
+            </label>
+            <select 
+              id="week-select"
+              class="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:focus:ring-purple-600 dark:focus:border-purple-600 text-gray-900 dark:text-white transition-colors"
+            >
+              <option value="">-- Loading weeks --</option>
+            </select>
+          </div>
+          
+          <!-- Current Week Display -->
+          <div class="text-center px-4 py-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Current Week</p>
+            <p id="current-week-range" class="text-lg font-bold text-purple-700 dark:text-purple-300">--</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-6">
+      <!-- Weekly Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Enrage Card -->
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 p-6 rounded-xl shadow-lg border-2 border-blue-200 dark:border-blue-900/30">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-700 dark:to-blue-800 text-white mr-4 shadow">
+              📈
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Total Enrage Gained</p>
+              <p id="weekly-total-enrage" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">0</p>
+              <div class="flex items-center mt-1">
+                <span id="weekly-enrage-improvement" class="text-sm font-semibold mr-1">0%</span>
+                <span id="weekly-enrage-arrow" class="text-sm">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Fastest Kill Card -->
+        <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20 p-6 rounded-xl shadow-lg border-2 border-green-200 dark:border-green-900/30">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-gradient-to-r from-green-500 to-green-600 dark:from-green-700 dark:to-green-800 text-white mr-4 shadow">
+              ⚡
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fastest Kill</p>
+              <p id="weekly-fastest-time" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--</p>
+              <div class="flex items-center mt-1">
+                <span id="weekly-speed-improvement" class="text-sm font-semibold mr-1">0%</span>
+                <span id="weekly-speed-arrow" class="text-sm">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Average Kill Time Card -->
+        <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/20 p-6 rounded-xl shadow-lg border-2 border-orange-200 dark:border-orange-900/30">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-700 dark:to-orange-800 text-white mr-4 shadow">
+              ⏱️
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Avg Kill Time</p>
+              <p id="weekly-avg-time" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--</p>
+              <div class="flex items-center mt-1">
+                <span id="weekly-avg-improvement" class="text-sm font-semibold mr-1">0%</span>
+                <span id="weekly-avg-arrow" class="text-sm">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Cleanliness Card -->
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20 p-6 rounded-xl shadow-lg border-2 border-purple-200 dark:border-purple-900/30">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 dark:from-purple-700 dark:to-purple-800 text-white mr-4 shadow">
+              🧹
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Cleanliness</p>
+              <p id="weekly-cleanliness" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">--</p>
+              <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">% kills near PB</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Radar Chart with Description -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Radar Chart -->
+        <div class="lg:col-span-1">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 p-6 h-full">
+            <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">Performance Radar</h3>
+            <div class="h-80">
+              <canvas id="weekly-radar-chart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Radar Description -->
+        <div class="lg:col-span-1">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 p-6 h-full">      
+            <!-- Metric Descriptions -->
+            <div class="space-y-4">
+              <!-- Total Enrage Gained -->
+              <div class="border-l-4 border-blue-500 pl-4 py-2">
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Total Enrage Gained</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                  Total enrage gained throughout the week.
+                </p>
+              </div>
+              
+              <!-- Kill Speed -->
+              <div class="border-l-4 border-green-500 pl-4 py-2">
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Kill Time</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                  Based on the average kill time throughout the week. Normalized with respect to your personal best. Lower times = better score.
+                </p>
+              </div>
+              
+              <!-- Consistency -->
+              <div class="border-l-4 border-orange-500 pl-4 py-2">
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Consistency</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                  Standard deviation of kill times. Lower values mean more consistent performance throughout the week.
+                </p>
+              </div>
+              
+              <!-- Cleanliness -->
+              <div class="border-l-4 border-purple-500 pl-4 py-2">
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Cleanliness</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                  Percentage of kills within 10% of your weekly personal best time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Kill History + Bracket Stats Section -->
 <div id="kill-table-stats-section" class="px-4 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8 hidden">
-  <!-- Personal Kill History Table (2/3 width) -->
+  <!-- Personal Kill History Table -->
   <div class="lg:col-span-2">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-gray-100 to-gray-100 dark:from-gray-800 dark:to-gray-800">
@@ -230,9 +380,7 @@ const playersData = {
               </th>
             </tr>
           </thead>
-          <tbody id="kill-table-body" class="divide-y divide-gray-200 dark:divide-gray-700">
-            <!-- Will be populated by JavaScript -->
-          </tbody>
+          <tbody id="kill-table-body" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
         </table>
       </div>
       <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
@@ -249,7 +397,7 @@ const playersData = {
     </div>
   </div>
 
-  <!-- Enrage Bracket Stats (1/3 width) -->
+  <!-- Enrage Bracket Stats -->
   <div class="lg:col-span-1">
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-hidden h-full">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20">
@@ -282,7 +430,6 @@ const playersData = {
   </div>
 </div>
 
-<!-- JavaScript for interactivity -->
 <script define:vars={{ playersData }}>
   // ========== GLOBAL STATE ==========
   let currentPlayer = '';
@@ -293,6 +440,9 @@ const playersData = {
   let differenceChart = null;
   let showDifferenceMode = false;
   let themeChangeObserver = null;
+  let weeklySummaryData = null;
+  let currentWeekIndex = 0;
+  let radarChart = null;
   let currentPage = 1;
   const pageSize = 15;
   const allPlayersData = playersData.players;
@@ -301,1476 +451,1863 @@ const playersData = {
 
   // ========== UTILITY FUNCTIONS ==========
   function getRSIconUrl(playerName) {
-      if (!playerName || playerName === 'Unknown') return null;
-      const encodedName = encodeURIComponent(playerName);
-      return `https://secure.runescape.com/m=avatar-rs/${encodedName}/chat.png`;
+    if (!playerName || playerName === 'Unknown') return null;
+    const encodedName = encodeURIComponent(playerName);
+    return `https://secure.runescape.com/m=avatar-rs/${encodedName}/chat.png`;
   }
 
   function formatKillTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = (seconds % 60).toFixed(1);
-      return `${mins}:${secs.padStart(4, '0')}`;
+    const mins = Math.floor(seconds / 60);
+    const secs = (seconds % 60).toFixed(1);
+    return `${mins}:${secs.padStart(4, '0')}`;
   }
 
   function timeAgoDetailed(timestamp) {
-      const now = Math.floor(Date.now() / 1000);
-      const secondsAgo = now - timestamp;
-      
-      const days = Math.floor(secondsAgo / 86400);
-      const hours = Math.floor((secondsAgo % 86400) / 3600);
-      const minutes = Math.floor((secondsAgo % 3600) / 60);
-      
-      if (days > 0) return hours > 0 ? `${days}d ${hours}h ago` : `${days}d ago`;
-      if (hours > 0) return minutes > 0 ? `${hours}h ${minutes}m ago` : `${hours}h ago`;
-      return `${minutes}m ago`;
+    const now = Math.floor(Date.now() / 1000);
+    const secondsAgo = now - timestamp;
+    
+    const days = Math.floor(secondsAgo / 86400);
+    const hours = Math.floor((secondsAgo % 86400) / 3600);
+    const minutes = Math.floor((secondsAgo % 3600) / 60);
+    
+    if (days > 0) return hours > 0 ? `${days}d ${hours}h ago` : `${days}d ago`;
+    if (hours > 0) return minutes > 0 ? `${hours}h ${minutes}m ago` : `${hours}h ago`;
+    return `${minutes}m ago`;
   }
 
   function formatDateTime(timestamp) {
-      const date = new Date(timestamp * 1000);
-      return date.toLocaleDateString('en-US', {
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleDateString('en-US', {
+      timeZone: userTimezone,
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  function calculateMostKills24h(kills) {
+    if (kills.length === 0) return { count: 0, date: '--' };
+    
+    const sortedKills = [...kills].sort((a, b) => a.timeOfKill - b.timeOfKill);
+    let maxKills = 0;
+    let bestDate = '';
+    
+    for (let i = 0; i < sortedKills.length; i++) {
+      const startTime = sortedKills[i].timeOfKill;
+      const endTime = startTime + 86400;
+      
+      let j = i;
+      while (j < sortedKills.length && sortedKills[j].timeOfKill <= endTime) j++;
+      
+      const killsIn24h = j - i;
+      if (killsIn24h > maxKills) {
+        maxKills = killsIn24h;
+        bestDate = formatDateTime(startTime);
+      }
+    }
+    
+    return { count: maxKills, date: bestDate };
+  }
+
+  function processPlayerKills(playerRecords) {
+    return playerRecords.map(record => ({
+      enrage: record.enrage,
+      timeOfKill: record.timeOfKill,
+      killTimeSeconds: record.killTimeSeconds,
+      formattedDate: formatDateTime(record.timeOfKill),
+      formattedKillTime: formatKillTime(record.killTimeSeconds),
+      timeAgoDetailed: timeAgoDetailed(record.timeOfKill),
+      date: new Date(record.timeOfKill * 1000)
+    })).sort((a, b) => a.timeOfKill - b.timeOfKill);
+  }
+
+  function getEnrageColorClass(enrage) {
+    if (enrage >= 55000) return 'text-red-900 dark:text-red-800';
+    if (enrage >= 50000) return 'text-red-800 dark:text-red-700';
+    if (enrage >= 45000) return 'text-red-700 dark:text-red-500';
+    if (enrage >= 40000) return 'text-orange-700 dark:text-orange-600';
+    if (enrage >= 35000) return 'text-orange-600 dark:text-orange-400';
+    if (enrage >= 30000) return 'text-yellow-600 dark:text-yellow-500';
+    if (enrage >= 25000) return 'text-yellow-500 dark:text-yellow-400';
+    if (enrage >= 20000) return 'text-green-500 dark:text-green-400';
+    if (enrage >= 15000) return 'text-green-400 dark:text-green-300';
+    if (enrage >= 10000) return 'text-teal-400 dark:text-teal-300';
+    if (enrage >= 5000) return 'text-cyan-500 dark:text-cyan-400';
+    return 'text-blue-600 dark:text-blue-400';
+  }
+
+  function formatDuration(seconds) {
+    if (seconds < 60) return "<1m";
+    
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    
+    if (days > 0) {
+      if (hours > 0 && days < 3) return `${days}d ${hours}h`;
+      return `${days}d`;
+    }
+    if (hours > 0) {
+      if (minutes > 0 && hours < 6) return `${hours}h ${minutes}m`;
+      return `${hours}h`;
+    }
+    return `${minutes}m`;
+  }
+
+  // ========== WEEKLY SUMMARY UTILITIES ==========
+  function getWeekNumber(date) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return weekNo;
+  }
+
+  function getWeekStartDate(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    return new Date(d.setDate(diff));
+  }
+
+  function formatWeekRange(start, end) {
+    return `${start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+  }
+
+  function calculateWeeklyStats(kills) {
+    if (kills.length === 0) return null;
+    
+    const sortedKills = [...kills].sort((a, b) => a.timeOfKill - b.timeOfKill);
+    const weeks = new Map();
+    
+    sortedKills.forEach(kill => {
+      const date = new Date(kill.timeOfKill * 1000);
+      const weekNumber = getISOWeek(date);
+      const year = date.getFullYear();
+      const weekKey = `${year}-W${weekNumber.toString().padStart(2, '0')}`;
+      
+      if (!weeks.has(weekKey)) {
+        const weekStart = getISOWeekStart(date);
+        weeks.set(weekKey, {
+          start: weekStart,
+          end: new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000),
+          kills: [],
+          killTimes: []
+        });
+      }
+      
+      const week = weeks.get(weekKey);
+      week.kills.push(kill);
+      week.killTimes.push(kill.killTimeSeconds);
+    });
+    
+    const weeklyStats = Array.from(weeks.entries())
+      .sort(([keyA], [keyB]) => keyB.localeCompare(keyA))
+      .map(([weekKey, week]) => {
+        const sortedWeekKills = week.kills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+        
+        let totalEnrageGained = 0;
+        if (sortedWeekKills.length === 1) {
+          totalEnrageGained = 10;
+        } else if (sortedWeekKills.length > 1) {
+          totalEnrageGained = 10;
+          for (let i = 1; i < sortedWeekKills.length; i++) {
+            const currentEnrage = sortedWeekKills[i].enrage;
+            const previousEnrage = sortedWeekKills[i-1].enrage;
+            totalEnrageGained += (currentEnrage - previousEnrage);
+          }
+        }
+        
+        const fastestKill = sortedWeekKills.reduce((fastest, current) => 
+          current.killTimeSeconds < fastest.killTimeSeconds ? current : fastest
+        );
+        
+        const avgKillTime = week.killTimes.length > 0 
+          ? week.killTimes.reduce((sum, time) => sum + time, 0) / week.killTimes.length
+          : 0;
+        
+        let stdDev = 0;
+        if (week.killTimes.length > 1) {
+          const variance = week.killTimes.reduce((sum, time) => 
+            sum + Math.pow(time - avgKillTime, 2), 0) / week.killTimes.length;
+          stdDev = Math.sqrt(variance);
+        }
+        
+        let cleanliness = 0;
+        if (week.killTimes.length > 0) {
+          const personalBest = Math.min(...week.killTimes);
+          const nearPersonalBest = week.killTimes.filter(time => time <= personalBest * 1.1).length;
+          cleanliness = (nearPersonalBest / week.killTimes.length) * 100;
+        }
+        
+        return {
+          weekKey,
+          startDate: week.start,
+          endDate: week.end,
+          formattedRange: formatWeekRange(week.start, week.end),
+          kills: sortedWeekKills,
+          totalEnrageGained,
+          fastestKillTime: fastestKill.killTimeSeconds,
+          avgKillTime,
+          consistency: stdDev,
+          cleanliness,
+          killCount: sortedWeekKills.length,
+          maxEnrage: Math.max(...sortedWeekKills.map(k => k.enrage)),
+          minEnrage: Math.min(...sortedWeekKills.map(k => k.enrage)),
+          enrageRange: sortedWeekKills.length > 0 ? 
+            `${sortedWeekKills[0].enrage} - ${sortedWeekKills[sortedWeekKills.length - 1].enrage}` : '--'
+        };
+      })
+      .filter(week => week.killCount > 0);
+    
+    return weeklyStats;
+  }
+
+  function getISOWeek(date) {
+    const target = new Date(date.valueOf());
+    const dayNr = (date.getDay() + 6) % 7;
+    target.setDate(target.getDate() - dayNr + 3);
+    const firstThursday = target.valueOf();
+    target.setMonth(0, 1);
+    if (target.getDay() !== 4) {
+      target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+    }
+    return 1 + Math.ceil((firstThursday - target) / 604800000);
+  }
+
+  function getISOWeekStart(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    return new Date(d.setDate(diff));
+  }
+
+  function calculateImprovementPercentage(current, previous, isTime = false) {
+    if (!previous || previous === 0) return 0;
+    
+    if (isTime) {
+      return ((previous - current) / previous) * 100;
+    } else {
+      return ((current - previous) / previous) * 100;
+    }
+  }
+
+  function updateImprovementDisplay(elementId, value, isPositive = true) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    const arrow = document.getElementById(elementId.replace('-improvement', '-arrow'));
+    
+    if (value === 0) {
+      element.textContent = '0%';
+      element.className = 'text-sm font-semibold text-gray-600 dark:text-gray-400 mr-1';
+      if (arrow) arrow.textContent = '→';
+    } else if ((isPositive && value > 0) || (!isPositive && value < 0)) {
+      element.textContent = `+${Math.abs(value).toFixed(1)}%`;
+      element.className = 'text-sm font-semibold text-green-600 dark:text-green-400 mr-1';
+      if (arrow) arrow.textContent = '↗';
+      if (arrow) arrow.className = 'text-sm text-green-600 dark:text-green-400';
+    } else {
+      element.textContent = `-${Math.abs(value).toFixed(1)}%`;
+      element.className = 'text-sm font-semibold text-red-600 dark:text-red-400 mr-1';
+      if (arrow) arrow.textContent = '↘';
+      if (arrow) arrow.className = 'text-sm text-red-600 dark:text-red-400';
+    }
+  }
+
+  function updateKillTimeImprovementDisplay(elementId, currentTime, previousTime) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    const arrow = document.getElementById(elementId.replace('-improvement', '-arrow'));
+    
+    if (!previousTime || previousTime === 0) {
+      element.textContent = '--';
+      element.className = 'text-sm font-semibold text-gray-600 dark:text-gray-400 mr-1';
+      if (arrow) arrow.textContent = '→';
+      return;
+    }
+    
+    const improvement = ((previousTime - currentTime) / previousTime) * 100;
+    
+    if (improvement === 0) {
+      element.textContent = '0%';
+      element.className = 'text-sm font-semibold text-gray-600 dark:text-gray-400 mr-1';
+      if (arrow) arrow.textContent = '→';
+    } else if (improvement > 0) {
+      element.textContent = `-${Math.abs(improvement).toFixed(1)}%`;
+      element.className = 'text-sm font-semibold text-green-600 dark:text-green-400 mr-1';
+      if (arrow) arrow.textContent = '↘';
+      if (arrow) arrow.className = 'text-sm text-green-600 dark:text-green-400';
+    } else {
+      element.textContent = `+${Math.abs(improvement).toFixed(1)}%`;
+      element.className = 'text-sm font-semibold text-red-600 dark:text-red-400 mr-1';
+      if (arrow) arrow.textContent = '↗';
+      if (arrow) arrow.className = 'text-sm text-red-600 dark:text-red-400';
+    }
+  }
+
+  function isDark() {
+    return document.documentElement.classList.contains('dark');
+  }
+
+  // ========== PLAYER STATS FUNCTIONS ==========
+  function processPlayerStats(kills, playerName) {
+    if (kills.length === 0) return;
+    
+    const totalKills = kills.length;
+    const highestEnrageRecord = kills.reduce((prev, current) => 
+      (prev.enrage > current.enrage) ? prev : current
+    );
+    const highestEnrage = highestEnrageRecord.enrage;
+    const mostRecent = kills[kills.length - 1];
+    const most24h = calculateMostKills24h(kills);
+    
+    document.getElementById('total-kills').textContent = totalKills;
+    document.getElementById('highest-enrage').textContent = highestEnrage.toLocaleString() + '%';
+    document.getElementById('most-24h').textContent = most24h.count;
+    document.getElementById('most-24h-date').textContent = most24h.date !== '--' ? `On ${most24h.date}` : '--';
+    
+    document.getElementById('enrage-player').textContent = playerName;
+    document.getElementById('enrage-date').textContent = `Achieved: ${highestEnrageRecord.formattedDate}`;
+    
+    updateHighestEnrageCardColors(highestEnrage);
+    
+    const enrageElement = document.getElementById('highest-enrage');
+    enrageElement.title = `Kill Time: ${formatKillTime(highestEnrageRecord.killTimeSeconds)}\nDate: ${highestEnrageRecord.formattedDate}`;
+    
+    const now = Math.floor(Date.now() / 1000);
+    const secondsAgo = now - mostRecent.timeOfKill;
+    const hours = Math.floor(secondsAgo / 3600);
+    const minutes = Math.floor((secondsAgo % 3600) / 60);
+    
+    if (hours < 24) {
+      document.getElementById('recent-activity').textContent = `${hours}h ${minutes}m ago`;
+    } else {
+      const days = Math.floor(hours / 24);
+      document.getElementById('recent-activity').textContent = `${days}d ago`;
+    }
+    
+    document.getElementById('last-kill-details').textContent = `Last kill: ${mostRecent.formattedKillTime}`;
+    
+    updatePlayerIcon(playerName);
+  }
+
+  function updatePlayerIcon(playerName) {
+    const avatarContainer = document.getElementById('highest-enrage-avatar');
+    const avatarImg = document.getElementById('player-avatar');
+    
+    if (!avatarContainer || !avatarImg) return;
+    
+    const avatarUrl = getRSIconUrl(playerName);
+    
+    if (avatarUrl) {
+      avatarContainer.classList.remove('hidden');
+      avatarImg.src = avatarUrl;
+      avatarImg.alt = playerName;
+      avatarContainer.title = playerName;
+      
+      avatarImg.onerror = function() {
+        this.onerror = null;
+        this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23DC2626"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
+      };
+    } else {
+      avatarContainer.classList.add('hidden');
+    }
+  }
+
+  // ========== CARD COLOR FUNCTIONS ==========
+  function updateHighestEnrageCardColors(enrage) {
+    const card = document.getElementById('highest-enrage-card');
+    const icon = document.getElementById('highest-enrage-icon-inner');
+    const enrageText = document.getElementById('highest-enrage');
+    
+    if (card && icon && enrageText) {
+      card.className = `p-6 rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${getEnrageCardClass(enrage)}`;
+      icon.className = `w-12 h-12 rounded-full border-2 ${getBorderColor(enrage)} bg-gradient-to-r flex items-center justify-center text-white shadow ${getIconGradient(enrage)}`;
+      enrageText.className = `text-3xl font-bold mt-1 ${getEnrageColorClass(enrage)}`;
+      
+      const iconEmoji = enrage >= 50000 ? '🔥' : enrage >= 30000 ? '⚡' : enrage >= 15000 ? '✨' : '⭐';
+      icon.textContent = iconEmoji;
+    }
+  }
+
+  function getEnrageCardClass(enrageValue) {
+    if (enrageValue >= 55000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 border-red-200 dark:border-red-900/30';
+    if (enrageValue >= 50000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-800/30 dark:to-red-700/20 border-red-200 dark:border-red-800/30';
+    if (enrageValue >= 45000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-700/30 dark:to-red-600/20 border-red-200 dark:border-red-700/30';
+    if (enrageValue >= 40000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-800/30 dark:to-orange-700/20 border-orange-200 dark:border-orange-800/30';
+    if (enrageValue >= 35000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-700/30 dark:to-orange-600/20 border-orange-200 dark:border-orange-700/30';
+    if (enrageValue >= 30000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-800/30 dark:to-yellow-700/20 border-yellow-200 dark:border-yellow-800/30';
+    if (enrageValue >= 25000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-700/30 dark:to-yellow-600/20 border-yellow-200 dark:border-yellow-700/30';
+    if (enrageValue >= 20000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-800/30 dark:to-green-700/20 border-green-200 dark:border-green-800/30';
+    if (enrageValue >= 15000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-700/30 dark:to-green-600/20 border-green-200 dark:border-green-700/30';
+    if (enrageValue >= 10000) return 'bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-800/30 dark:to-teal-700/20 border-teal-200 dark:border-teal-800/30';
+    if (enrageValue >= 5000) return 'bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-800/30 dark:to-cyan-700/20 border-cyan-200 dark:border-cyan-800/30';
+    return 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-800/30 dark:to-blue-700/20 border-blue-200 dark:border-blue-800/30';
+  }
+
+  function getBorderColor(enrageValue) {
+    if (enrageValue >= 55000) return 'border-red-900 dark:border-red-800';
+    if (enrageValue >= 50000) return 'border-red-800 dark:border-red-700';
+    if (enrageValue >= 45000) return 'border-red-700 dark:border-red-500';
+    if (enrageValue >= 40000) return 'border-orange-700 dark:border-orange-600';
+    if (enrageValue >= 35000) return 'border-orange-600 dark:border-orange-400';
+    if (enrageValue >= 30000) return 'border-yellow-600 dark:border-yellow-500';
+    if (enrageValue >= 25000) return 'border-yellow-500 dark:border-yellow-400';
+    if (enrageValue >= 20000) return 'border-green-500 dark:border-green-400';
+    if (enrageValue >= 15000) return 'border-green-400 dark:border-green-300';
+    if (enrageValue >= 10000) return 'border-teal-400 dark:border-teal-300';
+    if (enrageValue >= 5000) return 'border-cyan-500 dark:border-cyan-400';
+    return 'border-blue-600 dark:border-blue-400';
+  }
+
+  function getIconGradient(enrageValue) {
+    if (enrageValue >= 55000) return 'from-red-500 to-red-600 dark:from-red-700 dark:to-red-800';
+    if (enrageValue >= 50000) return 'from-red-400 to-red-500 dark:from-red-600 dark:to-red-700';
+    if (enrageValue >= 45000) return 'from-red-300 to-red-400 dark:from-red-500 dark:to-red-600';
+    if (enrageValue >= 40000) return 'from-orange-400 to-orange-500 dark:from-orange-600 dark:to-orange-700';
+    if (enrageValue >= 35000) return 'from-orange-300 to-orange-400 dark:from-orange-500 dark:to-orange-600';
+    if (enrageValue >= 30000) return 'from-yellow-400 to-yellow-500 dark:from-yellow-600 dark:to-yellow-700';
+    if (enrageValue >= 25000) return 'from-yellow-300 to-yellow-400 dark:from-yellow-500 dark:to-yellow-600';
+    if (enrageValue >= 20000) return 'from-green-400 to-green-500 dark:from-green-600 dark:to-green-700';
+    if (enrageValue >= 15000) return 'from-green-300 to-green-400 dark:from-green-500 dark:to-green-600';
+    if (enrageValue >= 10000) return 'from-teal-400 to-teal-500 dark:from-teal-600 dark:to-teal-700';
+    if (enrageValue >= 5000) return 'from-cyan-400 to-cyan-500 dark:from-cyan-600 dark:to-cyan-700';
+    return 'from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700';
+  }
+
+  function resetHighestEnrageCard() {
+    const card = document.getElementById('highest-enrage-card');
+    const icon = document.getElementById('highest-enrage-icon-inner');
+    const enrageText = document.getElementById('highest-enrage');
+    const avatarContainer = document.getElementById('highest-enrage-avatar');
+    
+    if (card && icon && enrageText) {
+      card.className = 'p-6 rounded-xl shadow-lg border-2 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-800/30 dark:to-blue-700/20 border-blue-200 dark:border-blue-800/30';
+      icon.className = 'w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center text-white shadow';
+      enrageText.className = 'text-3xl font-bold mt-1 text-blue-600 dark:text-blue-400';
+      icon.textContent = '⭐';
+      
+      if (avatarContainer) avatarContainer.classList.add('hidden');
+    }
+  }
+
+  // ========== WEEKLY SUMMARY FUNCTIONS ==========
+  function initializeWeeklySummary(kills) {
+    const weeklySection = document.getElementById('weekly-summary-section');
+    if (!weeklySection) return;
+    
+    weeklySummaryData = calculateWeeklyStats(kills);
+    
+    if (!weeklySummaryData || weeklySummaryData.length === 0) {
+      weeklySection.classList.add('hidden');
+      return;
+    }
+    
+    weeklySection.classList.remove('hidden');
+    currentWeekIndex = 0;
+    populateWeekDropdown();
+    updateWeeklyDisplay();
+  }
+
+  function populateWeekDropdown() {
+    const weekSelect = document.getElementById('week-select');
+    if (!weekSelect || !weeklySummaryData) return;
+    
+    weekSelect.innerHTML = '';
+    
+    weeklySummaryData.forEach((week, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = `${week.formattedRange} (${week.killCount} kills)`;
+      if (index === 0) option.selected = true;
+      weekSelect.appendChild(option);
+    });
+    
+    weekSelect.onchange = function() {
+      currentWeekIndex = parseInt(this.value);
+      updateWeeklyDisplay();
+    };
+  }
+
+  function updateWeeklyDisplay() {
+    if (!weeklySummaryData || weeklySummaryData.length === 0) return;
+    
+    const currentWeek = weeklySummaryData[currentWeekIndex];
+    const previousWeek = weeklySummaryData[currentWeekIndex + 1];
+    
+    document.getElementById('current-week-range').textContent = currentWeek.formattedRange;
+    
+    document.getElementById('weekly-total-enrage').textContent = `${currentWeek.totalEnrageGained.toLocaleString()}%`;
+    document.getElementById('weekly-fastest-time').textContent = formatKillTime(currentWeek.fastestKillTime);
+    document.getElementById('weekly-avg-time').textContent = formatKillTime(currentWeek.avgKillTime);
+    document.getElementById('weekly-cleanliness').textContent = `${currentWeek.cleanliness.toFixed(1)}%`;
+    
+    if (previousWeek) {
+      const enrageImprovement = calculateImprovementPercentage(currentWeek.totalEnrageGained, previousWeek.totalEnrageGained);
+      updateKillTimeImprovementDisplay('weekly-speed-improvement', currentWeek.avgKillTime, previousWeek.avgKillTime);
+      updateKillTimeImprovementDisplay('weekly-avg-improvement', currentWeek.avgKillTime, previousWeek.avgKillTime);
+      updateImprovementDisplay('weekly-enrage-improvement', enrageImprovement);
+    } else {
+      updateImprovementDisplay('weekly-enrage-improvement', 0);
+      document.getElementById('weekly-speed-improvement').textContent = '--';
+      document.getElementById('weekly-avg-improvement').textContent = '--';
+    }
+
+    updateRadarChart(currentWeek, previousWeek);
+  }
+
+  function updateRadarChart(currentWeek, previousWeek) {
+    const canvas = document.getElementById('weekly-radar-chart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const isDarkMode = isDark();
+    
+    if (radarChart) radarChart.destroy();
+    
+    const allPlayerKills = currentKillsForChart || [];
+    
+    let allEnrageGained = [];
+    let allAvgTimes = [];
+    let allConsistency = [];
+    let allCleanliness = [];
+    
+    if (weeklySummaryData && weeklySummaryData.length > 0) {
+      allEnrageGained = weeklySummaryData.map(w => w.totalEnrageGained);
+      allAvgTimes = weeklySummaryData.map(w => w.avgKillTime);
+      allConsistency = weeklySummaryData.map(w => w.consistency);
+      allCleanliness = weeklySummaryData.map(w => w.cleanliness);
+    }
+    
+    const normalize = (value, values, isLowerBetter = false) => {
+      if (values.length === 0 || value === 0) return 0.1;
+      
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      
+      if (max === min) return 0.5;
+      
+      if (isLowerBetter) {
+        const normalized = (value - min) / (max - min);
+        return Math.max(0.1, 1 - normalized);
+      } else {
+        return Math.max(0.1, (value - min) / (max - min));
+      }
+    };
+    
+    const normalizedData = [
+      normalize(currentWeek.totalEnrageGained, allEnrageGained, false),
+      normalize(currentWeek.avgKillTime, allAvgTimes, true),
+      normalize(currentWeek.consistency, allConsistency, true),
+      normalize(currentWeek.cleanliness, allCleanliness, false)
+    ];
+    
+    const datasets = [{
+      label: currentWeek.formattedRange,
+      data: normalizedData,
+      backgroundColor: 'rgba(147, 51, 234, 0.2)',
+      borderColor: 'rgb(147, 51, 234)',
+      pointBackgroundColor: 'rgb(147, 51, 234)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgb(147, 51, 234)',
+      pointHoverRadius: 6,
+      borderWidth: 2,
+      pointRadius: 4
+    }];
+    
+    if (previousWeek) {
+      const previousNormalizedData = [
+        normalize(previousWeek.totalEnrageGained, allEnrageGained, false),
+        normalize(previousWeek.avgKillTime, allAvgTimes, true),
+        normalize(previousWeek.consistency, allConsistency, true),
+        normalize(previousWeek.cleanliness, allCleanliness, false)
+      ];
+      
+      datasets.push({
+        label: `Previous: ${previousWeek.formattedRange}`,
+        data: previousNormalizedData,
+        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+        borderColor: 'rgb(59, 130, 246)',
+        pointBackgroundColor: 'rgb(59, 130, 246)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(59, 130, 246)',
+        pointHoverRadius: 6,
+        borderWidth: 2,
+        pointRadius: 4,
+        borderDash: [5, 5]
+      });
+    }
+    
+    try {
+      radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['Total Enrage Gained', 'Kill Time', 'Consistency', 'Cleanliness'],
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              beginAtZero: true,
+              min: 0,
+              max: 1,
+              ticks: { display: false, stepSize: 0.2 },
+              pointLabels: {
+                color: isDarkMode ? '#D1D5DB' : '#374151',
+                font: { size: 12, weight: '600' },
+                padding: 15
+              },
+              grid: {
+                color: isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)',
+                circular: true
+              },
+              angleLines: {
+                color: isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: isDarkMode ? '#D1D5DB' : '#374151',
+                font: { size: 12 },
+                padding: 15,
+                usePointStyle: true,
+                boxWidth: 10
+              }
+            },
+            tooltip: {
+              enabled: true,
+              mode: 'nearest',
+              intersect: false,
+              backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+              titleColor: isDarkMode ? '#F3F4F6' : '#111827',
+              bodyColor: isDarkMode ? '#D1D5DB' : '#374151',
+              borderColor: isDarkMode ? '#4B5563' : '#E5E7EB',
+              borderWidth: 1,
+              padding: 12,
+              cornerRadius: 8,
+              boxPadding: 6,
+              displayColors: true,
+              callbacks: {
+                title: function(tooltipItems) {
+                  if (tooltipItems.length > 0) {
+                    const datasetIndex = tooltipItems[0].datasetIndex;
+                    return datasetIndex === 0 ? 
+                      `Current Week: ${currentWeek.formattedRange}` :
+                      `Previous Week: ${previousWeek.formattedRange}`;
+                  }
+                  return '';
+                },
+                label: function(context) {
+                  const label = context.label || '';
+                  const value = context.raw;
+                  const week = context.datasetIndex === 0 ? currentWeek : previousWeek;
+                  
+                  if (!week) return '';
+                  
+                  switch(context.dataIndex) {
+                    case 0: return `${label}: ${week.totalEnrageGained.toLocaleString()}% gained`;
+                    case 1: return `${label}: ${formatKillTime(week.avgKillTime)} avg`;
+                    case 2: return `${label}: ${week.consistency.toFixed(1)}s std dev`;
+                    case 3: return `${label}: ${week.cleanliness.toFixed(1)}% near PB`;
+                    default: return '';
+                  }
+                },
+                labelColor: function(context) {
+                  return {
+                    borderColor: context.dataset.borderColor,
+                    backgroundColor: context.dataset.borderColor,
+                    borderWidth: 2,
+                    borderRadius: 2
+                  };
+                }
+              }
+            }
+          },
+          interaction: { intersect: false, mode: 'nearest' },
+          elements: {
+            line: { tension: 0.1, fill: true },
+            point: { hitRadius: 15, hoverRadius: 8 }
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Radar chart creation failed:', error);
+    }
+  }
+
+  // ========== UI STATE FUNCTIONS ==========
+  function showNoSelectionState() {
+    const sectionsToHide = ['stats-cards', 'graph-section', 'kill-table-stats-section', 'weekly-summary-section'];
+    sectionsToHide.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) element.classList.add('hidden');
+    });
+    
+    resetHighestEnrageCard();
+    
+    const noSelectElement = document.getElementById('no-selection-state');
+    if (noSelectElement) noSelectElement.classList.remove('hidden');
+  }
+
+  function showPlayerContent() {
+    const noSelectElement = document.getElementById('no-selection-state');
+    if (noSelectElement) noSelectElement.classList.add('hidden');
+    
+    const sectionsToShow = ['stats-cards', 'graph-section', 'kill-table-stats-section', 'weekly-summary-section'];
+    sectionsToShow.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) element.classList.remove('hidden');
+    });
+  }
+
+  // ========== KILL TABLE FUNCTIONS ==========
+  function renderKillTable(kills) {
+    const tableBody = document.getElementById('kill-table-body');
+    const visibleKillsSpan = document.getElementById('visible-kills');
+    const tableCountSpan = document.getElementById('table-count');
+    
+    if (!tableBody || !visibleKillsSpan || !tableCountSpan) return;
+    
+    const tableKills = [...kills].sort((a, b) => b.timeOfKill - a.timeOfKill);
+    
+    tableBody.innerHTML = '';
+    tableCountSpan.textContent = `${tableKills.length} kills`;
+    
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, tableKills.length);
+    const pageKills = tableKills.slice(startIndex, endIndex);
+    
+    visibleKillsSpan.textContent = `${startIndex + 1}-${endIndex} of ${tableKills.length}`;
+    
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = endIndex >= tableKills.length;
+    
+    pageKills.forEach((kill, index) => {
+      const globalIndex = startIndex + index + 1;
+      
+      const row = document.createElement('tr');
+      row.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150';
+      
+      row.innerHTML = `
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+          ${globalIndex}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-lg font-bold ${getEnrageColorClass(kill.enrage)}">
+            ${kill.enrage.toLocaleString()}%
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
+          ${kill.formattedDate}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="font-mono font-semibold text-gray-900 dark:text-white">
+            ${kill.formattedKillTime}
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
+            ${kill.timeAgoDetailed}
+          </div>
+        </td>
+      `;
+      
+      tableBody.appendChild(row);
+    });
+    
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderKillTable(kills);
+        }
+      };
+    }
+    
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        if (endIndex < tableKills.length) {
+          currentPage++;
+          renderKillTable(kills);
+        }
+      };
+    }
+  }
+
+  // ========== BRACKET STATS FUNCTIONS ==========
+  function renderBracketStats(kills) {
+    const container = document.getElementById('bracket-stats-container');
+    if (!container) {
+      console.error('Bracket stats container not found');
+      return;
+    }
+    
+    if (kills.length === 0) {
+      container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No bracket data available</p>';
+      return;
+    }
+    
+    const sortedKills = [...kills].sort((a, b) => a.timeOfKill - b.timeOfKill);
+    
+    const bracketRanges = [
+      { min: 55000, max: 59999, label: '55-60k', color: '#8B0000' },
+      { min: 50000, max: 54999, label: '50-55k', color: '#B22222' },
+      { min: 45000, max: 49999, label: '45-50k', color: '#DC143C' },
+      { min: 40000, max: 44999, label: '40-45k', color: '#FF4500' },
+      { min: 35000, max: 39999, label: '35-40k', color: '#FF8C00' },
+      { min: 30000, max: 35999, label: '30-35k', color: '#FFA500' },
+      { min: 25000, max: 29999, label: '25-30k', color: '#FFD700' },
+      { min: 20000, max: 24999, label: '20-25k', color: '#9ACD32' },
+      { min: 15000, max: 19999, label: '15-20k', color: '#32CD32' },
+      { min: 10000, max: 14999, label: '10-15k', color: '#00FA9A' },
+      { min: 5000, max: 9999, label: '5-10k', color: '#20B2AA' },
+      { min: 0, max: 4999, label: '0-5k', color: '#4682B4' }
+    ];
+    
+    const bracketData = bracketRanges.map(range => {
+      const bracketKills = sortedKills.filter(k => k.enrage >= range.min && k.enrage <= range.max);
+      
+      if (bracketKills.length === 0) return null;
+      
+      const avgTime = bracketKills.reduce((sum, k) => sum + k.killTimeSeconds, 0) / bracketKills.length;
+      const fastest = bracketKills.reduce((fastest, k) => 
+        k.killTimeSeconds < fastest.killTimeSeconds ? k : fastest
+      );
+      
+      const firstKill = bracketKills[0];
+      const lastKill = bracketKills[bracketKills.length - 1];
+      const durationSeconds = lastKill.timeOfKill - firstKill.timeOfKill;
+      const durationDays = Math.max(durationSeconds / 86400, 0.1);
+      
+      const totalEnrageGained = lastKill.enrage - firstKill.enrage;
+      let avgEnrageGainedPerDay = 0;
+      if (durationDays > 0) {
+        avgEnrageGainedPerDay = totalEnrageGained / durationDays;
+      } else {
+        avgEnrageGainedPerDay = totalEnrageGained;
+      }
+
+      let durationFormatted = "0m";
+      if (durationSeconds > 0) {
+        durationFormatted = formatDuration(durationSeconds);
+      } else {
+        durationFormatted = "Single kill";
+      }
+      
+      let maxEnrageGainedIn24h = 0;
+      let maxEnrageGainedStartTime = 0;
+      let maxEnrageGainedEndTime = 0;
+      let killsInBest24h = [];
+      
+      if (bracketKills.length >= 2) {
+        bracketKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+        
+        for (let i = 0; i < bracketKills.length; i++) {
+          const startKill = bracketKills[i];
+          const startTime = startKill.timeOfKill;
+          const endTime = startTime + 86400;
+          
+          let j = i;
+          let windowKills = [];
+          while (j < bracketKills.length && bracketKills[j].timeOfKill <= endTime) {
+            windowKills.push(bracketKills[j]);
+            j++;
+          }
+          
+          if (windowKills.length >= 2) {
+            const sortedWindowKills = [...windowKills].sort((a, b) => a.enrage - b.enrage);
+            
+            let windowEnrageGain = 0;
+            for (let k = 1; k < sortedWindowKills.length; k++) {
+              const gain = sortedWindowKills[k].enrage - sortedWindowKills[k-1].enrage;
+              if (gain > 0) {
+                windowEnrageGain += gain;
+              }
+            }
+            
+            const firstInWindow = windowKills[0];
+            const lastInWindow = windowKills[windowKills.length - 1];
+            const simpleGain = 10 + lastInWindow.enrage - firstInWindow.enrage;
+
+            const windowGain = Math.max(windowEnrageGain, simpleGain);
+            
+            if (windowGain > maxEnrageGainedIn24h) {
+              maxEnrageGainedIn24h = windowGain;
+              maxEnrageGainedStartTime = startTime;
+              maxEnrageGainedEndTime = endTime;
+              killsInBest24h = windowKills;
+            }
+          }
+        }
+      }
+      
+      let formattedMaxEnrageGainPeriod = '--';
+      if (maxEnrageGainedStartTime > 0) {
+        const startDate = new Date(maxEnrageGainedStartTime * 1000);
+        const endDate = new Date(maxEnrageGainedEndTime * 1000);
+        
+        const startFormatted = startDate.toLocaleDateString('en-US', {
           timeZone: userTimezone,
           year: 'numeric',
           month: 'short',
           day: 'numeric',
           hour: '2-digit',
           minute: '2-digit'
+        });
+        
+        const endFormatted = endDate.toLocaleDateString('en-US', {
+          timeZone: userTimezone,
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        formattedMaxEnrageGainPeriod = `${startFormatted}`;
+      }
+      
+      const fastestDate = new Date(fastest.timeOfKill * 1000);
+      const formattedFastestDate = fastestDate.toLocaleDateString('en-US', {
+        timeZone: userTimezone,
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
       });
-  }
-
-  function calculateMostKills24h(kills) {
-      if (kills.length === 0) return { count: 0, date: '--' };
-      
-      const sortedKills = [...kills].sort((a, b) => a.timeOfKill - b.timeOfKill);
-      let maxKills = 0;
-      let bestDate = '';
-      
-      for (let i = 0; i < sortedKills.length; i++) {
-          const startTime = sortedKills[i].timeOfKill;
-          const endTime = startTime + 86400;
-          
-          let j = i;
-          while (j < sortedKills.length && sortedKills[j].timeOfKill <= endTime) j++;
-          
-          const killsIn24h = j - i;
-          if (killsIn24h > maxKills) {
-              maxKills = killsIn24h;
-              bestDate = formatDateTime(startTime);
-          }
-      }
-      
-      return { count: maxKills, date: bestDate };
-  }
-
-  function processPlayerKills(playerRecords) {
-      return playerRecords.map(record => ({
-          enrage: record.enrage,
-          timeOfKill: record.timeOfKill,
-          killTimeSeconds: record.killTimeSeconds,
-          formattedDate: formatDateTime(record.timeOfKill),
-          formattedKillTime: formatKillTime(record.killTimeSeconds),
-          timeAgoDetailed: timeAgoDetailed(record.timeOfKill),
-          date: new Date(record.timeOfKill * 1000)
-      })).sort((a, b) => a.timeOfKill - b.timeOfKill);
-  }
-
-  function getEnrageColorClass(enrage) {
-      if (enrage >= 55000) return 'text-red-900 dark:text-red-800';
-      if (enrage >= 50000) return 'text-red-800 dark:text-red-700';
-      if (enrage >= 45000) return 'text-red-700 dark:text-red-500';
-      if (enrage >= 40000) return 'text-orange-700 dark:text-orange-600';
-      if (enrage >= 35000) return 'text-orange-600 dark:text-orange-400';
-      if (enrage >= 30000) return 'text-yellow-600 dark:text-yellow-500';
-      if (enrage >= 25000) return 'text-yellow-500 dark:text-yellow-400';
-      if (enrage >= 20000) return 'text-green-500 dark:text-green-400';
-      if (enrage >= 15000) return 'text-green-400 dark:text-green-300';
-      if (enrage >= 10000) return 'text-teal-400 dark:text-teal-300';
-      if (enrage >= 5000) return 'text-cyan-500 dark:text-cyan-400';
-      return 'text-blue-600 dark:text-blue-400';
-  }
-
-  function formatDuration(seconds) {
-      if (seconds < 60) return "<1m"; // Less than a minute
-      
-      const days = Math.floor(seconds / 86400);
-      const hours = Math.floor((seconds % 86400) / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      
-      if (days > 0) {
-          if (hours > 0 && days < 3) {
-              return `${days}d ${hours}h`;
-          }
-          return `${days}d`;
-      }
-      if (hours > 0) {
-          if (minutes > 0 && hours < 6) {
-              return `${hours}h ${minutes}m`;
-          }
-          return `${hours}h`;
-      }
-      return `${minutes}m`;
-  }
-
-  function calculateBracketProgress(bracketKills, bracketMin, bracketMax) {
-      if (bracketKills.length === 0) return 0;
-      
-      // Calculate based on how many enrage milestones were achieved within the bracket
-      const enrages = bracketKills.map(k => k.enrage);
-      const minEnrage = Math.min(...enrages);
-      const maxEnrage = Math.max(...enrages);
-      
-      // Progress based on enrage range covered
-      const bracketRange = bracketMax - bracketMin;
-      const coveredRange = maxEnrage - minEnrage;
-      
-      // Also factor in number of kills (but weighted less)
-      const killProgress = Math.min(bracketKills.length / 20, 1) * 40; // Max 40% from kills
-      const rangeProgress = Math.min(coveredRange / bracketRange, 1) * 60; // Max 60% from range coverage
-      
-      return Math.min(killProgress + rangeProgress, 100);
-  }
-
-  function isDark() {
-      return document.documentElement.classList.contains('dark');
-  }
-
-  // ========== PLAYER STATS FUNCTIONS ==========
-  function processPlayerStats(kills, playerName) {
-      if (kills.length === 0) return;
-      
-      const totalKills = kills.length;
-      const highestEnrageRecord = kills.reduce((prev, current) => 
-          (prev.enrage > current.enrage) ? prev : current
-      );
-      const highestEnrage = highestEnrageRecord.enrage;
-      const mostRecent = kills[kills.length - 1];
-      const most24h = calculateMostKills24h(kills);
-      
-      // Update DOM
-      document.getElementById('total-kills').textContent = totalKills;
-      document.getElementById('highest-enrage').textContent = highestEnrage.toLocaleString() + '%';
-      document.getElementById('most-24h').textContent = most24h.count;
-      document.getElementById('most-24h-date').textContent = most24h.date !== '--' ? `On ${most24h.date}` : '--';
-      
-      // Update highest enrage details
-      document.getElementById('enrage-player').textContent = playerName;
-      document.getElementById('enrage-date').textContent = `Achieved: ${highestEnrageRecord.formattedDate}`;
-      
-      // Update card colors
-      updateHighestEnrageCardColors(highestEnrage);
-      
-      // Add tooltip
-      const enrageElement = document.getElementById('highest-enrage');
-      enrageElement.title = `Kill Time: ${formatKillTime(highestEnrageRecord.killTimeSeconds)}\nDate: ${highestEnrageRecord.formattedDate}`;
-      
-      // Recent activity
-      const now = Math.floor(Date.now() / 1000);
-      const secondsAgo = now - mostRecent.timeOfKill;
-      const hours = Math.floor(secondsAgo / 3600);
-      const minutes = Math.floor((secondsAgo % 3600) / 60);
-      
-      if (hours < 24) {
-          document.getElementById('recent-activity').textContent = `${hours}h ${minutes}m ago`;
-      } else {
-          const days = Math.floor(hours / 24);
-          document.getElementById('recent-activity').textContent = `${days}d ago`;
-      }
-      
-      document.getElementById('last-kill-details').textContent = `Last kill: ${mostRecent.formattedKillTime}`;
-      
-      // Update player icon
-      updatePlayerIcon(playerName);
-  }
-
-  function updatePlayerIcon(playerName) {
-      const avatarContainer = document.getElementById('highest-enrage-avatar');
-      const avatarImg = document.getElementById('player-avatar');
-      
-      if (!avatarContainer || !avatarImg) return;
-      
-      const avatarUrl = getRSIconUrl(playerName);
-      
-      if (avatarUrl) {
-          avatarContainer.classList.remove('hidden');
-          avatarImg.src = avatarUrl;
-          avatarImg.alt = playerName;
-          avatarContainer.title = playerName;
-          
-          avatarImg.onerror = function() {
-              this.onerror = null;
-              this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23DC2626"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>';
-          };
-      } else {
-          avatarContainer.classList.add('hidden');
-      }
-  }
-
-  // ========== CARD COLOR FUNCTIONS ==========
-  function updateHighestEnrageCardColors(enrage) {
-      const card = document.getElementById('highest-enrage-card');
-      const icon = document.getElementById('highest-enrage-icon-inner');
-      const enrageText = document.getElementById('highest-enrage');
-      
-      if (card && icon && enrageText) {
-          card.className = `p-6 rounded-xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${getEnrageCardClass(enrage)}`;
-          icon.className = `w-12 h-12 rounded-full border-2 ${getBorderColor(enrage)} bg-gradient-to-r flex items-center justify-center text-white shadow ${getIconGradient(enrage)}`;
-          enrageText.className = `text-3xl font-bold mt-1 ${getEnrageColorClass(enrage)}`;
-          
-          const iconEmoji = enrage >= 50000 ? '🔥' : enrage >= 30000 ? '⚡' : enrage >= 15000 ? '✨' : '⭐';
-          icon.textContent = iconEmoji;
-      }
-  }
-
-  function getEnrageCardClass(enrageValue) {
-      if (enrageValue >= 55000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 border-red-200 dark:border-red-900/30';
-      if (enrageValue >= 50000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-800/30 dark:to-red-700/20 border-red-200 dark:border-red-800/30';
-      if (enrageValue >= 45000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-700/30 dark:to-red-600/20 border-red-200 dark:border-red-700/30';
-      if (enrageValue >= 40000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-800/30 dark:to-orange-700/20 border-orange-200 dark:border-orange-800/30';
-      if (enrageValue >= 35000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-700/30 dark:to-orange-600/20 border-orange-200 dark:border-orange-700/30';
-      if (enrageValue >= 30000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-800/30 dark:to-yellow-700/20 border-yellow-200 dark:border-yellow-800/30';
-      if (enrageValue >= 25000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-700/30 dark:to-yellow-600/20 border-yellow-200 dark:border-yellow-700/30';
-      if (enrageValue >= 20000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-800/30 dark:to-green-700/20 border-green-200 dark:border-green-800/30';
-      if (enrageValue >= 15000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-700/30 dark:to-green-600/20 border-green-200 dark:border-green-700/30';
-      if (enrageValue >= 10000) return 'bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-800/30 dark:to-teal-700/20 border-teal-200 dark:border-teal-800/30';
-      if (enrageValue >= 5000) return 'bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-800/30 dark:to-cyan-700/20 border-cyan-200 dark:border-cyan-800/30';
-      return 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-800/30 dark:to-blue-700/20 border-blue-200 dark:border-blue-800/30';
-  }
-
-  function getBorderColor(enrageValue) {
-      if (enrageValue >= 55000) return 'border-red-900 dark:border-red-800';
-      if (enrageValue >= 50000) return 'border-red-800 dark:border-red-700';
-      if (enrageValue >= 45000) return 'border-red-700 dark:border-red-500';
-      if (enrageValue >= 40000) return 'border-orange-700 dark:border-orange-600';
-      if (enrageValue >= 35000) return 'border-orange-600 dark:border-orange-400';
-      if (enrageValue >= 30000) return 'border-yellow-600 dark:border-yellow-500';
-      if (enrageValue >= 25000) return 'border-yellow-500 dark:border-yellow-400';
-      if (enrageValue >= 20000) return 'border-green-500 dark:border-green-400';
-      if (enrageValue >= 15000) return 'border-green-400 dark:border-green-300';
-      if (enrageValue >= 10000) return 'border-teal-400 dark:border-teal-300';
-      if (enrageValue >= 5000) return 'border-cyan-500 dark:border-cyan-400';
-      return 'border-blue-600 dark:border-blue-400';
-  }
-
-  function getIconGradient(enrageValue) {
-      if (enrageValue >= 55000) return 'from-red-500 to-red-600 dark:from-red-700 dark:to-red-800';
-      if (enrageValue >= 50000) return 'from-red-400 to-red-500 dark:from-red-600 dark:to-red-700';
-      if (enrageValue >= 45000) return 'from-red-300 to-red-400 dark:from-red-500 dark:to-red-600';
-      if (enrageValue >= 40000) return 'from-orange-400 to-orange-500 dark:from-orange-600 dark:to-orange-700';
-      if (enrageValue >= 35000) return 'from-orange-300 to-orange-400 dark:from-orange-500 dark:to-orange-600';
-      if (enrageValue >= 30000) return 'from-yellow-400 to-yellow-500 dark:from-yellow-600 dark:to-yellow-700';
-      if (enrageValue >= 25000) return 'from-yellow-300 to-yellow-400 dark:from-yellow-500 dark:to-yellow-600';
-      if (enrageValue >= 20000) return 'from-green-400 to-green-500 dark:from-green-600 dark:to-green-700';
-      if (enrageValue >= 15000) return 'from-green-300 to-green-400 dark:from-green-500 dark:to-green-600';
-      if (enrageValue >= 10000) return 'from-teal-400 to-teal-500 dark:from-teal-600 dark:to-teal-700';
-      if (enrageValue >= 5000) return 'from-cyan-400 to-cyan-500 dark:from-cyan-600 dark:to-cyan-700';
-      return 'from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700';
-  }
-
-  function resetHighestEnrageCard() {
-      const card = document.getElementById('highest-enrage-card');
-      const icon = document.getElementById('highest-enrage-icon-inner');
-      const enrageText = document.getElementById('highest-enrage');
-      const avatarContainer = document.getElementById('highest-enrage-avatar');
-      
-      if (card && icon && enrageText) {
-          card.className = 'p-6 rounded-xl shadow-lg border-2 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-800/30 dark:to-blue-700/20 border-blue-200 dark:border-blue-800/30';
-          icon.className = 'w-12 h-12 rounded-full bg-gradient-to-r from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center text-white shadow';
-          enrageText.className = 'text-3xl font-bold mt-1 text-blue-600 dark:text-blue-400';
-          icon.textContent = '⭐';
-          
-          if (avatarContainer) avatarContainer.classList.add('hidden');
-      }
-  }
-
-  // ========== UI STATE FUNCTIONS ==========
-  function showNoSelectionState() {
-      const sectionsToHide = ['stats-cards', 'graph-section', 'kill-table-stats-section'];
-      sectionsToHide.forEach(id => {
-          const element = document.getElementById(id);
-          if (element) element.classList.add('hidden');
+      const formattedFastestTime = fastestDate.toLocaleTimeString('en-US', {
+        timeZone: userTimezone,
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
       });
       
-      resetHighestEnrageCard();
-      
-      const noSelectElement = document.getElementById('no-selection-state');
-      if (noSelectElement) noSelectElement.classList.remove('hidden');
-  }
-
-  function showPlayerContent() {
-      const noSelectElement = document.getElementById('no-selection-state');
-      if (noSelectElement) noSelectElement.classList.add('hidden');
-      
-      const sectionsToShow = ['stats-cards', 'graph-section', 'kill-table-stats-section'];
-      sectionsToShow.forEach(id => {
-          const element = document.getElementById(id);
-          if (element) element.classList.remove('hidden');
+      const firstKillDate = new Date(firstKill.timeOfKill * 1000);
+      const lastKillDate = new Date(lastKill.timeOfKill * 1000);
+      const formattedFirstDate = firstKillDate.toLocaleDateString('en-US', {
+        timeZone: userTimezone,
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
       });
-  }
-
-  // ========== KILL TABLE FUNCTIONS ==========
-  function renderKillTable(kills) {
-      const tableBody = document.getElementById('kill-table-body');
-      const visibleKillsSpan = document.getElementById('visible-kills');
-      const tableCountSpan = document.getElementById('table-count');
-      
-      if (!tableBody || !visibleKillsSpan || !tableCountSpan) return;
-      
-      // Sort kills by date descending for table display
-      const tableKills = [...kills].sort((a, b) => b.timeOfKill - a.timeOfKill);
-      
-      tableBody.innerHTML = '';
-      tableCountSpan.textContent = `${tableKills.length} kills`;
-      
-      // Calculate pagination
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = Math.min(startIndex + pageSize, tableKills.length);
-      const pageKills = tableKills.slice(startIndex, endIndex);
-      
-      visibleKillsSpan.textContent = `${startIndex + 1}-${endIndex} of ${tableKills.length}`;
-      
-      // Update pagination buttons
-      const prevBtn = document.getElementById('prev-page');
-      const nextBtn = document.getElementById('next-page');
-      if (prevBtn) prevBtn.disabled = currentPage === 1;
-      if (nextBtn) nextBtn.disabled = endIndex >= tableKills.length;
-      
-      // Render rows
-      pageKills.forEach((kill, index) => {
-          const globalIndex = startIndex + index + 1;
-          
-          const row = document.createElement('tr');
-          row.className = 'hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150';
-          
-          row.innerHTML = `
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  ${globalIndex}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-lg font-bold ${getEnrageColorClass(kill.enrage)}">
-                      ${kill.enrage.toLocaleString()}%
-                  </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                  ${kill.formattedDate}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="font-mono font-semibold text-gray-900 dark:text-white">
-                      ${kill.formattedKillTime}
-                  </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                      ${kill.timeAgoDetailed}
-                  </div>
-              </td>
-          `;
-          
-          tableBody.appendChild(row);
+      const formattedLastDate = lastKillDate.toLocaleDateString('en-US', {
+        timeZone: userTimezone,
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
       });
       
-      // Add pagination event listeners
-      if (prevBtn) {
-          prevBtn.onclick = () => {
-              if (currentPage > 1) {
-                  currentPage--;
-                  renderKillTable(kills);
-              }
-          };
+      const currentMaxEnrage = Math.max(...bracketKills.map(k => k.enrage));
+      const bracketRange = range.max - range.min;
+      const progressThroughBracket = Math.max(0, currentMaxEnrage - range.min);
+      
+      let bracketProgress = Math.min((progressThroughBracket / bracketRange) * 100, 100);
+      
+      if (bracketKills.length > 0 && bracketProgress < 1) {
+        bracketProgress = 1;
       }
       
-      if (nextBtn) {
-          nextBtn.onclick = () => {
-              if (endIndex < tableKills.length) {
-                  currentPage++;
-                  renderKillTable(kills);
-              }
-          };
-      }
-  }
-
-  // ========== BRACKET STATS FUNCTIONS ==========
-  function renderBracketStats(kills) {
-      const container = document.getElementById('bracket-stats-container');
-      if (!container) {
-          console.error('Bracket stats container not found');
-          return;
-      }
-      
-      if (kills.length === 0) {
-          container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No bracket data available</p>';
-          return;
-      }
-      
-      // Sort kills by time for accurate timeline calculations
-      const sortedKills = [...kills].sort((a, b) => a.timeOfKill - b.timeOfKill);
-      
-      // Define brackets
-      const bracketRanges = [
-          { min: 55000, max: 59999, label: '55-60k', color: '#8B0000' },
-          { min: 50000, max: 54999, label: '50-55k', color: '#B22222' },
-          { min: 45000, max: 49999, label: '45-50k', color: '#DC143C' },
-          { min: 40000, max: 44999, label: '40-45k', color: '#FF4500' },
-          { min: 35000, max: 39999, label: '35-40k', color: '#FF8C00' },
-          { min: 30000, max: 35999, label: '30-35k', color: '#FFA500' },
-          { min: 25000, max: 29999, label: '25-30k', color: '#FFD700' },
-          { min: 20000, max: 24999, label: '20-25k', color: '#9ACD32' },
-          { min: 15000, max: 19999, label: '15-20k', color: '#32CD32' },
-          { min: 10000, max: 14999, label: '10-15k', color: '#00FA9A' },
-          { min: 5000, max: 9999, label: '5-10k', color: '#20B2AA' },
-          { min: 0, max: 4999, label: '0-5k', color: '#4682B4' }
-      ];
-      
-      const bracketData = bracketRanges.map(range => {
-          const bracketKills = sortedKills.filter(k => k.enrage >= range.min && k.enrage <= range.max);
-          
-          if (bracketKills.length === 0) return null;
-          
-          // Calculate average kill time
-          const avgTime = bracketKills.reduce((sum, k) => sum + k.killTimeSeconds, 0) / bracketKills.length;
-          const fastest = bracketKills.reduce((fastest, k) => 
-              k.killTimeSeconds < fastest.killTimeSeconds ? k : fastest
-          );
-          
-          // Calculate duration in bracket
-          const firstKill = bracketKills[0];
-          const lastKill = bracketKills[bracketKills.length - 1];
-          const durationSeconds = lastKill.timeOfKill - firstKill.timeOfKill;
-          const durationDays = Math.max(durationSeconds / 86400, 0.1); // Minimum 0.1 days to avoid division by zero
-          
-          // Calculate average enrage GAINED per day
-          const totalEnrageGained = lastKill.enrage - firstKill.enrage;
-          let avgEnrageGainedPerDay = 0;
-          if (durationDays > 0) {
-              avgEnrageGainedPerDay = totalEnrageGained / durationDays;
-          } else {
-              avgEnrageGainedPerDay = totalEnrageGained;
-          }
-
-          // Format duration - handle single kill case
-          let durationFormatted = "0m";
-          if (durationSeconds > 0) {
-              durationFormatted = formatDuration(durationSeconds);
-          } else {
-              durationFormatted = "Single kill";
-          }
-          
-          // NEW: Calculate max enrage gained within any 24-hour period
-          let maxEnrageGainedIn24h = 0;
-          let maxEnrageGainedStartTime = 0;
-          let maxEnrageGainedEndTime = 0;
-          let killsInBest24h = [];
-          
-          if (bracketKills.length >= 2) {
-              bracketKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
-              
-              // Use sliding window approach to find best 24-hour period
-              for (let i = 0; i < bracketKills.length; i++) {
-                  const startKill = bracketKills[i];
-                  const startTime = startKill.timeOfKill;
-                  const endTime = startTime + 86400; // 24 hours in seconds
-                  
-                  // Find all kills within this 24-hour window
-                  let j = i;
-                  let windowKills = [];
-                  while (j < bracketKills.length && bracketKills[j].timeOfKill <= endTime) {
-                      windowKills.push(bracketKills[j]);
-                      j++;
-                  }
-                  
-                  if (windowKills.length >= 2) {
-                      // Sort kills in window by enrage to calculate total gain
-                      const sortedWindowKills = [...windowKills].sort((a, b) => a.enrage - b.enrage);
-                      
-                      // Calculate total enrage gain in this window
-                      // This is more accurate than just first-last difference
-                      let windowEnrageGain = 0;
-                      for (let k = 1; k < sortedWindowKills.length; k++) {
-                          const gain = sortedWindowKills[k].enrage - sortedWindowKills[k-1].enrage;
-                          if (gain > 0) {
-                              windowEnrageGain += gain;
-                          }
-                      }
-                      
-                      // Alternative: Simple first to last in window (if kills are chronological)
-                      const firstInWindow = windowKills[0];
-                      const lastInWindow = windowKills[windowKills.length - 1];
-                      const simpleGain = 10 + lastInWindow.enrage - firstInWindow.enrage;
-
-                      // Use the higher of the two calculations
-                      const windowGain = Math.max(windowEnrageGain, simpleGain);
-                      
-                      if (windowGain > maxEnrageGainedIn24h) {
-                          maxEnrageGainedIn24h = windowGain;
-                          maxEnrageGainedStartTime = startTime;
-                          maxEnrageGainedEndTime = endTime;
-                          killsInBest24h = windowKills;
-                      }
-                  }
-              }
-          }
-          
-          // Format the best 24h period date
-          let formattedMaxEnrageGainPeriod = '--';
-          if (maxEnrageGainedStartTime > 0) {
-              const startDate = new Date(maxEnrageGainedStartTime * 1000);
-              const endDate = new Date(maxEnrageGainedEndTime * 1000);
-              
-              const startFormatted = startDate.toLocaleDateString('en-US', {
-                  timeZone: userTimezone,
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-              });
-              
-              const endFormatted = endDate.toLocaleDateString('en-US', {
-                  timeZone: userTimezone,
-                  hour: '2-digit',
-                  minute: '2-digit'
-              });
-              
-              formattedMaxEnrageGainPeriod = `${startFormatted}`;
-          }
-          
-          // Format dates
-          const fastestDate = new Date(fastest.timeOfKill * 1000);
-          const formattedFastestDate = fastestDate.toLocaleDateString('en-US', {
-              timeZone: userTimezone,
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-          });
-          const formattedFastestTime = fastestDate.toLocaleTimeString('en-US', {
-              timeZone: userTimezone,
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true
-          });
-          
-          const firstKillDate = new Date(firstKill.timeOfKill * 1000);
-          const lastKillDate = new Date(lastKill.timeOfKill * 1000);
-          const formattedFirstDate = firstKillDate.toLocaleDateString('en-US', {
-              timeZone: userTimezone,
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-          });
-          const formattedLastDate = lastKillDate.toLocaleDateString('en-US', {
-              timeZone: userTimezone,
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-          });
-          
-          // Progress calculation
-          const currentMaxEnrage = Math.max(...bracketKills.map(k => k.enrage));
-          const bracketRange = range.max - range.min;
-          const progressThroughBracket = Math.max(0, currentMaxEnrage - range.min);
-          
-          let bracketProgress = Math.min((progressThroughBracket / bracketRange) * 100, 100);
-          
-          if (bracketKills.length > 0 && bracketProgress < 1) {
-              bracketProgress = 1;
-          }
-          
-          return {
-              ...range,
-              kills: bracketKills.length,
-              avgTime: formatKillTime(avgTime),
-              fastestTime: formatKillTime(fastest.killTimeSeconds),
-              fastestKill: fastest,
-              formattedFastestDate: formattedFastestDate,
-              formattedFastestTime: formattedFastestTime,
-              fastestEnrage: fastest.enrage,
-              
-              // Duration and timeline data
-              firstKill: firstKill,
-              lastKill: lastKill,
-              durationSeconds: durationSeconds,
-              durationDays: durationDays,
-              durationFormatted: durationFormatted,
-              totalEnrageGained: totalEnrageGained,
-              avgEnrageGainedPerDay: avgEnrageGainedPerDay,
-              
-              // Max enrage gain in 24h period
-              maxEnrageGainedIn24h: maxEnrageGainedIn24h,
-              maxEnrageGainedStartTime: maxEnrageGainedStartTime,
-              maxEnrageGainedEndTime: maxEnrageGainedEndTime,
-              formattedMaxEnrageGainPeriod: formattedMaxEnrageGainPeriod,
-              killsInBest24h: killsInBest24h,
-              
-              formattedFirstDate: formattedFirstDate,
-              formattedLastDate: formattedLastDate,
-              
-              // Current max enrage for progress calculation
-              currentMaxEnrage: currentMaxEnrage,
-              
-              // Bracket progress
-              bracketProgress: bracketProgress
-          };
-      }).filter(b => b !== null);
-      
-      if (bracketData.length === 0) {
-          container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No kills in standard brackets</p>';
-          return;
-      }
-      
-      container.innerHTML = bracketData.map(bracket => `
-          <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-              <!-- Compact Header -->
-              <div class="mb-4">
-                  <div class="flex justify-between items-center mb-3">
-                      <div>
-                          <h4 class="font-bold ${getEnrageColorClass(bracket.min)} text-lg inline-block mr-2">
-                              ${bracket.label}
-                          </h4>
-                      </div>
-                      <span class="px-3 py-1.5 text-sm font-semibold ${getBracketColorClass(bracket.min)} rounded-full">
-                          ${bracket.kills} kill${bracket.kills !== 1 ? 's' : ''}
-                      </span>
-                  </div>
-                  
-                  <!-- First/Last Kill Row -->
-                  <div class="border border-gray-200 dark:border-gray-700 flex items-center justify-between rounded-lg p-3">
-                      <div class="text-center flex-1">
-                          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">First Kill</p>
-                          <p class="font-medium ${getEnrageColorClass(bracket.firstKill.enrage)}">
-                              ${bracket.firstKill.enrage.toLocaleString()}%
-                          </p>
-                          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" title="${bracket.formattedFirstDate}">
-                              ${bracket.formattedFirstDate}
-                          </p>
-                      </div>
-                      
-                      <div class="w-px h-8 bg-gray-300 dark:bg-gray-700 mx-2"></div>
-                      
-                      <div class="text-center flex-1">
-                          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Last Kill</p>
-                          <p class="font-medium ${getEnrageColorClass(bracket.lastKill.enrage)}">
-                              ${bracket.lastKill.enrage.toLocaleString()}%
-                          </p>
-                          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" title="${bracket.formattedLastDate}">
-                              ${bracket.formattedLastDate}
-                          </p>
-                      </div>
-                  </div>
-              </div>
-              
-              <!-- Stats Grid: 3 columns for top-level metrics -->
-              <div class="grid grid-cols-3 gap-3 mb-4">
-                  <!-- Duration -->
-                  <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-                      <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Duration</p>
-                      <p class="font-bold text-gray-900 dark:text-white text-lg mb-1">
-                          ${bracket.durationFormatted}
-                      </p>
-                  </div>
-                  
-                  <!-- Avg Enrage/Day -->
-                  <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-                      <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Avg Enrage/Day</p>
-                      <p class="font-bold text-gray-900 dark:text-white text-lg">
-                          ${bracket.avgEnrageGainedPerDay > 0 ? '+' : ''}${Math.round(bracket.avgEnrageGainedPerDay).toLocaleString()}%
-                      </p>
-                  </div>
-                  
-                  <!-- Avg Time -->
-                  <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-                      <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Avg Kill Time</p>
-                      <p class="font-bold text-gray-900 dark:text-white text-lg">
-                          ${bracket.avgTime}
-                      </p>
-                  </div>
-              </div>
-              
-              <!-- Secondary Stats: 2 columns for Max Enrage/24h and Fastest Time -->
-              <div class="grid grid-cols-2 gap-3 mb-4">
-                  <!-- Max Enrage Gain in 24h -->
-                  <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-                      <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Max Enrage/24h</p>
-                      <p class="font-bold ${getEnrageColorClass(bracket.maxEnrageGainedIn24h)} text-lg mb-1">
-                          ${bracket.maxEnrageGainedIn24h > 0 ? '+' : ''}${Math.round(bracket.maxEnrageGainedIn24h).toLocaleString()}%
-                      </p>
-                      ${bracket.formattedMaxEnrageGainPeriod !== '--' ? `
-                          <p class="text-xs text-gray-500 dark:text-gray-400">
-                              Started on:
-                          </p>
-                          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" title="${bracket.formattedMaxEnrageGainPeriod}">
-                              ${bracket.formattedMaxEnrageGainPeriod}
-                          </p>
-                      ` : `
-                          <p class="text-xs text-gray-500 dark:text-gray-400">
-                              Not enough data
-                          </p>
-                      `}
-                  </div>
-                  
-                  <!-- Fastest Time -->
-                  <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-                      <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Fastest Time</p>
-                      <p class="font-bold text-gray-900 dark:text-white text-lg mb-1">
-                          ${bracket.fastestTime}
-                      </p>
-                      <p class="text-xs text-gray-500 dark:text-gray-400">
-                          ${bracket.formattedFastestDate}
-                      </p>
-                  </div>
-              </div>
-              
-              <!-- Fastest Kill Details (Collapsible) -->
-              <details class="group">
-                  <summary class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-gray-300 py-2 border-t border-gray-200 dark:border-gray-700">
-                      <span>Fastest Kill Details</span>
-                      <span class="group-open:rotate-90 transition-transform">▸</span>
-                  </summary>
-                  <div class="mt-2 pt-2 space-y-2">
-                      <div class="grid grid-cols-2 gap-4">
-                          <div>
-                              <p class="text-xs text-gray-500 dark:text-gray-400">Date</p>
-                              <p class="text-sm font-medium text-gray-900 dark:text-white">${bracket.formattedFastestDate}</p>
-                          </div>
-                          <div>
-                              <p class="text-xs text-gray-500 dark:text-gray-400">Time</p>
-                              <p class="text-sm font-medium text-gray-900 dark:text-white">${bracket.formattedFastestTime}</p>
-                          </div>
-                      </div>
-                      <div class="grid grid-cols-2 gap-4">
-                          <div>
-                              <p class="text-xs text-gray-500 dark:text-gray-400">Enrage</p>
-                              <p class="text-sm font-medium ${getEnrageColorClass(bracket.fastestEnrage)}">
-                                  ${bracket.fastestEnrage.toLocaleString()}%
-                              </p>
-                          </div>
-                          <div>
-                              <p class="text-xs text-gray-500 dark:text-gray-400">Time Since</p>
-                              <p class="text-sm font-medium text-blue-600 dark:text-blue-400">
-                                  ${timeAgoDetailed(bracket.fastestKill.timeOfKill)}
-                              </p>
-                          </div>
-                      </div>
-                  </div>
-              </details>
-              
-              <!-- Bracket Progress Bar -->
-              ${bracket.kills > 1 ? `
-                  <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <div class="flex justify-between items-center mb-2">
-                          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Bracket Progress</span>
-                          <span class="text-sm font-bold ${getEnrageColorClass(bracket.currentMaxEnrage)}">${bracket.bracketProgress.toFixed(0)}%</span>
-                      </div>
-                      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                          <div class="h-2.5 rounded-full ${getBracketProgressColor(bracket.min)} transition-all duration-500" 
-                              style="width: ${bracket.bracketProgress}%"
-                              title="Progress from ${bracket.min.toLocaleString()}% to ${bracket.currentMaxEnrage.toLocaleString()}% (max: ${bracket.max === Infinity ? '∞' : bracket.max.toLocaleString() + '%'})"></div>
-                      </div>
-                      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          <span>${bracket.min.toLocaleString()}%</span>
-                          <span>Current: ${bracket.currentMaxEnrage.toLocaleString()}%</span>
-                          <span>${bracket.max === Infinity ? '∞' : bracket.max.toLocaleString() + '%'}</span>
-                      </div>
-                  </div>
-              ` : `
-                  <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-2">
-                          Only ${bracket.kills} kill${bracket.kills !== 1 ? 's' : ''} in this bracket
-                      </p>
-                  </div>
-              `}
+      return {
+        ...range,
+        kills: bracketKills.length,
+        avgTime: formatKillTime(avgTime),
+        fastestTime: formatKillTime(fastest.killTimeSeconds),
+        fastestKill: fastest,
+        formattedFastestDate: formattedFastestDate,
+        formattedFastestTime: formattedFastestTime,
+        fastestEnrage: fastest.enrage,
+        
+        firstKill: firstKill,
+        lastKill: lastKill,
+        durationSeconds: durationSeconds,
+        durationDays: durationDays,
+        durationFormatted: durationFormatted,
+        totalEnrageGained: totalEnrageGained,
+        avgEnrageGainedPerDay: avgEnrageGainedPerDay,
+        
+        maxEnrageGainedIn24h: maxEnrageGainedIn24h,
+        maxEnrageGainedStartTime: maxEnrageGainedStartTime,
+        maxEnrageGainedEndTime: maxEnrageGainedEndTime,
+        formattedMaxEnrageGainPeriod: formattedMaxEnrageGainPeriod,
+        killsInBest24h: killsInBest24h,
+        
+        formattedFirstDate: formattedFirstDate,
+        formattedLastDate: formattedLastDate,
+        
+        currentMaxEnrage: currentMaxEnrage,
+        
+        bracketProgress: bracketProgress
+      };
+    }).filter(b => b !== null);
+    
+    if (bracketData.length === 0) {
+      container.innerHTML = '<p class="text-gray-500 dark:text-gray-400">No kills in standard brackets</p>';
+      return;
+    }
+    
+    container.innerHTML = bracketData.map(bracket => `
+      <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <!-- Compact Header -->
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-3">
+            <div>
+              <h4 class="font-bold ${getEnrageColorClass(bracket.min)} text-lg inline-block mr-2">
+                ${bracket.label}
+              </h4>
+            </div>
+            <span class="px-3 py-1.5 text-sm font-semibold ${getBracketColorClass(bracket.min)} rounded-full">
+              ${bracket.kills} kill${bracket.kills !== 1 ? 's' : ''}
+            </span>
           </div>
-      `).join('');
+          
+          <!-- First/Last Kill Row -->
+          <div class="border border-gray-200 dark:border-gray-700 flex items-center justify-between rounded-lg p-3">
+            <div class="text-center flex-1">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">First Kill</p>
+              <p class="font-medium ${getEnrageColorClass(bracket.firstKill.enrage)}">
+                ${bracket.firstKill.enrage.toLocaleString()}%
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" title="${bracket.formattedFirstDate}">
+                ${bracket.formattedFirstDate}
+              </p>
+            </div>
+            
+            <div class="w-px h-8 bg-gray-300 dark:bg-gray-700 mx-2"></div>
+            
+            <div class="text-center flex-1">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Last Kill</p>
+              <p class="font-medium ${getEnrageColorClass(bracket.lastKill.enrage)}">
+                ${bracket.lastKill.enrage.toLocaleString()}%
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" title="${bracket.formattedLastDate}">
+                ${bracket.formattedLastDate}
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Stats Grid: 3 columns for top-level metrics -->
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <!-- Duration -->
+          <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Duration</p>
+            <p class="font-bold text-gray-900 dark:text-white text-lg mb-1">
+              ${bracket.durationFormatted}
+            </p>
+          </div>
+          
+          <!-- Avg Enrage/Day -->
+          <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Avg Enrage/Day</p>
+            <p class="font-bold text-gray-900 dark:text-white text-lg">
+              ${bracket.avgEnrageGainedPerDay > 0 ? '+' : ''}${Math.round(bracket.avgEnrageGainedPerDay).toLocaleString()}%
+            </p>
+          </div>
+          
+          <!-- Avg Time -->
+          <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Avg Kill Time</p>
+            <p class="font-bold text-gray-900 dark:text-white text-lg">
+              ${bracket.avgTime}
+            </p>
+          </div>
+        </div>
+        
+        <!-- Secondary Stats: 2 columns for Max Enrage/24h and Fastest Time -->
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <!-- Max Enrage Gain in 24h -->
+          <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Max Enrage/24h</p>
+            <p class="font-bold ${getEnrageColorClass(bracket.maxEnrageGainedIn24h)} text-lg mb-1">
+              ${bracket.maxEnrageGainedIn24h > 0 ? '+' : ''}${Math.round(bracket.maxEnrageGainedIn24h).toLocaleString()}%
+            </p>
+            ${bracket.formattedMaxEnrageGainPeriod !== '--' ? `
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                Started on:
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" title="${bracket.formattedMaxEnrageGainPeriod}">
+                ${bracket.formattedMaxEnrageGainPeriod}
+              </p>
+            ` : `
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                Not enough data
+              </p>
+            `}
+          </div>
+          
+          <!-- Fastest Time -->
+          <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Fastest Time</p>
+            <p class="font-bold text-gray-900 dark:text-white text-lg mb-1">
+              ${bracket.fastestTime}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              ${bracket.formattedFastestDate}
+            </p>
+          </div>
+        </div>
+        
+        <!-- Fastest Kill Details (Collapsible) -->
+        <details class="group">
+          <summary class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-gray-300 py-2 border-t border-gray-200 dark:border-gray-700">
+            <span>Fastest Kill Details</span>
+            <span class="group-open:rotate-90 transition-transform">▸</span>
+          </summary>
+          <div class="mt-2 pt-2 space-y-2">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Date</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white">${bracket.formattedFastestDate}</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Time</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-white">${bracket.formattedFastestTime}</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Enrage</p>
+                <p class="text-sm font-medium ${getEnrageColorClass(bracket.fastestEnrage)}">
+                  ${bracket.fastestEnrage.toLocaleString()}%
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Time Since</p>
+                <p class="text-sm font-medium text-blue-600 dark:text-blue-400">
+                  ${timeAgoDetailed(bracket.fastestKill.timeOfKill)}
+                </p>
+              </div>
+            </div>
+          </div>
+        </details>
+        
+        <!-- Bracket Progress Bar -->
+        ${bracket.kills > 1 ? `
+          <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Bracket Progress</span>
+              <span class="text-sm font-bold ${getEnrageColorClass(bracket.currentMaxEnrage)}">${bracket.bracketProgress.toFixed(0)}%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+              <div class="h-2.5 rounded-full ${getBracketProgressColor(bracket.min)} transition-all duration-500" 
+                style="width: ${bracket.bracketProgress}%"
+                title="Progress from ${bracket.min.toLocaleString()}% to ${bracket.currentMaxEnrage.toLocaleString()}% (max: ${bracket.max === Infinity ? '∞' : bracket.max.toLocaleString() + '%'})"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <span>${bracket.min.toLocaleString()}%</span>
+              <span>Current: ${bracket.currentMaxEnrage.toLocaleString()}%</span>
+              <span>${bracket.max === Infinity ? '∞' : bracket.max.toLocaleString() + '%'}</span>
+            </div>
+          </div>
+        ` : `
+          <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-2">
+              Only ${bracket.kills} kill${bracket.kills !== 1 ? 's' : ''} in this bracket
+            </p>
+          </div>
+        `}
+      </div>
+    `).join('');
   }
+  
   function getBracketColorClass(minEnrage) {
-      if (minEnrage >= 55000) return 'bg-red-50 dark:bg-red-950/30 text-red-900 dark:text-red-300 border-red-200 dark:border-red-900';
-      if (minEnrage >= 50000) return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800';
-      if (minEnrage >= 45000) return 'bg-red-50 dark:bg-red-800/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
-      if (minEnrage >= 40000) return 'bg-orange-50 dark:bg-orange-800/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800';
-      if (minEnrage >= 35000) return 'bg-orange-50 dark:bg-orange-700/30 text-orange-600 dark:text-orange-300 border-orange-200 dark:border-orange-700';
-      if (minEnrage >= 30000) return 'bg-yellow-50 dark:bg-yellow-800/30 text-yellow-600 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800';
-      if (minEnrage >= 25000) return 'bg-yellow-50 dark:bg-yellow-700/30 text-yellow-500 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700';
-      if (minEnrage >= 20000) return 'bg-green-50 dark:bg-green-700/30 text-green-500 dark:text-green-300 border-green-200 dark:border-green-700';
-      if (minEnrage >= 15000) return 'bg-green-50 dark:bg-green-600/30 text-green-400 dark:text-green-300 border-green-200 dark:border-green-600';
-      if (minEnrage >= 10000) return 'bg-teal-50 dark:bg-teal-700/30 text-teal-400 dark:text-teal-300 border-teal-200 dark:border-teal-700';
-      if (minEnrage >= 5000) return 'bg-cyan-50 dark:bg-cyan-700/30 text-cyan-500 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700';
-      return 'bg-blue-50 dark:bg-blue-800/30 text-blue-600 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+    if (minEnrage >= 55000) return 'bg-red-50 dark:bg-red-950/30 text-red-900 dark:text-red-300 border-red-200 dark:border-red-900';
+    if (minEnrage >= 50000) return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800';
+    if (minEnrage >= 45000) return 'bg-red-50 dark:bg-red-800/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
+    if (minEnrage >= 40000) return 'bg-orange-50 dark:bg-orange-800/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800';
+    if (minEnrage >= 35000) return 'bg-orange-50 dark:bg-orange-700/30 text-orange-600 dark:text-orange-300 border-orange-200 dark:border-orange-700';
+    if (minEnrage >= 30000) return 'bg-yellow-50 dark:bg-yellow-800/30 text-yellow-600 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800';
+    if (minEnrage >= 25000) return 'bg-yellow-50 dark:bg-yellow-700/30 text-yellow-500 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700';
+    if (minEnrage >= 20000) return 'bg-green-50 dark:bg-green-700/30 text-green-500 dark:text-green-300 border-green-200 dark:border-green-700';
+    if (minEnrage >= 15000) return 'bg-green-50 dark:bg-green-600/30 text-green-400 dark:text-green-300 border-green-200 dark:border-green-600';
+    if (minEnrage >= 10000) return 'bg-teal-50 dark:bg-teal-700/30 text-teal-400 dark:text-teal-300 border-teal-200 dark:border-teal-700';
+    if (minEnrage >= 5000) return 'bg-cyan-50 dark:bg-cyan-700/30 text-cyan-500 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700';
+    return 'bg-blue-50 dark:bg-blue-800/30 text-blue-600 dark:text-blue-300 border-blue-200 dark:border-blue-800';
   }
 
   function getBracketProgressColor(minEnrage) {
-      if (minEnrage >= 55000) return 'bg-red-900';
-      if (minEnrage >= 50000) return 'bg-red-800';
-      if (minEnrage >= 45000) return 'bg-red-700';
-      if (minEnrage >= 40000) return 'bg-orange-700';
-      if (minEnrage >= 35000) return 'bg-orange-600';
-      if (minEnrage >= 30000) return 'bg-yellow-600';
-      if (minEnrage >= 25000) return 'bg-yellow-500';
-      if (minEnrage >= 20000) return 'bg-green-500';
-      if (minEnrage >= 15000) return 'bg-green-400';
-      if (minEnrage >= 10000) return 'bg-teal-400';
-      if (minEnrage >= 5000) return 'bg-cyan-500';
-      return 'bg-blue-600';
+    if (minEnrage >= 55000) return 'bg-red-900';
+    if (minEnrage >= 50000) return 'bg-red-800';
+    if (minEnrage >= 45000) return 'bg-red-700';
+    if (minEnrage >= 40000) return 'bg-orange-700';
+    if (minEnrage >= 35000) return 'bg-orange-600';
+    if (minEnrage >= 30000) return 'bg-yellow-600';
+    if (minEnrage >= 25000) return 'bg-yellow-500';
+    if (minEnrage >= 20000) return 'bg-green-500';
+    if (minEnrage >= 15000) return 'bg-green-400';
+    if (minEnrage >= 10000) return 'bg-teal-400';
+    if (minEnrage >= 5000) return 'bg-cyan-500';
+    return 'bg-blue-600';
   }
 
   // ========== CHART FUNCTIONS ==========
   function setupThemeChangeListener() {
-      if (themeChangeObserver) themeChangeObserver.disconnect();
-      
-      themeChangeObserver = new MutationObserver(() => {
-          if (currentKillsForChart && currentPlayer) {
-              setTimeout(() => {
-                  initializeChart(currentKillsForChart);
-                  if (comparisonKills) initializeDifferenceChart(currentKillsForChart, comparisonKills);
-                  if (currentKillsForChart.length > 0) {
-                      const highestEnrageRecord = currentKillsForChart.reduce((prev, current) => 
-                          (prev.enrage > current.enrage) ? prev : current
-                      );
-                      updateHighestEnrageCardColors(highestEnrageRecord.enrage);
-                  }
-              }, 100);
+    if (themeChangeObserver) themeChangeObserver.disconnect();
+    
+    themeChangeObserver = new MutationObserver(() => {
+      if (currentKillsForChart && currentPlayer) {
+        setTimeout(() => {
+          initializeChart(currentKillsForChart);
+          if (comparisonKills) initializeDifferenceChart(currentKillsForChart, comparisonKills);
+          if (currentKillsForChart.length > 0) {
+            const highestEnrageRecord = currentKillsForChart.reduce((prev, current) => 
+              (prev.enrage > current.enrage) ? prev : current
+            );
+            updateHighestEnrageCardColors(highestEnrageRecord.enrage);
           }
-      });
-      
-      themeChangeObserver.observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['class']
-      });
+        }, 100);
+      }
+    });
+    
+    themeChangeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
   }
 
   function getPointStyle(totalPoints) {
-      return {
-          pointRadius: 0,
-          pointHoverRadius: 2,
-          pointBorderWidth: 0,
-          borderWidth: 2,
-          pointStyle: 'circle',
-          showLine: true
-      };
+    return {
+      pointRadius: 0,
+      pointHoverRadius: 2,
+      pointBorderWidth: 0,
+      borderWidth: 2,
+      pointStyle: 'circle',
+      showLine: true
+    };
   }
 
   function initializeChart(kills) {
-      if (typeof Chart === 'undefined') return;
+    if (typeof Chart === 'undefined') return;
+    
+    const canvas = document.getElementById('progress-chart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const isDarkMode = isDark();
+    
+    if (currentChart) currentChart.destroy();
+    
+    const sortedKills = kills.sort((a, b) => a.timeOfKill - b.timeOfKill);
+    const mainStyle = getPointStyle(sortedKills.length);
+    
+    const mainDataset = {
+      label: currentPlayer,
+      data: sortedKills.map(kill => ({
+        x: kill.timeOfKill * 1000,
+        y: kill.enrage
+      })),
+      borderColor: 'rgb(59, 130, 246)',
+      backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+      tension: 0.4,
+      pointBackgroundColor: 'rgb(59, 130, 246)',
+      pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
+      pointBorderWidth: mainStyle.pointBorderWidth,
+      borderWidth: mainStyle.borderWidth,
+      pointRadius: mainStyle.pointRadius,
+      pointHoverRadius: mainStyle.pointHoverRadius,
+      pointStyle: mainStyle.pointStyle,
+      showLine: mainStyle.showLine
+    };
+    
+    const datasets = [mainDataset];
+
+    if (comparisonPlayer && comparisonKills) {
+      const comparisonStyle = getPointStyle(sortedKills.length);
+      const comparisonSorted = comparisonKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
       
-      const canvas = document.getElementById('progress-chart');
-      if (!canvas) return;
-      
-      const ctx = canvas.getContext('2d');
-      const isDarkMode = isDark();
-      
-      if (currentChart) currentChart.destroy();
-      
-      const sortedKills = kills.sort((a, b) => a.timeOfKill - b.timeOfKill);
-      const mainStyle = getPointStyle(sortedKills.length);
-      
-      // Prepare main dataset
-      const mainDataset = {
-          label: currentPlayer,
-          data: sortedKills.map(kill => ({
-              x: kill.timeOfKill * 1000,
-              y: kill.enrage
-          })),
-          borderColor: 'rgb(59, 130, 246)',
-          backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-          tension: 0.4,
-          pointBackgroundColor: 'rgb(59, 130, 246)',
-          pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
-          pointBorderWidth: mainStyle.pointBorderWidth,
-          borderWidth: mainStyle.borderWidth,
-          pointRadius: mainStyle.pointRadius,
-          pointHoverRadius: mainStyle.pointHoverRadius,
-          pointStyle: mainStyle.pointStyle,
-          showLine: mainStyle.showLine
+      const comparisonDataset = {
+        label: comparisonPlayer,
+        data: comparisonSorted.map(kill => ({
+          x: kill.timeOfKill * 1000,
+          y: kill.enrage
+        })),
+        borderColor: 'rgb(16, 185, 129)',
+        backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+        tension: 0.4,
+        pointBackgroundColor: 'rgb(16, 185, 129)',
+        pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
+        pointBorderWidth: comparisonStyle.pointBorderWidth,
+        borderWidth: comparisonStyle.borderWidth,
+        pointRadius: comparisonStyle.pointRadius,
+        pointHoverRadius: comparisonStyle.pointHoverRadius,
+        pointStyle: comparisonStyle.pointStyle,
+        showLine: comparisonStyle.showLine
       };
       
-      const datasets = [mainDataset];
-
-      // Add comparison dataset if available
-      if (comparisonPlayer && comparisonKills) {
-          const comparisonStyle = getPointStyle(sortedKills.length);
-          const comparisonSorted = comparisonKills.sort((a, b) => a.timeOfKill - b.timeOfKill);
-          
-          const comparisonDataset = {
-              label: comparisonPlayer,
-              data: comparisonSorted.map(kill => ({
-                  x: kill.timeOfKill * 1000,
-                  y: kill.enrage
-              })),
-              borderColor: 'rgb(16, 185, 129)',
-              backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.1)',
-              tension: 0.4,
-              pointBackgroundColor: 'rgb(16, 185, 129)',
-              pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
-              pointBorderWidth: comparisonStyle.pointBorderWidth,
-              borderWidth: comparisonStyle.borderWidth,
-              pointRadius: comparisonStyle.pointRadius,
-              pointHoverRadius: comparisonStyle.pointHoverRadius,
-              pointStyle: comparisonStyle.pointStyle,
-              showLine: comparisonStyle.showLine
-          };
-          
-          datasets.push(comparisonDataset);
-      }
-      
-      // Calculate time range
-      const timestamps = sortedKills.map(kill => kill.timeOfKill * 1000);
-      const minTime = Math.min(...timestamps);
-      const maxTime = Math.max(...timestamps);
-      const timeRange = maxTime - minTime;
-      const daysRange = timeRange / (1000 * 60 * 60 * 24);
-      
-      let timeUnit = 'day';
-      if (daysRange > 365) timeUnit = 'year';
-      else if (daysRange > 30) timeUnit = 'month';
-      else if (daysRange > 7) timeUnit = 'week';
-      else if (daysRange > 2) timeUnit = 'day';
-      else if (daysRange > 0.5) timeUnit = 'hour';
-      else timeUnit = 'minute';
-      
-      // Theme colors
-      const textColor = isDarkMode ? '#D1D5DB' : '#374151';
-      const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
-      const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
-      
-      try {
-          currentChart = new Chart(ctx, {
-              type: 'line',
-              data: { datasets: datasets },
-              options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  scales: {
-                      y: {
-                          beginAtZero: true,
-                          title: {
-                              display: true,
-                              text: 'Enrage %',
-                              color: titleColor,
-                              font: { size: 14, weight: 'bold' }
-                          },
-                          ticks: {
-                              color: textColor,
-                              font: { size: 12 },
-                              callback: value => value.toLocaleString() + '%',
-                              padding: 10
-                          },
-                          grid: {
-                              color: gridColor,
-                              drawBorder: false
-                          }
-                      },
-                      x: {
-                          type: 'time',
-                          time: { unit: timeUnit, displayFormats: { day: 'MMM d' } },
-                          title: {
-                              display: true,
-                              text: 'Date',
-                              color: titleColor,
-                              font: { size: 14, weight: 'bold' }
-                          },
-                          ticks: {
-                              color: textColor,
-                              font: { size: 11 },
-                              maxRotation: 45,
-                              minRotation: 45,
-                              padding: 10,
-                              autoSkip: true,
-                              maxTicksLimit: Math.min(20, sortedKills.length)
-                          },
-                          grid: {
-                              color: gridColor,
-                              drawBorder: false
-                          }
-                      }
-                  },
-                  plugins: {
-                      legend: {
-                          display: true,
-                          position: 'top',
-                          labels: {
-                              color: textColor,
-                              font: {
-                                  size: sortedKills.length > 1000 ? 12 : 14,
-                                  weight: '600'
-                              },
-                              padding: 20,
-                              usePointStyle: true,
-                              pointStyle: 'circle'
-                          }
-                      },
-                      tooltip: {
-                          mode: 'index',
-                          intersect: false,
-                          backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                          titleColor: isDarkMode ? '#F3F4F6' : '#111827',
-                          bodyColor: isDarkMode ? '#D1D5DB' : '#374151',
-                          borderColor: isDarkMode ? '#4B5563' : '#E5E7EB',
-                          borderWidth: 1,
-                          padding: 12,
-                          cornerRadius: 8,
-                          callbacks: {
-                              title: function(tooltipItems) {
-                                  const index = tooltipItems[0].dataIndex;
-                                  const kill = sortedKills[index];
-                                  if (kill) {
-                                      const date = new Date(kill.timeOfKill * 1000);
-                                      return date.toLocaleDateString('en-US', {
-                                          month: 'short',
-                                          day: 'numeric',
-                                          year: 'numeric',
-                                          hour: '2-digit',
-                                          minute: '2-digit'
-                                      });
-                                  }
-                                  return '';
-                              },
-                              label: context => {
-                                  const label = context.dataset.label || '';
-                                  const value = context.parsed.y;
-                                  return `${label}: ${value.toLocaleString()}%`;
-                              }
-                          }
-                      }
-                  },
-                  interaction: { intersect: false, mode: 'nearest' },
-                  elements: {
-                      line: { fill: false },
-                      point: {
-                          hitRadius: sortedKills.length > 500 ? 5 : 10,
-                          hoverRadius: sortedKills.length > 500 ? 6 : 12
-                      }
-                  },
-                  animation: { duration: sortedKills.length > 1000 ? 0 : 1000 }
+      datasets.push(comparisonDataset);
+    }
+    
+    const timestamps = sortedKills.map(kill => kill.timeOfKill * 1000);
+    const minTime = Math.min(...timestamps);
+    const maxTime = Math.max(...timestamps);
+    const timeRange = maxTime - minTime;
+    const daysRange = timeRange / (1000 * 60 * 60 * 24);
+    
+    let timeUnit = 'day';
+    if (daysRange > 365) timeUnit = 'year';
+    else if (daysRange > 30) timeUnit = 'month';
+    else if (daysRange > 7) timeUnit = 'week';
+    else if (daysRange > 2) timeUnit = 'day';
+    else if (daysRange > 0.5) timeUnit = 'hour';
+    else timeUnit = 'minute';
+    
+    const textColor = isDarkMode ? '#D1D5DB' : '#374151';
+    const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
+    const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
+    
+    try {
+      currentChart = new Chart(ctx, {
+        type: 'line',
+        data: { datasets: datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Enrage %',
+                color: titleColor,
+                font: { size: 14, weight: 'bold' }
+              },
+              ticks: {
+                color: textColor,
+                font: { size: 12 },
+                callback: value => value.toLocaleString() + '%',
+                padding: 10
+              },
+              grid: {
+                color: gridColor,
+                drawBorder: false
               }
-          });
-          
-          if (!themeChangeObserver) setupThemeChangeListener();
-          
-      } catch (error) {
-          console.error('Chart creation failed:', error);
-      }
+            },
+            x: {
+              type: 'time',
+              time: { unit: timeUnit, displayFormats: { day: 'MMM d' } },
+              title: {
+                display: true,
+                text: 'Date',
+                color: titleColor,
+                font: { size: 14, weight: 'bold' }
+              },
+              ticks: {
+                color: textColor,
+                font: { size: 11 },
+                maxRotation: 45,
+                minRotation: 45,
+                padding: 10,
+                autoSkip: true,
+                maxTicksLimit: Math.min(20, sortedKills.length)
+              },
+              grid: {
+                color: gridColor,
+                drawBorder: false
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: textColor,
+                font: {
+                  size: sortedKills.length > 1000 ? 12 : 14,
+                  weight: '600'
+                },
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+              titleColor: isDarkMode ? '#F3F4F6' : '#111827',
+              bodyColor: isDarkMode ? '#D1D5DB' : '#374151',
+              borderColor: isDarkMode ? '#4B5563' : '#E5E7EB',
+              borderWidth: 1,
+              padding: 12,
+              cornerRadius: 8,
+              callbacks: {
+                title: function(tooltipItems) {
+                  const index = tooltipItems[0].dataIndex;
+                  const kill = sortedKills[index];
+                  if (kill) {
+                    const date = new Date(kill.timeOfKill * 1000);
+                    return date.toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    });
+                  }
+                  return '';
+                },
+                label: context => {
+                  const label = context.dataset.label || '';
+                  const value = context.parsed.y;
+                  return `${label}: ${value.toLocaleString()}%`;
+                }
+              }
+            }
+          },
+          interaction: { intersect: false, mode: 'nearest' },
+          elements: {
+            line: { fill: false },
+            point: {
+              hitRadius: sortedKills.length > 500 ? 5 : 10,
+              hoverRadius: sortedKills.length > 500 ? 6 : 12
+            }
+          },
+          animation: { duration: sortedKills.length > 1000 ? 0 : 1000 }
+        }
+      });
+      
+      if (!themeChangeObserver) setupThemeChangeListener();
+      
+    } catch (error) {
+      console.error('Chart creation failed:', error);
+    }
   }
 
   function interpolateDataPoints(mainKills, comparisonKills) {
-    // Sort kills by time
     const sortedMain = [...mainKills].sort((a, b) => a.timeOfKill - b.timeOfKill);
     const sortedComp = [...comparisonKills].sort((a, b) => a.timeOfKill - b.timeOfKill);
     
-    // Initialize pointers and current values
     let mainIdx = 0, compIdx = 0;
     let currentMain = null, currentComp = null;
     const differencePoints = [];
     
-    // Merge the two timelines
     while (mainIdx < sortedMain.length && compIdx < sortedComp.length) {
-        const mainTime = sortedMain[mainIdx].timeOfKill;
-        const compTime = sortedComp[compIdx].timeOfKill;
-        
-        // Process the earlier timestamp
-        if (mainTime <= compTime) {
-            currentMain = sortedMain[mainIdx].enrage;
-            mainIdx++;
-        }
-        
-        if (compTime <= mainTime) {
-            currentComp = sortedComp[compIdx].enrage;
-            compIdx++;
-        }
-        
-        // If we have values for both players, calculate difference
-        if (currentMain !== null && currentComp !== null) {
-            differencePoints.push({
-                x: Math.min(mainTime, compTime) * 1000, // Convert to milliseconds for Chart.js
-                y: currentMain - currentComp,
-                mainEnrage: currentMain,
-                compEnrage: currentComp,
-                timeOfKill: Math.min(mainTime, compTime)
-            });
-        }
+      const mainTime = sortedMain[mainIdx].timeOfKill;
+      const compTime = sortedComp[compIdx].timeOfKill;
+      
+      if (mainTime <= compTime) {
+        currentMain = sortedMain[mainIdx].enrage;
+        mainIdx++;
+      }
+      
+      if (compTime <= mainTime) {
+        currentComp = sortedComp[compIdx].enrage;
+        compIdx++;
+      }
+      
+      if (currentMain !== null && currentComp !== null) {
+        differencePoints.push({
+          x: Math.min(mainTime, compTime) * 1000,
+          y: currentMain - currentComp,
+          mainEnrage: currentMain,
+          compEnrage: currentComp,
+          timeOfKill: Math.min(mainTime, compTime)
+        });
+      }
     }
     
     return differencePoints;
   }
 
   function initializeDifferenceChart(mainKills, comparisonKills) {
-    console.log('=== INITIALIZING DIFFERENCE CHART ===');
-    
     if (typeof Chart === 'undefined') {
-        console.error('Chart.js not loaded');
-        return;
+      console.error('Chart.js not loaded');
+      return;
     }
     
     const isDarkMode = isDark();
     const canvas = document.getElementById('difference-chart');
     if (!canvas) {
-        console.error('Difference canvas element not found');
-        return;
+      console.error('Difference canvas element not found');
+      return;
     }
     
     const ctx = canvas.getContext('2d');
     
-    // Destroy existing difference chart
     if (differenceChart) {
-        differenceChart.destroy();
+      differenceChart.destroy();
     }
     
-    // Use the new interpolation function
     const differenceData = interpolateDataPoints(mainKills, comparisonKills);
     
     if (differenceData.length === 0) {
-        console.warn('No valid difference data to display');
-        hideDifferenceChart();
-        return;
+      console.warn('No valid difference data to display');
+      hideDifferenceChart();
+      return;
     }
     
-    console.log('Difference data points:', differenceData.length);
-    
-    // Define colors
     const textColor = isDarkMode ? '#D1D5DB' : '#374151';
     const gridColor = isDarkMode ? 'rgba(75, 85, 99, 0.2)' : 'rgba(156, 163, 175, 0.2)';
     const titleColor = isDarkMode ? '#C0C0C0' : '#585858';
     
-    // Calculate time range for dynamic configuration
     const timestamps = differenceData.map(point => point.x);
     const minTime = Math.min(...timestamps);
     const maxTime = Math.max(...timestamps);
     const timeRange = maxTime - minTime;
     
-    // Determine appropriate time unit
     let timeUnit = 'day';
     const daysRange = timeRange / (1000 * 60 * 60 * 24);
     
     if (daysRange > 365) {
-        timeUnit = 'year';
+      timeUnit = 'year';
     } else if (daysRange > 30) {
-        timeUnit = 'month';
+      timeUnit = 'month';
     } else if (daysRange > 7) {
-        timeUnit = 'week';
+      timeUnit = 'week';
     } else if (daysRange > 2) {
-        timeUnit = 'day';
+      timeUnit = 'day';
     } else if (daysRange > 0.5) {
-        timeUnit = 'hour';
+      timeUnit = 'hour';
     } else {
-        timeUnit = 'minute';
+      timeUnit = 'minute';
     }
     
-    // Prepare dataset
     const diffDataset = {
-        label: `Difference (${currentPlayer} - ${comparisonPlayer})`,
-        data: differenceData.map(point => ({
-            x: point.x,
-            y: point.y
-        })),
-        borderColor: 'rgb(239, 68, 68)',
-        backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-        tension: 0.4,
-        pointBackgroundColor: function(context) {
-            // Color points based on whether difference is positive or negative
-            const value = context.raw.y;
-            return value >= 0 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)';
-        },
-        pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
-        pointBorderWidth: 0,
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 2,
-        pointStyle: 'circle',
-        showLine: true,
-        segment: {
-            borderColor: function(context) {
-                // Color line segments based on whether difference is positive or negative
-                const value = context.p1.parsed.y;
-                return value >= 0 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)';
-            }
+      label: `Difference (${currentPlayer} - ${comparisonPlayer})`,
+      data: differenceData.map(point => ({
+        x: point.x,
+        y: point.y
+      })),
+      borderColor: 'rgb(239, 68, 68)',
+      backgroundColor: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+      tension: 0.4,
+      pointBackgroundColor: function(context) {
+        const value = context.raw.y;
+        return value >= 0 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)';
+      },
+      pointBorderColor: isDarkMode ? '#0D0D0D' : '#0D0D0D',
+      pointBorderWidth: 0,
+      borderWidth: 2,
+      pointRadius: 0,
+      pointHoverRadius: 2,
+      pointStyle: 'circle',
+      showLine: true,
+      segment: {
+        borderColor: function(context) {
+          const value = context.p1.parsed.y;
+          return value >= 0 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)';
         }
+      }
     };
     
     try {
-        // Create the difference chart
-        differenceChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [diffDataset]
+      differenceChart = new Chart(ctx, {
+        type: 'line',
+        data: { datasets: [diffDataset] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: 'Enrage Difference %',
+                color: titleColor,
+                font: { size: 14, weight: 'bold' }
+              },
+              ticks: {
+                color: textColor,
+                font: { size: 12 },
+                callback: function(value) {
+                  return (value > 0 ? '+' : '') + value.toLocaleString() + '%';
+                },
+                padding: 10
+              },
+              grid: {
+                color: gridColor,
+                drawBorder: false
+              }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        title: {
-                            display: true,
-                            text: 'Enrage Difference %',
-                            color: titleColor,
-                            font: { size: 14, weight: 'bold' }
-                        },
-                        ticks: {
-                            color: textColor,
-                            font: { size: 12 },
-                            callback: function(value) {
-                                return (value > 0 ? '+' : '') + value.toLocaleString() + '%';
-                            },
-                            padding: 10
-                        },
-                        grid: {
-                            color: gridColor,
-                            drawBorder: false
-                        }
-                    },
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: timeUnit,
-                            displayFormats: {
-                                millisecond: 'HH:mm:ss.SSS',
-                                second: 'HH:mm:ss',
-                                minute: 'HH:mm',
-                                hour: 'MMM d, HH:mm',
-                                day: 'MMM d',
-                                week: 'MMM d',
-                                month: 'MMM yyyy',
-                                year: 'yyyy'
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Date',
-                            color: titleColor,
-                            font: { size: 14, weight: 'bold' }
-                        },
-                        ticks: {
-                            color: textColor,
-                            font: { size: 11 },
-                            maxRotation: 45,
-                            minRotation: 45,
-                            padding: 10,
-                            autoSkip: true,
-                            maxTicksLimit: Math.min(20, differenceData.length)
-                        },
-                        grid: {
-                            color: gridColor,
-                            drawBorder: false
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: textColor,
-                            font: {
-                                size: differenceData.length > 1000 ? 12 : 14,
-                                weight: '600'
-                            },
-                            padding: 20,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                        titleColor: isDarkMode ? '#F3F4F6' : '#111827',
-                        bodyColor: isDarkMode ? '#D1D5DB' : '#374151',
-                        borderColor: isDarkMode ? '#4B5563' : '#E5E7EB',
-                        borderWidth: 1,
-                        padding: 12,
-                        cornerRadius: 8,
-                        callbacks: {
-                            title: function(tooltipItems) {
-                                const date = new Date(tooltipItems[0].parsed.x);
-                                return date.toLocaleDateString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                });
-                            },
-                            label: function(context) {
-                                const label = context.dataset.label || '';
-                                const value = context.parsed.y;
-                                return `${label}: ${value > 0 ? '+' : ''}${value.toLocaleString()}%`;
-                            },
-                            afterLabel: function(context) {
-                                const value = context.parsed.y;
-                                const dataPoint = differenceData[context.dataIndex];
-                                if (value > 0) {
-                                    return `${currentPlayer}: ${dataPoint.mainEnrage.toLocaleString()}%\n${comparisonPlayer}: ${dataPoint.compEnrage.toLocaleString()}%`;
-                                } else if (value < 0) {
-                                    return `${currentPlayer}: ${dataPoint.mainEnrage.toLocaleString()}%\n${comparisonPlayer}: ${dataPoint.compEnrage.toLocaleString()}%`;
-                                } else {
-                                    return `${currentPlayer}: ${dataPoint.mainEnrage.toLocaleString()}%\n${comparisonPlayer}: ${dataPoint.compEnrage.toLocaleString()}%`;
-                                }
-                            }
-                        }
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'nearest',
-                    axis: 'x'
-                },
-                elements: {
-                    line: {
-                        fill: false
-                    },
-                    point: {
-                        hitRadius: differenceData.length > 500 ? 5 : 10,
-                        hoverRadius: differenceData.length > 500 ? 6 : 12
-                    }
-                },
-                animation: {
-                    duration: differenceData.length > 1000 ? 0 : 1000,
+            x: {
+              type: 'time',
+              time: {
+                unit: timeUnit,
+                displayFormats: {
+                  millisecond: 'HH:mm:ss.SSS',
+                  second: 'HH:mm:ss',
+                  minute: 'HH:mm',
+                  hour: 'MMM d, HH:mm',
+                  day: 'MMM d',
+                  week: 'MMM d',
+                  month: 'MMM yyyy',
+                  year: 'yyyy'
                 }
+              },
+              title: {
+                display: true,
+                text: 'Date',
+                color: titleColor,
+                font: { size: 14, weight: 'bold' }
+              },
+              ticks: {
+                color: textColor,
+                font: { size: 11 },
+                maxRotation: 45,
+                minRotation: 45,
+                padding: 10,
+                autoSkip: true,
+                maxTicksLimit: Math.min(20, differenceData.length)
+              },
+              grid: {
+                color: gridColor,
+                drawBorder: false
+              }
             }
-        });
-        
-        // Show the difference chart container
-        updateChartLayout();
-        
-        console.log('✅ Difference chart created successfully!');
-        
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: textColor,
+                font: {
+                  size: differenceData.length > 1000 ? 12 : 14,
+                  weight: '600'
+                },
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+              titleColor: isDarkMode ? '#F3F4F6' : '#111827',
+              bodyColor: isDarkMode ? '#D1D5DB' : '#374151',
+              borderColor: isDarkMode ? '#4B5563' : '#E5E7EB',
+              borderWidth: 1,
+              padding: 12,
+              cornerRadius: 8,
+              callbacks: {
+                title: function(tooltipItems) {
+                  const date = new Date(tooltipItems[0].parsed.x);
+                  return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  });
+                },
+                label: function(context) {
+                  const label = context.dataset.label || '';
+                  const value = context.parsed.y;
+                  return `${label}: ${value > 0 ? '+' : ''}${value.toLocaleString()}%`;
+                },
+                afterLabel: function(context) {
+                  const value = context.parsed.y;
+                  const dataPoint = differenceData[context.dataIndex];
+                  if (value > 0) {
+                    return `${currentPlayer}: ${dataPoint.mainEnrage.toLocaleString()}%\n${comparisonPlayer}: ${dataPoint.compEnrage.toLocaleString()}%`;
+                  } else if (value < 0) {
+                    return `${currentPlayer}: ${dataPoint.mainEnrage.toLocaleString()}%\n${comparisonPlayer}: ${dataPoint.compEnrage.toLocaleString()}%`;
+                  } else {
+                    return `${currentPlayer}: ${dataPoint.mainEnrage.toLocaleString()}%\n${comparisonPlayer}: ${dataPoint.compEnrage.toLocaleString()}%`;
+                  }
+                }
+              }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'nearest',
+            axis: 'x'
+          },
+          elements: {
+            line: { fill: false },
+            point: {
+              hitRadius: differenceData.length > 500 ? 5 : 10,
+              hoverRadius: differenceData.length > 500 ? 6 : 12
+            }
+          },
+          animation: {
+            duration: differenceData.length > 1000 ? 0 : 1000,
+          }
+        }
+      });
+      
+      updateChartLayout();
+      
     } catch (error) {
-        console.error('❌ Error creating difference chart:', error);
-        hideDifferenceChart();
+      console.error('❌ Error creating difference chart:', error);
+      hideDifferenceChart();
     }
   }
 
   function updateChartLayout() {
-      const chartsContainer = document.getElementById('charts-container');
-      const diffContainer = document.getElementById('difference-chart-container');
-      const singleMsg = document.getElementById('single-chart-message');
-      
-      if (!chartsContainer || !diffContainer) return;
-      
-      if (showDifferenceMode && comparisonPlayer && comparisonKills) {
-          chartsContainer.classList.remove('lg:grid-cols-1');
-          chartsContainer.classList.add('lg:grid-cols-2');
-          diffContainer.classList.remove('hidden');
-          if (singleMsg) singleMsg.classList.add('hidden');
-      } else {
-          chartsContainer.classList.remove('lg:grid-cols-2');
-          chartsContainer.classList.add('lg:grid-cols-1');
-          diffContainer.classList.add('hidden');
-          if (singleMsg) singleMsg.classList.remove('hidden');
-      }
+    const chartsContainer = document.getElementById('charts-container');
+    const diffContainer = document.getElementById('difference-chart-container');
+    const singleMsg = document.getElementById('single-chart-message');
+    
+    if (!chartsContainer || !diffContainer) return;
+    
+    if (showDifferenceMode && comparisonPlayer && comparisonKills) {
+      chartsContainer.classList.remove('lg:grid-cols-1');
+      chartsContainer.classList.add('lg:grid-cols-2');
+      diffContainer.classList.remove('hidden');
+      if (singleMsg) singleMsg.classList.add('hidden');
+    } else {
+      chartsContainer.classList.remove('lg:grid-cols-2');
+      chartsContainer.classList.add('lg:grid-cols-1');
+      diffContainer.classList.add('hidden');
+      if (singleMsg) singleMsg.classList.remove('hidden');
+    }
   }
 
   function hideDifferenceChart() {
-      const diffContainer = document.getElementById('difference-chart-container');
-      const singleMsg = document.getElementById('single-chart-message');
-      
-      if (diffContainer) diffContainer.classList.add('hidden');
-      if (singleMsg) singleMsg.classList.remove('hidden');
-      
-      updateChartLayout();
-      
-      if (differenceChart) {
-          differenceChart.destroy();
-          differenceChart = null;
-      }
+    const diffContainer = document.getElementById('difference-chart-container');
+    const singleMsg = document.getElementById('single-chart-message');
+    
+    if (diffContainer) diffContainer.classList.add('hidden');
+    if (singleMsg) singleMsg.classList.remove('hidden');
+    
+    updateChartLayout();
+    
+    if (differenceChart) {
+      differenceChart.destroy();
+      differenceChart = null;
+    }
   }
 
   // ========== EVENT HANDLERS ==========
   function handlePlayerSelect(playerName) {
-      currentPlayer = playerName;
-      currentPage = 1;
-      
-      if (!playerName) {
-          showNoSelectionState();
-          return;
-      }
-      
-      const playerRecords = allPlayersData[playerName];
-      if (!playerRecords || playerRecords.length === 0) {
-          alert('Player data not found');
-          return;
-      }
-      
-      const playerKills = processPlayerKills(playerRecords);
-      currentKillsForChart = playerKills;
-      
-      resetHighestEnrageCard();
-      processPlayerStats(playerKills, playerName);
-      showPlayerContent();
-      renderKillTable(playerKills);
-      renderBracketStats(playerKills);
-      initializeChart(playerKills);
-      
-      if (comparisonKills) {
-          initializeDifferenceChart(playerKills, comparisonKills);
-      }
+    currentPlayer = playerName;
+    currentPage = 1;
+    
+    if (!playerName) {
+      showNoSelectionState();
+      return;
+    }
+    
+    const playerRecords = allPlayersData[playerName];
+    if (!playerRecords || playerRecords.length === 0) {
+      alert('Player data not found');
+      return;
+    }
+    
+    const playerKills = processPlayerKills(playerRecords);
+    currentKillsForChart = playerKills;
+    
+    resetHighestEnrageCard();
+    processPlayerStats(playerKills, playerName);
+    showPlayerContent();
+    renderKillTable(playerKills);
+    renderBracketStats(playerKills);
+    initializeChart(playerKills);
+    initializeWeeklySummary(playerKills);
+    
+    if (comparisonKills) {
+      initializeDifferenceChart(playerKills, comparisonKills);
+    }
   }
 
   function handleComparisonSelect(comparePlayerName) {
-      comparisonPlayer = comparePlayerName;
-      
-      if (!comparePlayerName) {
-          comparisonKills = null;
-          hideDifferenceChart();
-          if (currentKillsForChart) initializeChart(currentKillsForChart);
-          updateChartLayout();
-          return;
+    comparisonPlayer = comparePlayerName;
+    
+    if (!comparePlayerName) {
+      comparisonKills = null;
+      hideDifferenceChart();
+      if (currentKillsForChart) initializeChart(currentKillsForChart);
+      updateChartLayout();
+      return;
+    }
+    
+    const compareRecords = allPlayersData[comparePlayerName];
+    if (!compareRecords || compareRecords.length === 0) {
+      alert('Comparison player data not found');
+      return;
+    }
+    
+    comparisonKills = processPlayerKills(compareRecords);
+    
+    if (currentKillsForChart) {
+      if (showDifferenceMode) {
+        initializeChart(currentKillsForChart);
+        initializeDifferenceChart(currentKillsForChart, comparisonKills);
+      } else {
+        initializeChart(currentKillsForChart);
       }
-      
-      const compareRecords = allPlayersData[comparePlayerName];
-      if (!compareRecords || compareRecords.length === 0) {
-          alert('Comparison player data not found');
-          return;
-      }
-      
-      comparisonKills = processPlayerKills(compareRecords);
-      
-      if (currentKillsForChart) {
-          if (showDifferenceMode) {
-              initializeChart(currentKillsForChart);
-              initializeDifferenceChart(currentKillsForChart, comparisonKills);
-          } else {
-              initializeChart(currentKillsForChart);
-          }
-          updateChartLayout();
-      }
+      updateChartLayout();
+    }
   }
 
   // ========== INITIALIZATION ==========
   function initializePage() {
-      showNoSelectionState();
-      
-      const playerSelect = document.getElementById('player-select');
-      if (playerSelect) {
-          playerSelect.addEventListener('change', function() {
-              handlePlayerSelect(this.value);
-          });
-      }
-      
-      const compareSelect = document.getElementById('compare-select');
-      if (compareSelect) {
-          compareSelect.addEventListener('change', function() {
-              handleComparisonSelect(this.value);
-          });
-      }
-      
-      const showDifferenceCheckbox = document.getElementById('show-difference');
-      if (showDifferenceCheckbox) {
-          showDifferenceCheckbox.addEventListener('change', function() {
-              showDifferenceMode = this.checked;
-              
-              if (currentKillsForChart && currentPlayer) {
-                  if (showDifferenceMode && comparisonPlayer && comparisonKills) {
-                      initializeChart(currentKillsForChart);
-                      initializeDifferenceChart(currentKillsForChart, comparisonKills);
-                  } else {
-                      initializeChart(currentKillsForChart);
-                      hideDifferenceChart();
-                  }
-                  updateChartLayout();
-              }
-          });
-      }
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPlayer = urlParams.get('player');
+
+    if (urlPlayer) {
+      setTimeout(() => {
+        const select = document.getElementById('player-select');
+        if (select) {
+          select.value = urlPlayer;
+          handlePlayerSelect(urlPlayer);
+        }
+      }, 50);
+    }
+    showNoSelectionState();
+    
+    const playerSelect = document.getElementById('player-select');
+    if (playerSelect) {
+      playerSelect.addEventListener('change', function() {
+        const selectedPlayer = this.value;
+        handlePlayerSelect(selectedPlayer);
+        
+        if (selectedPlayer) {
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.set('player', selectedPlayer);
+          window.history.replaceState({}, '', newUrl);
+        } else {
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.delete('player');
+          window.history.replaceState({}, '', newUrl);
+        }
+      });
+    }
+    
+    const compareSelect = document.getElementById('compare-select');
+    if (compareSelect) {
+      compareSelect.addEventListener('change', function() {
+        handleComparisonSelect(this.value);
+      });
+    }
+    
+    const showDifferenceCheckbox = document.getElementById('show-difference');
+    if (showDifferenceCheckbox) {
+      showDifferenceCheckbox.addEventListener('change', function() {
+        showDifferenceMode = this.checked;
+        
+        if (currentKillsForChart && currentPlayer) {
+          if (showDifferenceMode && comparisonPlayer && comparisonKills) {
+            initializeChart(currentKillsForChart);
+            initializeDifferenceChart(currentKillsForChart, comparisonKills);
+          } else {
+            initializeChart(currentKillsForChart);
+            hideDifferenceChart();
+          }
+          updateChartLayout();
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializePage);
+    document.addEventListener('DOMContentLoaded', initializePage);
   } else {
-      initializePage();
+    initializePage();
   }
 </script>
