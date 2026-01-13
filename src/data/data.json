@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-13T17:02:15.689394+00:00",
-    "count": 3480
+    "generated_at": "2026-01-13T17:41:23.134732+00:00",
+    "count": 3481
   },
   "records": [
     {
@@ -21053,6 +21053,16 @@
         }
       ],
       "killTimeSeconds": 562.2
+    },
+    {
+      "enrage": 10450,
+      "timeOfKill": 1768325806,
+      "members": [
+        {
+          "name": "Sliske\u00a0Suck"
+        }
+      ],
+      "killTimeSeconds": 795.00006
     },
     {
       "enrage": 10450,
