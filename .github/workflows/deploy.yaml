@@ -1,23 +1,26 @@
-name: Flowbite Admin Dashboard — Deploy to Demo to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: ['main']
-
-  schedule:
-    - cron: "*/5 * * * *"
+  
+  # Optional: Remove or adjust the schedule if not needed
+  # schedule:
+  #   - cron: "*/5 * * * *"
 
   workflow_dispatch:
 
 env:
   CI: true
   FORCE_COLOR: true
+  # ADD THIS: Set NODE_ENV explicitly
+  NODE_ENV: production
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   deploy:
-    name: Deploy demo
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
 
     environment:
@@ -27,49 +30,74 @@ jobs:
     permissions:
       pages: write
       id-token: write
+      # ADD THIS: Read permissions for repository
+      contents: read
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # Update to v4
         with:
-          ref: ${{ github.ref }}
+          fetch-depth: 0
 
-      - name: Setup Node.js 18
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4  # Update to v4
         with:
-          node-version: 18
+          node-version: '20'  # Use Node 20 for better Astro compatibility
+          cache: 'pnpm'
 
-      - name: Setup PNPM 7+
+      - name: Setup PNPM
         uses: pnpm/action-setup@v2
         with:
-          version: 7.30.0
-          run_install: false
+          version: 8  # Use latest version
 
       - name: Get PNPM store directory
         id: pnpm-cache
+        shell: bash
         run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: Setup PNPM cache
         uses: actions/cache@v3
         with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install Node dependencies
-        run: NODE_ENV=production pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install
+        # OR if you prefer production-only:
+        # run: pnpm install --prod --frozen-lockfile
 
+      # ADD THIS STEP: Verify build configuration
+      - name: Check Astro config
+        run: |
+          echo "NODE_ENV: $NODE_ENV"
+          echo "CI: $CI"
+          echo "Building for GitHub Pages with base path: /zamorak-enrage-tracker/"
 
-      - name: Build demo website (dist)
-        run: NODE_ENV=production pnpm run build
+      - name: Build website
+        run: pnpm run build
+        env:
+          # Ensure Astro knows it's building for production
+          NODE_ENV: production
+          # Explicitly set the base URL for the build
+          PUBLIC_BASE_URL: /zamorak-enrage-tracker/
 
-      - name: Upload artifact — Demo (dist)
-        uses: actions/upload-pages-artifact@v4
+      # OPTIONAL: Verify the build output
+      - name: Verify build output
+        run: |
+          echo "Build directory contents:"
+          ls -la dist/
+          echo ""
+          echo "Checking for _astro directory:"
+          find dist -name "*.js" | head -10
+
+      - name: Upload artifact to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
-      - name: Deploy to GitHub Pages — Demo (dist)
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
