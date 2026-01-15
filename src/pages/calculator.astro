@@ -1,9 +1,13 @@
 ---
-// src/pages/calculator.astro
-import LayoutSidebar from '../app/LayoutSidebar.astro';
-import Calculator from '../components/calculator/Calculator.astro';
+import LayoutSidebar from "../app/LayoutSidebar.astro";
+import Calculator from "../components/calculator/Calculator.astro";
 ---
 
 <LayoutSidebar>
-    <Calculator />
+  <Calculator />
 </LayoutSidebar>
+
+<script
+  type="module"
+  src={`${import.meta.env.BASE_URL}client/calculatorClient.js`}
+></script>
