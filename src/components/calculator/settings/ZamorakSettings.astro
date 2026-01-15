@@ -18,6 +18,11 @@ const modeOptions = [
   { value: 'Iteration', label: 'Iteration' },
   { value: 'Red bar', label: 'Red bar' }
 ];
+
+function getAssetPath(path) {
+  const base = import.meta.env.BASE_URL;
+  return `${base}${path}`.replace(/\/\//g, '/');
+}
 ---
 
 <div class="space-y-3 px-1 py-2">
@@ -30,7 +35,7 @@ const modeOptions = [
     label="Enrage"
     value={state.enrage}
     type="number"
-    icon="/images/icons/zam.png"
+    icon={getAssetPath("/images/icons/zam.png")}
     iconAlt="Zamorak"
   />
   
@@ -41,7 +46,7 @@ const modeOptions = [
     label="Pad 1"
     value={state.pad1}
     options={padOptions}
-    icon="/images/icons/pad1_red.png"
+    icon={getAssetPath("/images/icons/pad1_red.png")}
     iconAlt="Pad 1"
     inputWidth='w-24'
   />
@@ -53,7 +58,7 @@ const modeOptions = [
     label="Pad 2"
     value={state.pad2}
     options={padOptions}
-    icon="/images/icons/pad2_red.png"
+    icon={getAssetPath("/images/icons/pad2_red.png")}
     iconAlt="Pad 2"
     inputWidth='w-24'
   />
@@ -64,7 +69,7 @@ const modeOptions = [
     name="pad3"
     label="Pad 3"
     checked={state.pad3}
-    icon="/images/icons/pad3_green.png"
+    icon={getAssetPath("/images/icons/pad3_green.png")}
     iconAlt="Pad 3"
   />
   
@@ -75,7 +80,7 @@ const modeOptions = [
     label="Pad 4"
     value={state.pad4}
     options={padOptions}
-    icon="/images/icons/pad4_red.png"
+    icon={getAssetPath("/images/icons/pad4_red.png")}
     iconAlt="Pad 4"
     inputWidth='w-24'
   />
@@ -86,7 +91,7 @@ const modeOptions = [
     name="pad5"
     label="Pad 5"
     checked={state.pad5}
-    icon="/images/icons/pad5_green.png"
+    icon={getAssetPath("/images/icons/pad5_green.png")}
     iconAlt="Pad 5"
   />
   
@@ -97,7 +102,7 @@ const modeOptions = [
     label="Pad 6"
     value={state.pad6}
     options={padOptions}
-    icon="/images/icons/pad6_green.png"
+    icon={getAssetPath("/images/icons/pad6_green.png")}
     iconAlt="Pad 6"
     inputWidth='w-24'
   />
