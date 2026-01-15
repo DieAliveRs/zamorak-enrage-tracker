@@ -1,0 +1,84 @@
+---
+// src/components/calculator/ui/SelectMenu.astro
+
+export interface Props {
+  id?: string;
+  name: string;
+  label: string;
+  value: string;
+  options: Array<{ value: string; label: string }>;
+  icon?: string;
+  iconAlt?: string;
+  className?: string;
+  labelClass?: string;
+  selectClass?: string;
+  disabled?: boolean;
+  labelWidth?: string;    // NEW: Control label width
+  inputWidth?: string;    // NEW: Control input width
+}
+
+const {
+  id,
+  name,
+  label,
+  value,
+  options = [],
+  icon,
+  iconAlt = '',
+  className = '',
+  labelClass = '',
+  selectClass = '',
+  disabled = false,
+  labelWidth = 'w-40',    // DEFAULT: w-32
+  inputWidth = 'w-60'     // DEFAULT: w-24
+} = Astro.props;
+
+const selectId = id || `select-${name}`;
+---
+
+<div class={`flex items-center space-x-3 ${className}`}>
+  <!-- Icon (if provided) -->
+  {icon && (
+    <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+      <img 
+        src={icon} 
+        alt={iconAlt} 
+        class="max-w-full max-h-full object-contain"
+      />
+    </div>
+  )}
+  
+  <!-- Label -->
+  <label 
+    for={selectId} 
+    class={`flex-shrink-0 ${labelWidth} font-medium text-gray-700 dark:text-gray-300 ${labelClass}`}
+  >
+    {label}
+  </label>
+  
+  <!-- Select Menu -->
+  <select
+    id={selectId}
+    name={name}
+    value={value}
+    disabled={disabled}
+    class={`
+      flex-shrink-0 ${inputWidth} px-2 py-1 text-sm text-gray-900 dark:text-white
+      bg-white dark:bg-gray-700
+      border border-gray-300 dark:border-gray-600
+      rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+      focus:outline-none transition-colors
+      disabled:opacity-50 disabled:cursor-not-allowed
+      ${selectClass}
+    `}
+    data-calc-select
+  >
+    {options.map(option => (
+      <option value={option.value}>
+        {option.label}
+      </option>
+    ))}
+  </select>
+</div>
+
+<!-- Script remains the same -->

@@ -1,0 +1,818 @@
+---
+// src/components/calculator/panels/ResultsDisplay.astro
+---
+
+<div class="results-tabs-container bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+  <!-- Tab Navigation -->
+  <div class="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+    <button
+      class="flex-1 py-3 px-4 text-center font-medium text-gray-700 dark:text-gray-300 border-b-2 border-transparent hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200"
+      id="damage-tab"
+    >
+      Damage
+    </button>
+    <button
+      class="flex-1 py-3 px-4 text-center font-medium text-gray-700 dark:text-gray-300 border-b-2 border-transparent hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200"
+      id="healing-tab"
+    >
+      Healing / Adren
+    </button>
+    <button
+      class="flex-1 py-3 px-4 text-center font-medium text-gray-700 dark:text-gray-300 border-b-2 border-transparent hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200"
+      id="reflect-tab"
+    >
+      Reflect
+    </button>
+  </div>
+
+  <!-- Damage Taken Tab -->
+  <div id="damage-content" class="tab-content">
+    <div class="overflow-x-auto -mx-2">
+      <table class="w-full min-w-max">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-700">
+            <th class="text-left py-2 px-3 text-xs font-medium text-gray-600 dark:text-gray-400">Attack</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Min</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Max</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Avg / Fixed</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Twinshot (2nd hits)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          <!-- Magic Auto -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/magic.png" alt="Magic" class="w-4 h-4 mr-2" /> 
+                Magic auto
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-damage-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-damage-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-damage-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-damage-ts">0</div>
+            </td>
+          </tr>
+
+          <!-- Ranged Auto -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/ranged.png" alt="Ranged" class="w-4 h-4 mr-2" /> 
+                Ranged auto
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-damage-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-damage-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-damage-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-damage-ts">0</div>
+            </td>
+          </tr>
+
+          <!-- Infernus -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/choke.png" alt="Infernus" class="w-4 h-4 mr-2" /> 
+                Infernus
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="infernus-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="infernus-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="infernus-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="text-xs text-gray-400 dark:text-gray-500">-</div>
+            </td>
+          </tr>
+
+          <!-- Melee Slam -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/slam.png" alt="Slam" class="w-4 h-4 mr-2" />
+                Melee slam
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="slam-primary">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="slam-secondary">0</div>
+            </td>
+          </tr>
+
+          <!-- Flames of Zamorak -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/smoke.png" alt="Flames of Zamorak" class="w-4 h-4 mr-2" />
+                Flames of Zamorak
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smoke-damage">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Tomb -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/tomb.png" alt="Tomb" class="w-4 h-4 mr-2" />
+                Tomb
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="tomb-damage">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Decimation -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/decimation.png" alt="Decimation" class="w-4 h-4 mr-2" />
+                Decimation
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="decimation-damage">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Cage -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/cage.png" alt="Cage" class="w-4 h-4 mr-2" />
+                Cage
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="cage-damage">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Chaos Damage -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/nuke.png" alt="Chaos Damage" class="w-4 h-4 mr-2" />
+                Chaos Damage
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Small Bombs -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/nukes.png" alt="Small Bombs" class="w-4 h-4 mr-2" />
+                Small Bombs
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smallbomb-normal">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smallbomb-ts">0</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Healing Tab -->
+  <div id="healing-content" class="tab-content hidden">
+    <div class="overflow-x-auto -mx-2">
+      <table class="w-full min-w-max">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-700">
+            <th class="text-left py-2 px-3 text-xs font-medium text-gray-600 dark:text-gray-400">Attack</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Min</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Max</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Avg / Fixed</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Twinshot (2nd hits)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          <!-- Magic Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/magic.png" alt="Magic" class="w-4 h-4 mr-2" /> 
+                Magic auto
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-heal-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-heal-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-heal-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-heal-ts">0</div>
+            </td>
+          </tr>
+
+          <!-- Range Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/ranged.png" alt="Ranged" class="w-4 h-4 mr-2" /> 
+                Ranged auto
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-heal-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-heal-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-heal-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-heal-ts">0</div>
+            </td>
+          </tr>
+
+          <!-- Slam Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/slam.png" alt="Slam" class="w-4 h-4 mr-2" />
+                Melee slam
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="slam-heal-primary">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="slam-heal-secondary">0</div>
+            </td>
+          </tr>
+
+          <!-- Flames of Zamorak Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/smoke.png" alt="Flames of Zamorak" class="w-4 h-4 mr-2" />
+                Flames of Zamorak
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smoke-heal">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Tomb Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/tomb.png" alt="Tomb" class="w-4 h-4 mr-2" />
+                Tomb
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="tomb-heal">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Decimation Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/decimation.png" alt="Decimation" class="w-4 h-4 mr-2" />
+                Decimation
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="decimation-heal">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Cage Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/cage.png" alt="Cage" class="w-4 h-4 mr-2" />
+                Cage
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="cage-heal">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Chaos Damage Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/nuke.png" alt="Chaos Damage" class="w-4 h-4 mr-2" />
+                Chaos damage
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-heal-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-heal-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-heal-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Small Bombs Healing -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/nukes.png" alt="Small Bombs" class="w-4 h-4 mr-2" />
+                Small bombs
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smallbomb-heal-normal">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smallbomb-heal-ts">0</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Reflect Tab -->
+  <div id="reflect-content" class="tab-content hidden">
+    <div class="overflow-x-auto -mx-2">
+      <table class="w-full min-w-max">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-700">
+            <th class="text-left py-2 px-3 text-xs font-medium text-gray-600 dark:text-gray-400">Attack</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Min</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Max</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Avg / Fixed</th>
+            <th class="text-center py-2 px-1 text-xs font-medium text-gray-600 dark:text-gray-300">Twinshot (2nd hits)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          <!-- Magic Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/magic.png" alt="Magic" class="w-4 h-4 mr-2" /> 
+                Magic auto
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-refl-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-refl-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-refl-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="mage-refl-ts">0</div>
+            </td>
+          </tr>
+
+          <!-- Range Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/ranged.png" alt="Ranged" class="w-4 h-4 mr-2" /> 
+                Ranged auto
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-refl-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-refl-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-refl-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="range-refl-ts">0</div>
+            </td>
+          </tr>
+
+          <!-- Slam Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/slam.png" alt="Slam" class="w-4 h-4 mr-2" />
+                Melee slam
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="slam-refl-primary">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="slam-refl-secondary">0</div>
+            </td>
+          </tr>
+
+          <!-- Flames of Zamorak Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/smoke.png" alt="Flames of Zamorak" class="w-4 h-4 mr-2" />
+                Flames of Zamorak
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smoke-refl">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Tomb Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/tomb.png" alt="Tomb" class="w-4 h-4 mr-2" />
+                Tomb
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="tomb-refl">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Decimation Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/decimation.png" alt="Decimation" class="w-4 h-4 mr-2" />
+                Decimation
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="decimation-refl">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Cage Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/cage.png" alt="Cage" class="w-4 h-4 mr-2" />
+                Cage
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="cage-refl">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Chaos Damage Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/nuke.png" alt="Chaos Damage" class="w-4 h-4 mr-2" />
+                Chaos damage
+              </div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-refl-min">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-refl-max">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="bigbomb-refl-avg">0</div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+          </tr>
+
+          <!-- Small Bombs Reflect -->
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+            <td class="py-2 px-3">
+              <div class="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                <img src="/images/icons/nukes.png" alt="Small Bombs" class="w-4 h-4 mr-2" />
+                Small bombs
+              </div>
+            </td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1"></td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smallbomb-refl-normal">0</div>
+            </td>
+            <td class="text-center py-2 px-1">
+              <div class="font-mono text-xs text-gray-800 dark:text-gray-200" id="smallbomb-refl-ts">0</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="module">
+  // Tab switching logic - SCOPED to results tabs only
+  function switchTab(tabName) {
+    console.log('Switching results tab to:', tabName);
+    
+    // Get the results container
+    const container = document.querySelector('.results-tabs-container');
+    if (!container) {
+      console.warn('Results container not found');
+      return;
+    }
+    
+    // Only select elements WITHIN THIS CONTAINER
+    const contents = container.querySelectorAll('.tab-content');
+    const target = container.querySelector(`#${tabName}-content`);
+    const activeTab = container.querySelector(`#${tabName}-tab`);
+
+    // If the tab does not exist, DO NOTHING
+    if (!target || !activeTab) {
+      console.warn('Invalid results tab:', tabName);
+      return;
+    }
+
+    // Hide all tab contents IN THIS CONTAINER ONLY
+    contents.forEach(content => {
+      content.classList.add('hidden');
+    });
+
+    // Reset all tab buttons IN THIS CONTAINER ONLY
+    container.querySelectorAll('button[id$="-tab"]').forEach(button => {
+      button.classList.remove(
+        'border-blue-500',
+        'text-blue-600',
+        'dark:text-blue-400',
+        'dark:border-blue-400'
+      );
+      button.classList.add('border-transparent');
+    });
+
+    // Show the target tab content
+    target.classList.remove('hidden');
+
+    // Activate the target tab button
+    activeTab.classList.remove('border-transparent');
+    activeTab.classList.add(
+      'border-blue-500',
+      'text-blue-600',
+      'dark:text-blue-400',
+      'dark:border-blue-400'
+    );
+    
+    // Use a unique key for results tabs
+    localStorage.setItem('activeResultsTab', tabName);
+  }
+
+  function initTabs() {
+    console.log('Initializing results tabs...');
+    
+    // Get the container
+    const container = document.querySelector('.results-tabs-container');
+    if (!container) {
+      console.warn('Results container not found, retrying...');
+      setTimeout(initTabs, 100);
+      return;
+    }
+    
+    const stored = localStorage.getItem('activeResultsTab');
+    const fallback = 'damage';
+
+    console.log('Stored results tab:', stored);
+    
+    // Check if the stored tab exists IN THIS CONTAINER
+    const exists =
+      stored &&
+      container.querySelector(`#${stored}-tab`) &&
+      container.querySelector(`#${stored}-content`);
+
+    if (exists) {
+      console.log('Found stored results tab:', stored);
+      setTimeout(() => switchTab(stored), 10);
+    } else {
+      console.log('Using fallback results tab:', fallback);
+      setTimeout(() => switchTab(fallback), 10);
+    }
+
+    // Add click handlers to buttons IN THIS CONTAINER ONLY
+    container.querySelectorAll('button[id$="-tab"]').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const tabName = e.currentTarget.id.replace('-tab', '');
+        console.log('Results tab clicked:', tabName);
+        switchTab(tabName);
+      });
+    });
+  }
+
+  // IMPORTANT: handle module timing correctly
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTabs);
+  } else {
+    setTimeout(initTabs, 100);
+  }
+
+
+  // Results update logic
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value ?? '0';
+  };
+
+  const fmt = (v) => v != null ? v.toLocaleString() : '0';
+
+  function updateResults(results) {
+    if (!results) return;
+
+    // Damage Taken values
+    set('mage-damage-min', results.mageAutos?.min?.toLocaleString());
+    set('mage-damage-max', results.mageAutos?.max?.toLocaleString());
+    set('mage-damage-avg', results.mageAutos?.avg?.toLocaleString());
+    set('mage-damage-ts', results.mageAutos?.ts?.toLocaleString());
+
+    set('range-damage-min', results.rangeAutos?.min?.toLocaleString());
+    set('range-damage-max', results.rangeAutos?.max?.toLocaleString());
+    set('range-damage-avg', results.rangeAutos?.avg?.toLocaleString());
+    set('range-damage-ts', results.rangeAutos?.ts?.toLocaleString());
+
+    set('infernus-min', results.infernus?.min?.toLocaleString());
+    set('infernus-max', results.infernus?.max?.toLocaleString());
+    set('infernus-avg', results.infernus?.avg?.toLocaleString());
+
+    set('slam-primary', results.slam?.primary?.toLocaleString());
+    set('slam-secondary', results.slam?.secondary?.toLocaleString());
+
+    set('smoke-damage', results.smoke?.damage?.toLocaleString());
+    set('tomb-damage', results.tomb?.damage?.toLocaleString());
+    set('decimation-damage', results.decimation?.damage?.toLocaleString());
+    set('cage-damage', results.cage?.damage?.toLocaleString());
+
+    set('bigbomb-min', results.bigBomb?.min?.toLocaleString());
+    set('bigbomb-max', results.bigBomb?.max?.toLocaleString());
+    set('bigbomb-avg', results.bigBomb?.avg?.toLocaleString());
+
+    set('smallbomb-normal', results.smallBomb?.normal?.toLocaleString());
+    set('smallbomb-ts', results.smallBomb?.twinshot?.toLocaleString());
+
+    // Healing values
+    set('mage-heal-min', results.mageDivert?.min?.toLocaleString());
+    set('mage-heal-max', results.mageDivert?.max?.toLocaleString());
+    set('mage-heal-avg', results.mageDivert?.avg?.toLocaleString());
+    set('mage-heal-ts', results.mageDivert?.ts?.toLocaleString());
+
+    set('range-heal-min', results.rangeDivert?.min?.toLocaleString());
+    set('range-heal-max', results.rangeDivert?.max?.toLocaleString());
+    set('range-heal-avg', results.rangeDivert?.avg?.toLocaleString());
+    set('range-heal-ts', results.rangeDivert?.ts?.toLocaleString());
+
+    set('slam-heal-primary', results.slamDivert?.primary?.toLocaleString());
+    set('slam-heal-secondary', results.slamDivert?.secondary?.toLocaleString());
+
+    set('smoke-heal', results.smokeDivert?.toLocaleString());
+    set('tomb-heal', results.tombDivert?.toLocaleString());
+    set('decimation-heal', results.decimationDivert?.toLocaleString());
+    set('cage-heal', results.cageDivert?.toLocaleString());
+
+    set('bigbomb-heal-min', results.bigBombDivert?.min?.toLocaleString());
+    set('bigbomb-heal-max', results.bigBombDivert?.max?.toLocaleString());
+    set('bigbomb-heal-avg', results.bigBombDivert?.avg?.toLocaleString());
+
+    set('smallbomb-heal-normal', results.smallBombDivert?.normal?.toLocaleString());
+    set('smallbomb-heal-ts', results.smallBombDivert?.twinshot?.toLocaleString());
+
+    // Reflect values
+    set('mage-refl-min', results.mageReflect?.min?.toLocaleString());
+    set('mage-refl-max', results.mageReflect?.max?.toLocaleString());
+    set('mage-refl-avg', results.mageReflect?.avg?.toLocaleString());
+    set('mage-refl-ts', results.mageReflect?.ts?.toLocaleString());
+
+    set('range-refl-min', results.rangeReflect?.min?.toLocaleString());
+    set('range-refl-max', results.rangeReflect?.max?.toLocaleString());
+    set('range-refl-avg', results.rangeReflect?.avg?.toLocaleString());
+    set('range-refl-ts', results.rangeReflect?.ts?.toLocaleString());
+
+    set('slam-refl-primary', results.slamReflect?.primary?.toLocaleString());
+    set('slam-refl-secondary', results.slamReflect?.secondary?.toLocaleString());
+
+    set('smoke-refl', results.smokeReflect?.toLocaleString());
+    set('tomb-refl', results.tombReflect?.toLocaleString());
+    set('decimation-refl', results.decimationReflect?.toLocaleString());
+    set('cage-refl', results.cageReflect?.toLocaleString());
+
+    set('bigbomb-refl-min', results.bigBombReflect?.min?.toLocaleString());
+    set('bigbomb-refl-max', results.bigBombReflect?.max?.toLocaleString());
+    set('bigbomb-refl-avg', results.bigBombReflect?.avg?.toLocaleString());
+
+    set('smallbomb-refl-normal', results.smallBombReflect?.normal?.toLocaleString());
+    set('smallbomb-refl-ts', results.smallBombReflect?.twinshot?.toLocaleString());
+  }
+
+  // Listen for results updates
+  document.addEventListener(
+    'calculator-results-updated',
+    (e) => updateResults(e.detail)
+  );
+</script>
+
+<style>
+/* Active tab styling - moved to style tag for better organization */
+button[id$="-tab"].border-blue-500 {
+  border-bottom-color: #3b82f6;
+}
+
+button[id$="-tab"].border-blue-500:hover {
+  border-bottom-color: #3b82f6;
+}
+
+/* Smooth transitions for tab switching */
+.tab-content {
+  transition: opacity 0.2s ease;
+}
+</style>

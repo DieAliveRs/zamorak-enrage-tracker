@@ -1,0 +1,120 @@
+---
+// src/components/calculator/settings/ReflectSettings.astro
+
+import SelectMenu from '../ui/SelectMenu.astro';
+import Checkbox from '../ui/Checkbox.astro';
+import { calculatorState } from '../state/calculatorState.js';
+
+const state = calculatorState.getAll();
+
+const hitcapOptions = ["None", "Green Hp", "Grey Hp"];
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+  <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Reflect Settings</h3>
+  
+  <!-- Hitcap Mode -->
+  <div class="mb-4">
+    <SelectMenu
+      id="hitcap-mode"
+      name="hitcaps"
+      label="Hitcap Mode"
+      value={state.hitcaps}
+      options={hitcapOptions.map(o => ({ value: o, label: o }))}
+      inputWidth='w-30'
+    />
+  </div>
+  
+  <!-- Reflect Modifiers Grid -->
+  <div class="grid grid-cols-3 gap-20">
+    <!-- Left Column -->
+    <div class="space-y-3">
+      <Checkbox
+        id="vuln-checkbox"
+        name="vuln"
+        label="Vulnerability"
+        checked={state.vuln}
+        icon="/images/icons/vuln.png"
+        iconAlt="Vulnerability"
+        labelWidth="w-24"
+      />
+      
+      <Checkbox
+        id="croe-checkbox"
+        name="croe"
+        label="Cryptbloom"
+        checked={state.croe}
+        icon="/images/icons/helm.png"
+        iconAlt="Cryptbloom"
+        labelWidth="w-24"
+      />
+
+      <Checkbox
+        id="defl-checkbox"
+        name="defl_check"
+        label="Deflect"
+        checked={state.defl_check}
+        icon="/images/icons/deflect.png"
+        iconAlt="Deflect"
+        labelWidth="w-24"
+      />
+    </div>
+    
+    <!-- Middle Column -->
+    <div class="space-y-3">
+      <Checkbox
+        id="veng-checkbox"
+        name="veng_check"
+        label="Vengeance"
+        checked={state.veng_check}
+        icon="/images/icons/veng.png"
+        iconAlt="Vengeance"
+        labelWidth="w-24"
+      />
+
+      <Checkbox
+        id="dtb-checkbox"
+        name="dtb_check"
+        label="Deathtouch"
+        checked={state.dtb_check}
+        icon="/images/icons/dtb.png"
+        iconAlt="Deathtouch"
+        labelWidth="w-24"
+      />
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  const setSelectValue = (id, value) => {
+    const el = document.getElementById(id);
+      if (!el) return;
+      el.value = String(value);
+  };
+
+  const setCheckbox = (id, value) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.checked = Boolean(value);
+  };
+
+  const fmt = (v) => (v != null ? v.toLocaleString() : '0');
+
+  function updateInputs() {
+    const state = calculatorState.getAll()
+
+    setSelectValue('hitcap-mode', state.hitcaps)
+    setCheckbox('vuln-checkbox', state.vuln)
+    setCheckbox('croe-checkbox', state.croe)
+    setCheckbox('defl-checkbox', state.defl_check)
+    setCheckbox('veng-checkbox', state.veng_check)
+    setCheckbox('dtb-checkbox', state.dtb_check)
+  }
+
+  document.addEventListener(
+    'calculator-results-updated',
+    (e) => {
+      updateInputs()    
+    }
+  );
+</script>

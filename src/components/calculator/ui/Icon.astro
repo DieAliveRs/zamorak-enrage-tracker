@@ -1,0 +1,24 @@
+---
+// src/components/calculator/ui/Icon.astro
+
+export interface Props {
+  src: string;
+  alt: string;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+const { src, alt, size = 'md', className = '' } = Astro.props;
+
+const sizeClasses = {
+  sm: 'w-4 h-4',
+  md: 'w-6 h-6',
+  lg: 'w-8 h-8'
+};
+---
+
+<img 
+  src={src} 
+  alt={alt} 
+  class={`${sizeClasses[size]} dark:invert ${className}`}
+/>

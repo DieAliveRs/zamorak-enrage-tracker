@@ -949,7 +949,7 @@ const playersData = {
     
     if (previousWeek) {
       const enrageImprovement = calculateImprovementPercentage(currentWeek.totalEnrageGained, previousWeek.totalEnrageGained);
-      updateKillTimeImprovementDisplay('weekly-speed-improvement', currentWeek.avgKillTime, previousWeek.avgKillTime);
+      updateKillTimeImprovementDisplay('weekly-speed-improvement', currentWeek.fastestKillTime, previousWeek.fastestKillTime);
       updateKillTimeImprovementDisplay('weekly-avg-improvement', currentWeek.avgKillTime, previousWeek.avgKillTime);
       updateImprovementDisplay('weekly-enrage-improvement', enrageImprovement);
     } else {
@@ -1665,6 +1665,12 @@ const playersData = {
               (prev.enrage > current.enrage) ? prev : current
             );
             updateHighestEnrageCardColors(highestEnrageRecord.enrage);
+          }
+          
+          if (weeklySummaryData && weeklySummaryData.length > 0) {
+            const currentWeek = weeklySummaryData[currentWeekIndex];
+            const previousWeek = weeklySummaryData[currentWeekIndex + 1];
+            updateRadarChart(currentWeek, previousWeek);
           }
         }, 100);
       }

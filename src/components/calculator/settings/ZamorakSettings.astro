@@ -1,0 +1,615 @@
+---
+// src/components/calculator/settings/ZamorakSettings.astro
+
+import InputField from '../ui/InputField.astro';
+import SelectMenu from '../ui/SelectMenu.astro';
+import Checkbox from '../ui/Checkbox.astro';
+import { calculatorState } from '../state/calculatorState.js';
+
+const state = calculatorState.getAll();
+
+const padOptions = Array.from({ length: 7 }, (_, i) => ({
+  value: i.toString(),
+  label: i.toString()
+}));
+
+const modeOptions = [
+  { value: 'Charge value', label: 'Charge value' },
+  { value: 'Iteration', label: 'Iteration' },
+  { value: 'Red bar', label: 'Red bar' }
+];
+---
+
+<div class="space-y-3 px-1 py-2">
+  <!-- Inputs as a list without sections -->
+  
+  <!-- Enrage -->
+  <InputField
+    id="enrage-input"
+    name="enrage"
+    label="Enrage"
+    value={state.enrage}
+    type="number"
+    icon="/images/icons/zam.png"
+    iconAlt="Zamorak"
+  />
+  
+  <!-- Pad 1 -->
+  <SelectMenu
+    id="pad1-menu"
+    name="pad1"
+    label="Pad 1"
+    value={state.pad1}
+    options={padOptions}
+    icon="/images/icons/pad1_red.png"
+    iconAlt="Pad 1"
+    inputWidth='w-24'
+  />
+  
+  <!-- Pad 2 -->
+  <SelectMenu
+    id="pad2-menu"
+    name="pad2"
+    label="Pad 2"
+    value={state.pad2}
+    options={padOptions}
+    icon="/images/icons/pad2_red.png"
+    iconAlt="Pad 2"
+    inputWidth='w-24'
+  />
+  
+  <!-- Pad 3 -->
+  <Checkbox
+    id="pad3-checkbox"
+    name="pad3"
+    label="Pad 3"
+    checked={state.pad3}
+    icon="/images/icons/pad3_green.png"
+    iconAlt="Pad 3"
+  />
+  
+  <!-- Pad 4 -->
+  <SelectMenu
+    id="pad4-menu"
+    name="pad4"
+    label="Pad 4"
+    value={state.pad4}
+    options={padOptions}
+    icon="/images/icons/pad4_red.png"
+    iconAlt="Pad 4"
+    inputWidth='w-24'
+  />
+  
+  <!-- Pad 5 -->
+  <Checkbox
+    id="pad5-checkbox"
+    name="pad5"
+    label="Pad 5"
+    checked={state.pad5}
+    icon="/images/icons/pad5_green.png"
+    iconAlt="Pad 5"
+  />
+  
+  <!-- Pad 6 -->
+  <SelectMenu
+    id="pad6-menu"
+    name="pad6"
+    label="Pad 6"
+    value={state.pad6}
+    options={padOptions}
+    icon="/images/icons/pad6_green.png"
+    iconAlt="Pad 6"
+    inputWidth='w-24'
+  />
+  
+  <!-- Choke Stacks -->
+  <InputField
+    id="choke-input"
+    name="choke"
+    label="Choke Stacks"
+    value={state.choke}
+    type="number"
+    icon="/images/icons/choke.png"
+    iconAlt="Choke"
+  />
+  
+  <!-- Slam Distance -->
+  <InputField
+    id="slam-input"
+    name="slam"
+    label="Slam Distance"
+    value={state.slam}
+    type="number"
+    icon="/images/icons/slam.png"
+    iconAlt="Slam"
+  />
+
+  <!-- Smoke & Fire - Horizontal layout -->
+  <div class="flex items-center space-x-2">
+    <div class="flex-1">
+      <InputField
+        id="smoke-input"
+        name="smoke"
+        label="Flames of Zamorak"
+        value={state.smoke}
+        type="number"
+        icon="/images/icons/smoke.png"
+        iconAlt="Smoke"
+      />
+    </div>
+    <div>
+      <Checkbox
+        id="infernus-checkbox"
+        name="infernus"
+        label="Infernus"
+        checked={state.infernus}
+        labelWidth='w-24'
+      />
+    </div>
+  </div>
+  
+  <!-- Tomb -->
+  <InputField
+    id="tomb-input"
+    name="tomb"
+    label="Tomb"
+    value={state.tomb}
+    type="number"
+    icon="/images/icons/tomb.png"
+    iconAlt="Tomb"
+  />
+  
+  <!-- Decimation -->
+  <InputField
+    id="decimation-input"
+    name="decimation"
+    label="Decimation"
+    value={state.decimation}
+    type="number"
+    icon="/images/icons/decimation.png"
+    iconAlt="Decimation"
+  />
+  
+  <!-- Aggro & Grey HP - Horizontal layout -->
+  <div class="flex items-center space-x-2">
+    <div>
+      <Checkbox
+        id="aggro-checkbox"
+        name="aggro"
+        label="Aggro"
+        checked={state.aggro}
+        icon="/images/icons/aggro.png"
+        iconAlt="Aggro"
+        
+      />
+    </div>
+    <div>
+      <Checkbox
+        id="grey-checkbox"
+        name="grey"
+        label="Grey Hp"
+        checked={state.grey}
+        labelWidth='w-24'
+      />
+    </div>
+  </div>
+
+  <!-- P7 Settings Section - Keep original styling -->
+  <div class="pt-3 mt-3 border-t border-gray-200 dark:border-gray-700">
+    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">P7 Settings</h3>
+    
+    <!-- Mode Selector -->
+    <div class="mb-2">
+      <SelectMenu
+        id="p7-mode-menu"
+        name="mode"
+        label="Input Mode"
+        value={state.mode}
+        options={modeOptions}
+        inputWidth='w-38'
+      />
+    </div>
+    
+    <!-- Dynamic Input Containers with color coding -->
+    <div id="charge-input-container" class="transition-all duration-300 mb-1">
+      <div class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-grey-800/20 rounded p-1">
+        <InputField
+          id="charge-input"
+          name="charge_input"
+          label="Charge Value"
+          value={state.charge_input}
+          type="number"
+          icon="/images/icons/charge.png"
+          iconAlt="Charge"
+        />
+      </div>
+    </div>
+    
+    <div id="iteration-input-container" class="transition-all duration-300 mb-1">
+      <div class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-grey-800/20 rounded p-1">
+        <InputField
+          id="iteration-input"
+          name="iteration_input"
+          label="Iteration"
+          value={state.iteration_input}
+          type="number"
+          icon="/images/icons/charge.png"
+          iconAlt="Iteration"
+        />
+      </div>
+    </div>
+    
+    <div id="red-input-container" class="transition-all duration-300 mb-2">
+      <div class="bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/20 dark:to-grey-800/20 rounded p-1">
+        <InputField
+          id="red-input"
+          name="red_input"
+          label="Red Bar"
+          value={state.red_input}
+          type="number"
+          icon="/images/icons/nuke.png"
+          iconAlt="Red Bar"
+        />
+      </div>
+    </div>
+    
+    <!-- P7 Info Display - Clean box without gradient -->
+    <div id="p7-info" class="p-2 bg-gray-50 dark:bg-gray-700/50 rounded text-sm border border-gray-200 dark:border-gray-600">
+      <!-- Will be populated by JavaScript -->
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript remains exactly the same -->
+<script type="module">
+  // Helper functions for showing/hiding
+  const show = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.remove('hidden');
+    }
+  };
+  
+  const hide = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.add('hidden');
+    }
+  };
+
+  // Calculation functions (keep these as they are)
+  const MAX_LIMITS = {
+    ENRAGE: 4000,
+    ITERATION: 500,
+    RED_BAR: 100000,
+    CHARGE_START_MAX: 2000,
+    CAGE_MAX: 32500,
+    SLAM_MAX: 35000,
+    TOTAL_HP_MAX: 1600000,
+    DEMON_HP_MAX: 70000,
+    ADREN_BLOCK_MAX: 12000
+  };
+
+  function redBar(charge_start, charge_rate, iteration) {
+    let charge = charge_start;
+    let red_bar = 0;
+    
+    for (let i = 0; i < iteration; i++) {
+      charge += charge_rate;
+      red_bar += Math.floor(charge);
+    }
+    
+    return Math.min(red_bar, MAX_LIMITS.RED_BAR);
+  }
+
+  /**
+   * Small bombs calculation (from Python smallBombs)
+   */
+  function smallBombs(red_bar, iteration) {
+    return Math.floor((red_bar / 100) * iteration);
+  }
+
+  /**
+   * Iteration calculation (from Python iterationCalc)
+   */
+  function iterationCalc(charge_start, charge_rate, charge) {
+    let newCharge = charge_start;
+    let iteration = 0;
+    
+    while (newCharge < charge && iteration < MAX_LIMITS.ITERATION) {
+      newCharge += charge_rate;
+      iteration++;
+    }
+    
+    return Math.min(iteration, MAX_LIMITS.ITERATION);
+  }
+
+  /**
+   * P7 main calculation (from Python p7)
+   */
+  function p7(mode, enrage, variables) {
+    let iteration, red_bar, small_bombs, charge_value;
+    
+    if (mode === "Iteration") {
+      iteration = Math.min(variables.iteration_input, MAX_LIMITS.ITERATION);
+      
+      const charge_start = Math.min(250 + (enrage / 5 - 20), MAX_LIMITS.CHARGE_START_MAX);
+      const charge_rate = charge_start / 100;
+      
+      charge_value = iterationToCharge(iteration, enrage);
+      red_bar = redBar(charge_start, charge_rate, iteration);
+      small_bombs = smallBombs(red_bar, iteration);
+      
+    } else if (mode === "Charge value") {
+      charge_value = variables.charge_input;
+      
+      const charge_start = Math.min(250 + (enrage / 5 - 20), MAX_LIMITS.CHARGE_START_MAX);
+      const charge_rate = charge_start / 100;
+      
+      iteration = iterationCalc(charge_start, charge_rate, charge_value);
+      
+      red_bar = redBar(charge_start, charge_rate, iteration);
+      small_bombs = smallBombs(red_bar, iteration);
+      
+    } else if (mode === "Red bar") {
+      red_bar = variables.red_input;
+      small_bombs = 0;
+      iteration = 0;
+      charge_value = 0;
+    } else {
+      red_bar = 0;
+      small_bombs = 0;
+      iteration = 0;
+      charge_value = 0;
+    }
+    
+    return { red_bar, small_bombs, iteration, charge_value };
+  }
+
+  /**
+   * Charge calculations (from Python chargeCalcs)
+   */
+  function chargeCalcs(enrage) {
+    if (enrage < 100) {
+      return { start: 0, cap: 0 };
+    }
+    
+    const charge_start = Math.min(250 + (enrage / 5 - 20), MAX_LIMITS.CHARGE_START_MAX);
+    const charge_rate = charge_start / 100;
+    const charge_cap = charge_start + charge_rate * MAX_LIMITS.ITERATION;
+    
+    return { 
+      start: Math.floor(charge_start), 
+      cap: Math.floor(charge_cap) 
+    };
+  }
+
+  /**
+   * Iteration to charge (from Python iterationToCharge)
+   */
+  function iterationToCharge(iteration, enrage) {
+    const { start } = chargeCalcs(enrage);
+    return Math.floor(start + (start / 100) * Math.min(iteration, MAX_LIMITS.ITERATION));
+  }
+
+  function updateP7UI() {
+    const state = calculatorState.getAll();
+    const info = document.getElementById('p7-info');
+    if (!info) return;
+
+    // Hide all input containers by default
+    hide('charge-input-container');
+    hide('iteration-input-container');
+    hide('red-input-container');
+
+    let html = '';
+    
+    // Get values from state
+    const mode = state.mode;
+    const enrage = parseInt(state.enrage) || 0;
+    const chargeInput = parseInt(state.charge_input) || 0;
+    const iterationInput = parseInt(state.iteration_input) || 0;
+    const redInput = parseInt(state.red_input) || 0;
+
+    // Define MAX_LIMITS if not already defined
+    const MAX_LIMITS = {
+      RED_BAR: 99999, // Adjust as needed
+      ITERATION: 500,
+      CHARGE_START_MAX: 2000
+    };
+
+    switch (mode) {
+      case 'Charge value':
+        show('charge-input-container');
+        
+        // Perform calculations matching Python logic
+        const chargeCalcsResult = chargeCalcs(enrage);
+        const chargeStart = chargeCalcsResult.start;
+        const chargeCap = chargeCalcsResult.cap;
+        
+        // Call p7 function with all needed variables
+        const p7Result1 = p7(mode, enrage, {
+          iteration_input: 0,
+          charge_input: chargeInput,
+          red_input: 0
+        });
+        
+        const redBar1 = p7Result1.red_bar;
+        const smallBomb1 = p7Result1.small_bombs;
+        const iteration1 = p7Result1.iteration;
+        
+        html = `
+          <div class="flex items-center justify-between py-1">
+            <span class="font-semibold text-gray-700 dark:text-gray-300">Red Bar:</span>
+            <span class="font-mono font-bold text-red-600 dark:text-red-400">${redBar1.toLocaleString()}</span>
+          </div>
+          <div class="flex items-center justify-between py-1">
+            <span class="font-semibold text-gray-700 dark:text-gray-300">Iteration:</span>
+            <span class="font-mono font-bold text-purple-600 dark:text-purple-400">${iteration1}</span>
+          </div>
+          <div class="pt-2 text-xs text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-600">
+            Charge value range: <span class="font-mono text-purple-600 dark:text-purple-400">${chargeStart}</span> → 
+            <span class="font-mono text-purple-600 dark:text-purple-400">${chargeCap}</span>
+          </div>
+        `;
+        break;
+
+      case 'Iteration':
+        show('iteration-input-container');
+        
+        // Perform calculations matching Python logic
+        const p7Result2 = p7(mode, enrage, {
+          iteration_input: iterationInput,
+          charge_input: 0,
+          red_input: 0
+        });
+        
+        const redBar2 = p7Result2.red_bar;
+        const smallBomb2 = p7Result2.small_bombs;
+        const iteration2 = p7Result2.iteration;
+        
+        // Calculate charge from iteration
+        const charge = iterationToCharge(iterationInput, enrage);
+        
+        html = `
+          <div class="flex items-center justify-between py-1">
+            <span class="font-semibold text-gray-700 dark:text-gray-300">Red Bar:</span>
+            <span class="font-mono font-bold text-red-600 dark:text-red-400">${redBar2.toLocaleString()}</span>
+          </div>
+          <div class="flex items-center justify-between py-1">
+            <span class="font-semibold text-gray-700 dark:text-gray-300">Current Charge:</span>
+            <span class="font-mono font-bold text-purple-600 dark:text-purple-400">${charge}</span>
+          </div>
+          <div class="pt-2 text-xs text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-600">
+            Iterations: 0 → 500 (increases per tick)
+          </div>
+        `;
+        break;
+
+      case 'Red bar':
+        show('red-input-container');
+        
+        // Only show one line for red bar mode
+        html = `
+          <div class="text-center py-1">
+            <span class="text-red-600 dark:text-red-400 font-semibold">⚠️</span>
+            <span class="text-gray-700 dark:text-gray-300 ml-2 text-sm">Red bar input can only calculate Chaos damage</span>
+          </div>
+        `;
+        break;
+    }
+
+    info.innerHTML = html;
+  }
+
+  // Function to handle mode change
+  function handleModeChange() {
+    const modeSelect = document.getElementById('p7-mode-menu');
+    if (!modeSelect) return;
+
+    calculatorState.set('mode', modeSelect.value);
+    updateInputs();
+    updateP7UI();
+  }
+
+
+
+  // Function to handle input changes
+  function setupInputListeners() {
+    ['charge-input', 'iteration-input', 'red-input'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.addEventListener('input', (e) => {
+        calculatorState.set(e.target.name, e.target.value);
+        updateP7UI();
+      });
+    });
+
+    const modeSelect = document.getElementById('p7-mode-menu');
+    if (modeSelect) {
+      modeSelect.addEventListener('change', handleModeChange);
+    }
+  }
+
+
+  function updateInputs() {
+    const state = calculatorState.getAll();
+
+    // Update all input values
+    const updateValue = (id, value) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = value ?? '';
+    };
+    
+    const updateCheckbox = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = Boolean(value);
+    };
+
+    updateValue('enrage-input', state.enrage);
+    updateValue('pad1-menu', state.pad1);
+    updateValue('pad2-menu', state.pad2);
+    updateCheckbox('pad3-checkbox', state.pad3);
+    updateValue('pad4-menu', state.pad4);
+    updateCheckbox('pad5-checkbox', state.pad5);
+    updateValue('pad6-menu', state.pad6);
+    updateValue('choke-input', state.choke);
+    updateValue('slam-input', state.slam);
+    updateValue('smoke-input', state.smoke);
+    updateCheckbox('infernus-checkbox', state.infernus);
+    updateValue('tomb-input', state.tomb);
+    updateValue('decimation-input', state.decimation);
+    updateCheckbox('grey-checkbox', state.grey);
+    updateCheckbox('aggro-checkbox', state.aggro);
+
+    updateValue('p7-mode-menu', state.mode);
+    updateValue('charge-input', state.charge_input);
+    updateValue('iteration-input', state.iteration_input);
+    updateValue('red-input', state.red_input);
+  }
+
+  // Initialize on DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
+    setupInputListeners();
+    updateInputs();
+    updateP7UI();
+  });
+
+  // Listen for results updates
+  document.addEventListener('calculator-results-updated', (e) => {
+    updateInputs();
+    updateP7UI();
+  });
+</script>
+
+<style>
+/* Smooth transitions for showing/hiding */
+#charge-input-container,
+#iteration-input-container,
+#red-input-container {
+  transition: all 0.3s ease;
+  height: auto;
+  overflow: hidden;
+}
+
+#charge-input-container.hidden,
+#iteration-input-container.hidden,
+#red-input-container.hidden {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Scale transitions for compact mode */
+.scale-90, .scale-95 {
+  transition: transform 0.2s ease;
+}
+
+.scale-90:hover, .scale-95:hover {
+  transform: scale(0.95);
+}
+</style>

@@ -1,0 +1,51 @@
+---
+// src/components/calculator/ui/Tabs.astro
+
+export interface Props {
+  tabs: Array<{ id: string; label: string }>;
+  activeTab: string;
+  onChange?: (tabId: string) => void;
+  className?: string;
+}
+
+const { tabs = [], activeTab, onChange, className = '' } = Astro.props;
+---
+
+<div class={className}>
+  <!-- Tab Headers -->
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" role="tablist">
+      {tabs.map((tab, index) => (
+        <li class="mr-2" role="presentation">
+          <button
+            type="button"
+            role="tab"
+            aria-controls={tab.id}
+            aria-selected={activeTab === tab.id}
+            class={`
+              inline-block p-4 border-b-2 rounded-t-lg
+              transition-colors duration-200
+              ${activeTab === tab.id 
+                ? 'text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500' 
+                : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'
+              }
+            `}
+            onclick={() => {
+              if (onChange) {
+                onChange(tab.id);
+              }
+            }}
+          >
+            {tab.label}
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+  
+  <!-- Tab Content Container -->
+  <div id="tab-content" class="pt-4">
+    <!-- Content will be filled by parent component -->
+    <slot />
+  </div>
+</div>

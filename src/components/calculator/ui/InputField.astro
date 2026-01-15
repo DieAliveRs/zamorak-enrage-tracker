@@ -1,0 +1,94 @@
+---
+// src/components/calculator/ui/InputField.astro
+
+export interface Props {
+  id?: string;
+  name: string;
+  label: string;
+  value: string | number;
+  type?: 'text' | 'number' | 'email' | 'password';
+  placeholder?: string;
+  icon?: string;
+  iconAlt?: string;
+  required?: boolean;
+  disabled?: boolean;
+  min?: number;
+  max?: number;
+  step?: number;
+  className?: string;
+  labelClass?: string;
+  inputClass?: string;
+  labelWidth?: string;    // NEW: Control label width
+  inputWidth?: string;    // NEW: Control input width
+}
+
+const {
+  id,
+  name,
+  label,
+  value,
+  type = 'text',
+  placeholder = '',
+  icon,
+  iconAlt = '',
+  required = false,
+  disabled = false,
+  min,
+  max,
+  step,
+  className = '',
+  labelClass = '',
+  inputClass = '',
+  labelWidth = 'w-40',    // DEFAULT: w-32
+  inputWidth = 'w-24'     // DEFAULT: w-24
+} = Astro.props;
+
+const inputId = id || `input-${name}`;
+---
+
+<div class={`flex items-center space-x-3 ${className}`}>
+  <!-- Icon (if provided) -->
+  {icon && (
+    <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+      <img 
+        src={icon} 
+        alt={iconAlt} 
+        class="max-w-full max-h-full object-contain"
+      />
+    </div>
+  )}
+  
+  <!-- Label -->
+  <label 
+    for={inputId} 
+    class={`flex-shrink-0 ${labelWidth} font-medium text-gray-700 dark:text-gray-300 ${labelClass}`}
+  >
+    {label}
+  </label>
+  
+  <!-- Input Field -->
+  <input
+    type={type}
+    id={inputId}
+    name={name}
+    value={value}
+    placeholder={placeholder}
+    required={required}
+    disabled={disabled}
+    min={min}
+    max={max}
+    step={step}
+    class={`
+      flex-shrink-0 ${inputWidth} px-2 py-1 text-sm text-gray-900 dark:text-white
+      bg-white dark:bg-gray-700
+      border border-gray-300 dark:border-gray-600
+      rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+      focus:outline-none transition-colors
+      disabled:opacity-50 disabled:cursor-not-allowed
+      ${inputClass}
+    `}
+    data-calc-input
+  />
+</div>
+
+<!-- Script remains the same -->

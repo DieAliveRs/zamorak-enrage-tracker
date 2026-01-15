@@ -1,0 +1,159 @@
+---
+// src/components/calculator/settings/SettingsTabs.astro
+
+import ZamorakSettings from './ZamorakSettings.astro';
+import PlayerSettings from './PlayerSettings.astro';
+import DamageModifiers from './DamageModifiers.astro';
+---
+
+<div class="settings-tabs-container bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
+  <!-- Tabs Navigation - Updated to match ResultsDisplay style -->
+  <div class="border-b border-gray-200 dark:border-gray-700 mb-4">
+    <div class="flex">
+      <button
+        class="settings-tab-button flex-1 py-3 px-4 text-center font-medium text-gray-700 dark:text-gray-300 border-b-2 border-transparent hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200"
+        id="zamorak-tab"
+      >
+        Zamorak Settings
+      </button>
+      <button
+        class="settings-tab-button flex-1 py-3 px-4 text-center font-medium text-gray-700 dark:text-gray-300 border-b-2 border-transparent hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200"
+        id="player-tab"
+      >
+        Player Settings
+      </button>
+      <button
+        class="settings-tab-button flex-1 py-3 px-4 text-center font-medium text-gray-700 dark:text-gray-300 border-b-2 border-transparent hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-200"
+        id="modifiers-tab"
+      >
+        Damage Modifiers
+      </button>
+    </div>
+  </div>
+  
+  <!-- Tab Content -->
+  <div>
+    <div id="zamorak-content" class="tab-content">
+      <ZamorakSettings />
+    </div>
+    <div id="player-content" class="tab-content hidden">
+      <PlayerSettings />
+    </div>
+    <div id="modifiers-content" class="tab-content hidden">
+      <DamageModifiers />
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  // Tab switching logic for Settings - SCOPED to settings tabs only
+  function switchSettingsTab(tabName) {
+    console.log('Switching settings tab to:', tabName);
+    
+    // Get the settings container
+    const container = document.querySelector('.settings-tabs-container');
+    if (!container) {
+      console.warn('Settings container not found');
+      return;
+    }
+    
+    // Only select elements WITHIN THIS CONTAINER
+    const contents = container.querySelectorAll('.tab-content');
+    const target = container.querySelector(`#${tabName}-content`);
+    const activeTab = container.querySelector(`#${tabName}-tab`);
+
+    // If the tab does not exist, DO NOTHING
+    if (!target || !activeTab) {
+      console.warn('Invalid settings tab:', tabName);
+      return;
+    }
+
+    // Hide all tab contents IN THIS CONTAINER ONLY
+    contents.forEach(content => {
+      content.classList.add('hidden');
+    });
+
+    // Reset all tab buttons IN THIS CONTAINER ONLY
+    container.querySelectorAll('.settings-tab-button').forEach(button => {
+      button.classList.remove(
+        'border-blue-500',
+        'dark:border-blue-400'
+      );
+      button.classList.add('border-transparent');
+    });
+
+    // Show the target tab content
+    target.classList.remove('hidden');
+
+    // Activate the target tab button - ADD ONLY BORDER CLASSES
+    activeTab.classList.remove('border-transparent');
+    activeTab.classList.add('border-blue-500', 'dark:border-blue-400');
+    
+    // Save to localStorage with unique key for settings tabs
+    localStorage.setItem('activeSettingsTab', tabName);
+  }
+
+  function initSettingsTabs() {
+    console.log('Initializing settings tabs...');
+    
+    // Get the container
+    const container = document.querySelector('.settings-tabs-container');
+    if (!container) {
+      console.warn('Settings container not found, retrying...');
+      setTimeout(initSettingsTabs, 100);
+      return;
+    }
+    
+    // Check localStorage for saved settings tab
+    const stored = localStorage.getItem('activeSettingsTab');
+    const fallback = 'zamorak';
+
+    console.log('Stored settings tab:', stored);
+    
+    // Check if the stored tab exists IN THIS CONTAINER
+    const exists =
+      stored &&
+      container.querySelector(`#${stored}-tab`) &&
+      container.querySelector(`#${stored}-content`);
+
+    if (exists) {
+      console.log('Found stored settings tab:', stored);
+      setTimeout(() => switchSettingsTab(stored), 10);
+    } else {
+      console.log('Using fallback settings tab:', fallback);
+      setTimeout(() => switchSettingsTab(fallback), 10);
+    }
+
+    // Add click handlers to buttons IN THIS CONTAINER ONLY
+    container.querySelectorAll('.settings-tab-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const tabName = e.currentTarget.id.replace('-tab', '');
+        console.log('Settings tab clicked:', tabName);
+        switchSettingsTab(tabName);
+      });
+    });
+  }
+
+  // IMPORTANT: handle module timing correctly
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSettingsTabs);
+  } else {
+    setTimeout(initSettingsTabs, 100);
+  }
+</script>
+
+<style>
+/* Minimal CSS - let Tailwind handle most styling */
+.settings-tabs-container .settings-tab-button.border-blue-500 {
+  border-bottom-color: #3b82f6;
+}
+
+.dark .settings-tabs-container .settings-tab-button.border-blue-500 {
+  border-bottom-color: #60a5fa; /* blue-400 */
+}
+
+/* Smooth transition for content */
+.settings-tabs-container .tab-content {
+  transition: opacity 0.2s ease;
+}
+</style>

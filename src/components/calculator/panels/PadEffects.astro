@@ -1,0 +1,366 @@
+---
+// src/components/calculator/panels/PadEffects.astro
+
+import InputField from '../ui/InputField.astro';
+import SelectMenu from '../ui/SelectMenu.astro';
+import { calculatorState } from '../state/calculatorState.js';
+
+let state = calculatorState.getAll();
+let calculations = {
+  pads: {},
+  hp: {}
+};
+
+// Team size options
+const teamsizeOptions = Array.from({ length: 5 }, (_, i) => ({
+  value: (i + 1).toString(),
+  label: (i + 1).toString()
+}));
+
+// Spec options for Pad 4
+const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
+
+// let pad2Cd = state.cooldown;
+// let pad2Mode = "ticks"; // or "seconds"
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-6">
+  <!-- HP Scaling Section -->
+  <div>
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+      <div>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Health Points Scaling</h3>
+      </div>
+      <div class="md:w-48">
+        <SelectMenu
+          id="team-size"
+          name="teamsize"
+          label="Team Size"
+          value={state.teamsize}
+          options={teamsizeOptions}
+          className="w-full"
+          labelWidth='w-18'
+          inputWidth='w-22'
+        />
+      </div>
+    </div>
+    
+    <div class="border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
+      <div class="grid grid-cols-2 text-sm">
+        <div class="font-semibold text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-900/70 border-b border-gray-300 dark:border-gray-700">Phase</div>
+        <div class="font-semibold text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-900/70 border-b border-gray-300 dark:border-gray-700 text-right">HP</div>
+        
+        {[
+          { label: 'P1', value: calculations.hp?.p1Hp, id: 'hp-p1' },
+          { label: 'P2', value: calculations.hp?.p2Hp, id: 'hp-p2' },
+          { label: 'P3', value: calculations.hp?.p3Hp, id: 'hp-p3' },
+          { label: 'P4', value: calculations.hp?.p4Hp, id: 'hp-p4' },
+          { label: 'P5', value: calculations.hp?.p5Hp, id: 'hp-p5' },
+          { label: 'P6', value: calculations.hp?.p6Hp, id: 'hp-p6' },
+          { label: 'P7', value: calculations.hp?.p7Hp, id: 'hp-p7' },
+          { label: 'Grey HP', value: calculations.hp?.grey, id: 'hp-grey' },
+          { label: 'Witch', value: calculations.hp?.witch, id: 'hp-witch' },
+          { label: 'Demon', value: calculations.hp?.demon, id: 'hp-demon' },
+          { label: 'Rune', value: calculations.hp?.rune, id: 'hp-rune' }
+        ].map((item, index) => (
+          <>
+            <div class={`p-3 text-gray-800 dark:text-gray-300 ${index < 10 ? 'border-b border-gray-200 dark:border-gray-800' : ''} ${index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/40'}`}>
+              {item.label}
+            </div>
+            <div class={`p-3 text-right font-mono ${index < 10 ? 'border-b border-gray-200 dark:border-gray-800' : ''} ${index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900/40'}`}>
+              <span id={item.id} class="font-semibold text-gray-900 dark:text-white">
+                {item.value?.toLocaleString() || '0'}
+              </span>
+            </div>
+          </>
+        ))}
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pad Effects Section -->
+  <div>
+    <div class="mb-4">
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">Pad Effects</h3>
+    </div>
+    
+    <div class="space-y-5">
+      <!-- Pad 1: Anima Flow -->
+      <div class="border border-gray-300 dark:border-gray-700 rounded-xl p-4 bg-gray-50 dark:bg-gray-900/50">
+        <h4 class="font-medium text-gray-900 dark:text-white mb-4">Anima Flow (Pad 1)</h4>
+        
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+            <InputField
+              id="base-adrenaline"
+              name="adren"
+              label="Base Adrenaline"
+              value={state.adren}
+              type="number"
+              step="0.1"
+              className="w-full"
+              inputWidth='w-32'
+            />
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div class="border border-green-300 dark:border-green-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+              <div class="flex items-center mb-1">
+                <img src="/images/icons/pad1_green.png" alt="pad1-green" class="w-5 h-5 mr-2" />
+                <span class="text-sm text-gray-700 dark:text-gray-300">Adrenaline Gained</span>
+              </div>
+              <div id="pad1-adren" class="text-lg font-bold text-green-700 dark:text-green-400 font-mono">
+                {calculations.pads?.pad1?.gain?.toFixed(1) || '0.0'}
+              </div>
+            </div>
+            
+            <div class="border border-red-300 dark:border-red-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+              <div class="flex items-center mb-1">
+                <img src="/images/icons/pad1_red.png" alt="pad1-red" class="w-5 h-5 mr-2" />
+                <span class="text-sm text-gray-700 dark:text-gray-300">Twinshot Damage</span>
+              </div>
+              <div id="pad1-tsdmg" class="text-lg font-bold text-red-700 dark:text-red-400 font-mono">
+                {calculations.pads?.pad1?.dmg || '0'}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pad 2: Smite -->
+      <div class="border border-gray-300 dark:border-gray-700 rounded-xl p-4 bg-gray-50 dark:bg-gray-900/50">
+        <h4 class="font-medium text-gray-900 dark:text-white mb-4">Smite (Pad 2)</h4>
+        
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+            <InputField
+              id="base-cooldown"
+              name="cooldown"
+              label="Base Cooldown"
+              value={state.cooldown}
+              type="text"
+              className="w-full"
+              inputWidth='w-32'
+            />
+          </div>
+          
+          <div class="grid grid-cols-3 gap-3">
+            <div class="border border-green-300 dark:border-green-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+              <div class="flex items-center mb-1">
+                <img src="/images/icons/pad6_green.png" alt="pad2-green" class="w-5 h-5 mr-2" />
+                <span class="text-sm text-gray-700 dark:text-gray-300">Final Cooldown</span>
+              </div>
+              <div id="pad2-cd-ticks" class="text-base font-bold text-gray-900 dark:text-white font-mono">
+                <div>{calculations.pads?.pad2?.cdTicks || '0'} ticks</div>
+              </div>
+              <div id="pad2-cd-s" class="text-base font-bold text-gray-900 dark:text-white font-mono">
+                  <div>{calculations.pads?.pad2?.cdSec || '0.0'}s</div>
+                </div>
+            </div>
+            
+            <div class="border border-red-300 dark:border-red-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+              <div class="flex items-center mb-1">
+                <img src="/images/icons/pad2_red.png" alt="pad2-red" class="w-5 h-5 mr-2" />
+                <span class="text-sm text-gray-700 dark:text-gray-300">Execute Threshold</span>
+              </div>
+              <div id="pad2-thresh" class="text-base font-bold text-red-700 dark:text-red-400 font-mono">
+                {calculations.pads?.pad2?.thresh?.toLocaleString() || '0'}
+              </div>
+            </div>
+            
+            <div class="border border-blue-300 dark:border-blue-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+              <div class="text-sm text-gray-700 dark:text-gray-300 mb-1">Effective Max HP</div>
+              <div id="pad2-effhp" class="text-base font-bold text-blue-700 dark:text-blue-400 font-mono">
+                {calculations.pads?.pad2?.effHp?.toLocaleString() || '0'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pad 4: Disintegrate -->
+      <div class="border border-gray-300 dark:border-gray-700 rounded-xl p-4 bg-gray-50 dark:bg-gray-900/50">
+        <h4 class="font-medium text-gray-900 dark:text-white mb-4">Disintegrate (Pad 4)</h4>
+        
+        <div class="space-y-3">
+          <div>
+            <InputField
+              id="pad4-dr"
+              name="disint_dr"
+              label="Defensives' DR %"
+              value={state.disint_dr}
+              type="number"
+              className="w-full"
+              inputWidth='w-32'
+            />
+          </div>
+          
+          <div>
+            <SelectMenu
+              id="pad4-spec"
+              name="spec"
+              label="Spec"
+              value={state.spec}
+              options={specOptions.map(o => ({ value: o, label: o }))}
+              className="w-full"
+              inputWidth='w-32'
+            />
+          </div>
+          
+          <div>
+            <InputField
+              id="pad4-smoke"
+              name="disint_smoke"
+              label="Flames Stacks"
+              value={state.disint_smoke}
+              type="number"
+              className="w-full"
+              inputWidth='w-32'
+            />
+          </div>
+          
+          <div class="border border-purple-300 dark:border-purple-800 rounded p-3 bg-white dark:bg-gray-800 mt-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <img src="/images/icons/pad4_red.png" alt="pad4-red" class="w-5 h-5 mr-2" />
+                <span class="text-sm text-gray-700 dark:text-gray-300">Effectiveness</span>
+              </div>
+              <div id="pad4-effectiveness" class="text-lg font-bold text-purple-700 dark:text-purple-400 font-mono">
+                {calculations.pads?.pad4?.effectiveness || '0'}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pad 6: Balance of Power -->
+      <div class="border border-gray-300 dark:border-gray-700 rounded-xl p-4 bg-gray-50 dark:bg-gray-900/50">
+        <h4 class="font-medium text-gray-900 dark:text-white mb-4">Balance of Power (Pad 6)</h4>
+        
+        <div class="grid grid-cols-3 gap-3">
+          <div class="border border-blue-300 dark:border-blue-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+            <div class="flex items-center mb-1">
+              <img src="/images/icons/maxhp.png" alt="pad6-hp" class="w-5 h-5 mr-2" />
+              <span class="text-sm text-gray-700 dark:text-gray-300">HP Needed</span>
+            </div>
+            <div id="pad6-hpneeded" class="text-base font-bold text-blue-700 dark:text-blue-400 font-mono">
+              &lt; {calculations.pads?.pad6?.hpNeeded?.toLocaleString() || '0'}
+            </div>
+          </div>
+          
+          <div class="border border-green-300 dark:border-green-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+            <div class="flex items-center mb-1">
+              <img src="/images/icons/pad6_green.png" alt="pad6-green" class="w-5 h-5 mr-2" />
+              <span class="text-sm text-gray-700 dark:text-gray-300">Damage Bonus</span>
+            </div>
+            <div id="pad6-dmgbonus" class="text-base font-bold text-green-700 dark:text-green-400 font-mono">
+              {calculations.pads?.pad6?.dmgBonus || '0'}%
+            </div>
+          </div>
+          
+          <div class="border border-red-300 dark:border-red-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
+            <div class="flex items-center mb-1">
+              <img src="/images/icons/pad2_red.png" alt="pad6-red" class="w-5 h-5 mr-2" />
+              <span class="text-sm text-gray-700 dark:text-gray-300">Healing Reduction</span>
+            </div>
+            <div id="pad6-healingred" class="text-base font-bold text-red-700 dark:text-red-400 font-mono">
+              {calculations.pads?.pad6?.healingReduction || '0'}%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = value ?? '0';
+  };
+
+  const setSelectValue = (id, value) => {
+    const el = document.getElementById(id);
+      if (!el) return;
+      el.value = value ?? '0';
+  };
+
+  const fmt = (v) => (v != null ? v.toLocaleString() : '0');
+
+  function updateInputs() {
+    const state = calculatorState.getAll()
+
+    setSelectValue('team-size', state.teamsize)
+    setSelectValue('base-adrenaline', state.adren)
+    setSelectValue('base-cooldown', state.cooldown)
+    setSelectValue('pad4-dr', state.disint_dr)
+    setSelectValue('pad4-spec', state.spec)
+    setSelectValue('pad4-smoke', state.disint_smoke)
+
+  }
+
+  function updatePadEffects(results) {
+    if (!results) return;
+
+    const { hp, pads } = results;
+    
+
+    /* =====================
+       HP SCALING
+       ===================== */
+    set('hp-p1', fmt(hp?.p1Hp));
+    set('hp-p2', fmt(hp?.p2Hp));
+    set('hp-p3', fmt(hp?.p3Hp));
+    set('hp-p4', fmt(hp?.p4Hp));
+    set('hp-p5', fmt(hp?.p5Hp));
+    set('hp-p6', fmt(hp?.p6Hp));
+    set('hp-p7', fmt(hp?.p7Hp));
+    set('hp-grey', fmt(hp?.grey));
+    set('hp-witch', fmt(hp?.witch));
+    set('hp-demon', fmt(hp?.demon));
+    set('hp-rune', fmt(hp?.rune));
+
+    /* =====================
+       PAD 1 – ANIMA FLOW
+       ===================== */
+    set('pad1-adren', pads?.pad1?.gain?.toFixed(1));
+    set('pad1-tsdmg', `${fmt(pads?.pad1?.dmg)}%`);
+
+    /* =====================
+       PAD 2 – SMITE
+       ===================== */
+    const cd = pads?.pad2;
+    const textTicks = `${cd.cdTicks} ticks`;
+    const textSeconds = `${cd.cdSec?.toFixed(1) ?? '0.0'}s`;
+    set('pad2-cd-ticks', textTicks);
+    set('pad2-cd-s', textSeconds);
+    set('pad2-thresh', fmt(cd.thresh));
+    set('pad2-effhp', fmt(cd.effHp));
+
+    /* =====================
+       PAD 4 – DISINTEGRATE
+       ===================== */
+    set('pad4-effectiveness', pads?.pad4 != null? `${pads.pad4}%` : '0%');
+
+    /* =====================
+       PAD 6 – BALANCE OF POWER
+       ===================== */
+    if (pads?.pad6) {
+      set('pad6-hpneeded', `&lt; ${fmt(pads.pad6.hpNeeded)}`);
+      set('pad6-dmgbonus', `${pads.pad6.dmgBonus ?? 0}%`);
+      set('pad6-healingred', `${pads.pad6.healingReduction ?? 0}%`);
+    }
+  }
+
+  document.addEventListener(
+    'calculator-results-updated',
+    (e) => {
+      updateInputs()
+      updatePadEffects(e.detail)
+    
+    }
+  );
+
+
+</script>

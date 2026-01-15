@@ -1,0 +1,83 @@
+---
+// src/components/calculator/ui/Checkbox.astro
+
+export interface Props {
+  id?: string;
+  name: string;
+  label: string;
+  checked: boolean;
+  icon?: string;
+  iconAlt?: string;
+  className?: string;
+  labelClass?: string;
+  disabled?: boolean;
+  labelWidth?: string;    // NEW: Control label width
+  inputWidth?: string;    // NEW: Control input container width
+  labelFlex?: 'fixed' | 'grow';  // NEW: Control input alignment
+}
+
+const {
+  id,
+  name,
+  label,
+  checked = false,
+  icon,
+  iconAlt = '',
+  className = '',
+  labelClass = '',
+  disabled = false,
+  labelWidth = 'w-40',       // DEFAULT: w-32
+  inputWidth = 'w-24',       // DEFAULT: w-24
+  labelFlex = 'fixed'       // DEFAULT: start (left align)
+} = Astro.props;
+
+const checkboxId = id || `checkbox-${name}`;
+const labelFlexClass = labelFlex === 'grow' ? 'flex-1' : 'flex-shrink-0';
+
+---
+
+<div class={`flex items-center space-x-3 ${className}`}>
+  <!-- Icon -->
+  {icon && (
+    <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+      <img
+        src={icon}
+        alt={iconAlt}
+        class="max-w-full max-h-full object-contain"
+      />
+    </div>
+  )}
+
+  <!-- Label -->
+  <label
+    for={checkboxId}
+    class={`
+      ${labelFlexClass} ${labelWidth} font-medium text-gray-700 dark:text-gray-300
+      ${labelClass}
+    `}
+  >
+    {label}
+  </label>
+
+  <!-- Checkbox container -->
+  <div class={`flex-shrink-0 ${inputWidth} flex justify-start`}>
+    <input
+      type="checkbox"
+      id={checkboxId}
+      name={name}
+      checked={checked}
+      disabled={disabled}
+      class={`
+        w-5 h-5 text-blue-600 bg-gray-100 border-gray-300
+        rounded focus:ring-blue-500 focus:ring-2
+        dark:bg-gray-700 dark:border-gray-600
+        dark:focus:ring-blue-600
+        dark:ring-offset-gray-800
+        disabled:opacity-50 disabled:cursor-not-allowed
+      `}
+      data-calc-checkbox
+    />
+  </div>
+</div>
+
+<!-- Script remains the same -->

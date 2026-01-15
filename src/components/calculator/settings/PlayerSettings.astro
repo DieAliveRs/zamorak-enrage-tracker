@@ -1,0 +1,663 @@
+---
+// src/components/calculator/settings/PlayerSettings.astro
+
+import InputField from '../ui/InputField.astro';
+import SelectMenu from '../ui/SelectMenu.astro';
+import Checkbox from '../ui/Checkbox.astro';
+import { calculatorState } from '../state/calculatorState.js';
+
+const state = calculatorState.getAll();
+
+const gearOptions = [
+  "Other/Dps", "Cryptbloom", "Achto (mage)", "Achto (non mage)", 
+  "Deathwarden", "Sub. Ports", "Ganodermic", "TFN", "Deathdealer t90"
+];
+
+const shieldOptions = ["None", "T90", "Spirit", "T90 defender"];
+const ovlOptions = ["None", "Elder overload"];
+
+// Ability damage modes
+const abilDamageModeOptions = [
+  { value: "Total value", label: "Total value" },
+  { value: "Ability damage calc", label: "Ability damage calc" }
+];
+
+// Jewelry options
+const ringOptions = ["+30.4", "+27.7", "+25.2", "None"];
+const pocketOptions = ["+15", "+8", "+7", "None"];
+const necklaceOptions = ["+59", "+56", "+48", "+44.1", "38.4", "None"];
+const eruptiveOptions = ["4", "3", "2", "1", "0"];
+
+// Gear bonuses
+const T95_BONUSES = {
+  helm: 25,
+  top: 37,
+  bottoms: 32,
+  gloves: 16,
+  boots: 16
+};
+
+const T90_BONUSES = {
+  helm: 23.2,
+  top: 34.8,
+  bottoms: 29,
+  gloves: 14.5,
+  boots: 14.5
+};
+
+---
+
+<div class="space-y-3">
+  <!-- Armor -->
+  <SelectMenu
+    id="helm-menu"
+    name="helm"
+    label="Helm"
+    value={state.helm}
+    options={gearOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/helm.png"
+    iconAlt="Helm"
+  />
+  
+  <SelectMenu
+    id="top-menu"
+    name="top"
+    label="Top"
+    value={state.top}
+    options={gearOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/top.png"
+    iconAlt="Top"
+  />
+  
+  <SelectMenu
+    id="bottoms-menu"
+    name="bottoms"
+    label="Bottoms"
+    value={state.bottoms}
+    options={[...gearOptions, "Deathtouch bracelet"].map(o => ({ value: o, label: o }))}
+    icon="/images/icons/bottoms.png"
+    iconAlt="Bottoms"
+  />
+  
+  <SelectMenu
+    id="gloves-menu"
+    name="gloves"
+    label="Gloves"
+    value={state.glove}
+    options={[...gearOptions, "Deathtouch bracelet"].map(o => ({ value: o, label: o }))}
+    icon="/images/icons/gloves.png"
+    iconAlt="Gloves"
+  />
+  
+  <SelectMenu
+    id="boots-menu"
+    name="boots"
+    label="Boots"
+    value={state.boots}
+    options={gearOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/boots.png"
+    iconAlt="Boots"
+  />
+  
+  <SelectMenu
+    id="shield-menu"
+    name="shield"
+    label="Shield"
+    value={state.shield}
+    options={shieldOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/shield.png"
+    iconAlt="Shield"
+  />
+  
+  <!-- Equipment/Stats -->
+  <Checkbox
+    id="eof-checkbox"
+    name="eof"
+    label="EoF/Amulet of Souls"
+    checked={state.eof}
+    icon="/images/icons/eof.png"
+    iconAlt="EoF"
+  />
+  
+  <SelectMenu
+    id="ovl-menu"
+    name="ovl"
+    label="Overload"
+    value={state.ovl}
+    options={ovlOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/ovl.png"
+    iconAlt="Overload"
+  />
+  
+  <InputField
+    id="def-input"
+    name="def"
+    label="Defence Level"
+    value={state.def}
+    type="number"
+    icon="/images/icons/def.png"
+    iconAlt="Defence"
+  />
+  
+  <Checkbox
+    id="powder-checkbox"
+    name="powder"
+    label="Penance Powder"
+    checked={state.powder}
+    icon="/images/icons/powder.png"
+    iconAlt="Powder"
+  />
+
+  <InputField
+    id="ppoints-input"
+    name="ppoints"
+    label="Prayer Points"
+    value={state.ppoints}
+    type="number"
+    icon="/images/icons/ppoints.png"
+    iconAlt="Prayer Points"
+  />
+
+  <InputField
+    id="affliction-input"
+    name="affliction"
+    label="Affliction"
+    value={state.affliction}
+    type="number"
+    icon="/images/icons/affliction.png"
+    iconAlt="Affliction"
+  />
+
+  <InputField
+    id="desolation-input"
+    name="desolation"
+    label="Desolation"
+    value={state.desolation}
+    type="number"
+    icon="/images/icons/desolation.png"
+    iconAlt="Desolation"
+  />
+
+  <InputField
+    id="maxhp-input"
+    name="maxhp"
+    label="Max HP"
+    value={state.maxhp}
+    type="number"
+    icon="/images/icons/maxhp.png"
+    iconAlt="Max HP"
+  />
+
+  <InputField
+    id="currenthp-input"
+    name="currenthp"
+    label="Current HP"
+    value={state.currenthp}
+    type="number"
+    icon="/images/icons/currenthp.png"
+    iconAlt="Current HP"
+  />
+
+  <InputField
+    id="boneshield-input"
+    name="boneshield"
+    label="Boneshield Tier"
+    value={state.boneshield}
+    type="number"
+    icon="/images/icons/boneshield.png"
+    iconAlt="Boneshield"
+  />
+
+  <Checkbox
+    id="totg-checkbox"
+    name="totg"
+    label="Twilight of the Gods"
+    checked={state.totg}
+    icon="/images/icons/totg.png"
+    iconAlt="Twilight"
+  />
+
+  <Checkbox
+    id="puzzlebox-checkbox"
+    name="puzzlebox"
+    label="Infernal Puzzle Box"
+    checked={state.puzzlebox}
+    icon="/images/icons/puzzlebox.png"
+    iconAlt="Puzzle Box"
+  />
+  
+  <!-- Ability Damage Section -->
+  <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Ability Damage</h3>
+    
+    <div class="space-y-4">
+      <SelectMenu
+        id="abilDamageMode-select"
+        name="abilDamageMode"
+        label="Input Mode"
+        value={state.abilDamageMode}
+        options={abilDamageModeOptions}
+        inputWidth='w-50'
+      />
+
+      <!-- Total Value Input (only shows in "Total value" mode) -->
+      <div id="total-value-container" class="transition-all duration-300">
+        <div class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-gray-800/20 rounded p-1">
+          <InputField
+            id="abilDamage-input"
+            name="abilDamage"
+            label="Total Value"
+            value={state.abilDamage}
+            type="number"
+            labelWidth='w-32'
+            inputWidth='w-20'
+          />
+        </div>
+      </div>
+      
+      <!-- Ability Damage Calculation Inputs (only shows in "Ability damage calc" mode) -->
+      <div id="ability-calc-container" class="transition-all duration-300">
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Left Column -->
+          <div class="space-y-3">
+            <SelectMenu
+              id="eruptive-select"
+              name="eruptive"
+              label="Eruptive"
+              value={state.eruptive}
+              options={eruptiveOptions.map(o => ({ value: o, label: o }))}
+              labelWidth='w-32'
+              inputWidth='w-20'
+            />
+
+            <SelectMenu
+              id="pocket-select"
+              name="pocket"
+              label="Pocket Slot"
+              value={state.pocket}
+              options={pocketOptions.map(o => ({ value: o, label: o }))}
+              labelWidth='w-32'
+              inputWidth='w-20'
+            />
+
+            <Checkbox
+              id="reaperCrew-checkbox"
+              name="reaperCrew"
+              label="Reaper Crew"
+              checked={state.reaperCrew}
+              labelWidth='w-32'
+            />
+
+            <Checkbox
+              id="eqAura-checkbox"
+              name="eqAura"
+              label="Equilibrium Aura"
+              checked={state.eqAura}
+              labelWidth='w-32'
+            />
+          </div>
+          
+          <!-- Right Column -->
+          <div class="space-y-3">
+            <SelectMenu
+              id="ring-select"
+              name="ring"
+              label="Ring"
+              value={state.ring}
+              options={ringOptions.map(o => ({ value: o, label: o }))}
+              labelWidth='w-32'
+              inputWidth='w-22'
+            />
+
+            <SelectMenu
+              id="necklace-select"
+              name="necklace"
+              label="Necklace"
+              value={state.necklace}
+              options={necklaceOptions.map(o => ({ value: o, label: o }))}
+              labelWidth='w-32'
+              inputWidth='w-22'
+            />
+
+            <InputField
+              id="weaponTier-input"
+              name="weaponTier"
+              label="Weapon Tier"
+              value={state.weaponTier}
+              type="number"
+              labelWidth='w-32'
+              inputWidth='w-20'
+            />
+
+            <InputField
+              id="NecroLvl-input"
+              name="NecroLvl"
+              label="Necro Level"
+              value={state.NecroLvl}
+              type="number"
+              labelWidth='w-32'
+              inputWidth='w-20'
+            />
+          </div>
+        </div>
+      </div>
+      
+      <!-- Ability Damage Info Display -->
+      <div id="ability-damage-info" class="p-2 bg-gray-50 dark:bg-gray-700/50 rounded text-sm border border-gray-200 dark:border-gray-600">
+        <!-- Will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  // Helper functions for showing/hiding
+  const show = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.remove('hidden');
+    }
+  };
+  
+  const hide = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.add('hidden');
+    }
+  };
+
+  // Gear bonuses
+  const T95_BONUSES = {
+    helm: 25,
+    top: 37,
+    bottoms: 32,
+    gloves: 16,
+    boots: 16
+  };
+
+  const T90_BONUSES = {
+    helm: 23.2,
+    top: 34.8,
+    bottoms: 29,
+    gloves: 14.5,
+    boots: 14.5
+  };
+
+  // Function to calculate ability damage based on inputs
+  function calculateAbilityDamage(mode, variables) {
+    if (mode === "Total value") {
+      return parseInt(variables.abilDamage) || 0;
+    }
+    
+    if (mode === "Ability damage calc") {
+      const eruptive = 0.005 * parseInt(variables.eruptive || "0");
+      const ring = variables.ring !== "None" ? parseFloat(variables.ring.slice(1)) : 0;
+      const pocket = variables.pocket !== "None" ? parseFloat(variables.pocket.slice(1)) : 0;
+      const necklace = variables.necklace !== "None" ? parseFloat(variables.necklace.slice(1)) : 0;
+      const reaperCrew = variables.reaperCrew ? 12 : 0;
+      const eqAura = variables.eqAura ? 0.12 : 0;
+      const weaponTier = parseFloat(variables.weaponTier || "0");
+      const NecroLvl = parseInt(variables.NecroLvl || "0");
+      
+      // Add gear bonuses
+      let bonusAD = 0;
+      const gear = ["helm", "top", "bottoms", "gloves", "boots"];
+      
+      gear.forEach((item, i) => {
+        if (variables[item] === "TFN") {
+          bonusAD += T95_BONUSES[item];
+        } else if (variables[item] === "Deathdealer t90") {
+          bonusAD += T90_BONUSES[item];
+        }
+      });
+      
+      bonusAD += ring + pocket + necklace + reaperCrew;
+      
+      // Calculate mainhand and offhand ability damage
+      const ADmh = Math.floor(2.5 * NecroLvl) + Math.floor(9.6 * weaponTier + bonusAD);
+      const ADoh = Math.floor(0.5 * (Math.floor(2.5 * NecroLvl) + Math.floor(9.6 * weaponTier + bonusAD)));
+      
+      // Final ability damage with modifiers
+      const finalAD = Math.floor((ADmh + ADoh) * (1 + eruptive + eqAura));
+      
+      return finalAD;
+    }
+    
+    return 0;
+  }
+
+  // Function to update the ability damage UI based on selected mode
+  function updateAbilityDamageUI() {
+    const state = calculatorState.getAll();
+    const info = document.getElementById('ability-damage-info');
+    
+    // Hide all containers by default
+    hide('total-value-container');
+    hide('ability-calc-container');
+
+    // Get values from state
+    const mode = state.abilDamageMode;
+    
+    let html = '';
+    let displayedValue = 0;
+    
+    switch (mode) {
+      case 'Total value':
+        show('total-value-container');
+        
+        const totalValue = parseInt(state.abilDamage) || 0;
+        displayedValue = totalValue;
+        
+        html = `
+          <div class="flex items-center justify-between py-1">
+            <span class="font-semibold text-gray-700 dark:text-gray-300">Ability Damage:</span>
+            <span class="font-mono font-bold text-blue-600 dark:text-blue-400">${displayedValue.toLocaleString()}</span>
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+            Value used for Phantom Guard
+          </div>
+        `;
+        break;
+
+      case 'Ability damage calc':
+        show('ability-calc-container');
+        
+        const calculatedValue = calculateAbilityDamage(mode, state);
+        displayedValue = calculatedValue;
+        
+        // Also get the saved total value for comparison
+        const savedTotalValue = parseInt(state.abilDamage) || 0;
+        
+        html = `
+          <div class="flex items-center justify-between py-1">
+            <span class="font-semibold text-gray-700 dark:text-gray-300">Calculated Ability Damage:</span>
+            <span class="font-mono font-bold text-green-600 dark:text-green-400">${calculatedValue.toLocaleString()}</span>
+          </div>
+          <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+            Value used for Phantom Guard
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-500 mt-1 border-t border-gray-200 dark:border-gray-600 pt-1">
+            Saved total value: ${savedTotalValue.toLocaleString()} (will be used if you switch back to "Total value" mode)
+          </div>
+        `;
+        break;
+    }
+    
+    // Update the info display
+    if (info) {
+      info.innerHTML = html;
+    }
+    
+    // Return the displayed value (but don't overwrite the stored abilDamage)
+    return displayedValue;
+  }
+
+  // Function to handle mode change
+  function handleAbilityDamageModeChange() {
+    const modeSelect = document.getElementById('abilDamageMode-select');
+    if (!modeSelect) return;
+
+    const newMode = modeSelect.value;
+    calculatorState.set('abilDamageMode', newMode);
+    updateAbilityDamageUI();
+    updateInputs();
+  }
+
+  // Function to setup input listeners for ability damage section
+  function setupAbilityDamageListeners() {
+    // Mode selector
+    const modeSelect = document.getElementById('abilDamageMode-select');
+    if (modeSelect) {
+      modeSelect.addEventListener('change', handleAbilityDamageModeChange);
+    }
+    
+    // Total value input
+    const totalValueInput = document.getElementById('abilDamage-input');
+    if (totalValueInput) {
+      totalValueInput.addEventListener('input', (e) => {
+        calculatorState.set(e.target.name, e.target.value);
+        updateAbilityDamageUI();
+      });
+    }
+    
+    // Component inputs (for ability damage calc mode)
+    const componentInputs = [
+      'eruptive-select',
+      'pocket-select',
+      'ring-select',
+      'necklace-select',
+      'weaponTier-input',
+      'NecroLvl-input',
+      'reaperCrew-checkbox',
+      'eqAura-checkbox'
+    ];
+    
+    componentInputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      
+      const eventType = el.type === 'checkbox' ? 'change' : 'input';
+      el.addEventListener(eventType, (e) => {
+        const value = el.type === 'checkbox' ? e.target.checked : e.target.value;
+        calculatorState.set(e.target.name, value);
+        updateAbilityDamageUI();
+      });
+    });
+    
+    // Also listen for armor changes since they affect ability damage calculation
+    const armorInputs = ['helm-menu', 'top-menu', 'bottoms-menu', 'gloves-menu', 'boots-menu'];
+    armorInputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('change', (e) => {
+          calculatorState.set(e.target.name, e.target.value);
+          updateAbilityDamageUI();
+        });
+      }
+    });
+  }
+
+  // Update inputs function
+  const updateInputs = () => {
+    const state = calculatorState.getAll();
+
+    const setSelectValue = (id, value) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = value ?? '';
+    };
+    
+    const setCheckbox = (id, value) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.checked = Boolean(value);
+    };
+
+    const setInputValue = (id, value) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.value = value ?? '';
+    };
+
+    // Armor selections
+    setSelectValue('helm-menu', state.helm);
+    setSelectValue('top-menu', state.top);
+    setSelectValue('bottoms-menu', state.bottoms);
+    setSelectValue('gloves-menu', state.gloves);
+    setSelectValue('boots-menu', state.boots);
+    setSelectValue('shield-menu', state.shield);
+    
+    // Equipment/Stats
+    setCheckbox('eof-checkbox', state.eof);
+    setSelectValue('ovl-menu', state.ovl);
+    setInputValue('def-input', state.def);
+    setCheckbox('powder-checkbox', state.powder);
+    setInputValue('ppoints-input', state.ppoints);
+    
+    // Curses
+    setInputValue('affliction-input', state.affliction);
+    setInputValue('desolation-input', state.desolation);
+    
+    // HP
+    setInputValue('maxhp-input', state.maxhp);
+    setInputValue('currenthp-input', state.currenthp);
+    setInputValue('boneshield-input', state.boneshield);
+    
+    // Misc checkboxes
+    setCheckbox('totg-checkbox', state.totg);
+    setCheckbox('puzzlebox-checkbox', state.puzzlebox);
+    
+    // Ability Damage Section
+    setSelectValue('abilDamageMode-select', state.abilDamageMode);
+    setInputValue('abilDamage-input', state.abilDamage);
+    setSelectValue('eruptive-select', state.eruptive);
+    setSelectValue('pocket-select', state.pocket);
+    setSelectValue('ring-select', state.ring);
+    setSelectValue('necklace-select', state.necklace);
+    setCheckbox('reaperCrew-checkbox', state.reaperCrew);
+    setCheckbox('eqAura-checkbox', state.eqAura);
+    setInputValue('weaponTier-input', state.weaponTier);
+    setInputValue('NecroLvl-input', state.NecroLvl);
+  };
+
+  // Initialize on DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
+    setupAbilityDamageListeners();
+    updateInputs();
+    updateAbilityDamageUI();
+  });
+
+  // Listen for results updates
+  document.addEventListener('calculator-results-updated', () => {
+    updateInputs();
+    updateAbilityDamageUI();
+  });
+</script>
+
+<style>
+/* Smooth transitions for showing/hiding */
+#total-value-container,
+#ability-calc-container {
+  transition: all 0.3s ease;
+  height: auto;
+  overflow: hidden;
+}
+
+#total-value-container.hidden,
+#ability-calc-container.hidden {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Ensure the grid layout transitions smoothly */
+#ability-calc-container .grid {
+  transition: opacity 0.3s ease;
+}
+
+#ability-calc-container.hidden .grid {
+  opacity: 0;
+}
+</style>

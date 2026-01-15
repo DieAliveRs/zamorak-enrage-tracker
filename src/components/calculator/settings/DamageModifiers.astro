@@ -1,0 +1,322 @@
+---
+// src/components/calculator/settings/DamageModifiers.astro
+
+// import InputField from '../ui/InputField.astro';
+import SelectMenu from '../ui/SelectMenu.astro';
+import Checkbox from '../ui/Checkbox.astro';
+import { calculatorState } from '../state/calculatorState.js';
+
+const state = calculatorState.getAll();
+
+const divertOptions = ["None", "Divert", "Resonance"];
+const auraOptions = ["None", "Aegis", "Zerk aura"];
+const sdOptions = ["50", "25", "12", "6", "3", "1", "0"];
+const absorbOptions = ["0", "1", "2", "3", "4"];
+const emeraldOptions = ["0", "1", "2", "3", "4", "5"];
+---
+
+<div class="space-y-3">
+  <!-- Defensive Abilities -->
+  <Checkbox
+    id="disr-checkbox"
+    name="disr"
+    label="Disruption Shield"
+    checked={state.disr}
+    icon="/images/icons/disr.png"
+    iconAlt="Disruption"
+  />
+  
+  <Checkbox
+    id="cade-checkbox"
+    name="cade"
+    label="Barricade"
+    checked={state.cade}
+    icon="/images/icons/cade.png"
+    iconAlt="Barricade"
+  />
+  
+  <SelectMenu
+    id="divert_res_check-menu"
+    name="divert_res_check"
+    label="Divert/Resonance"
+    value={state.divert_res_check}
+    options={divertOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/divert.png"
+    iconAlt="Divert"
+    inputWidth='w-32'
+  />
+  
+  <Checkbox
+    id="refl-checkbox"
+    name="refl"
+    label="Reflect"
+    checked={state.refl}
+    icon="/images/icons/refl.png"
+    iconAlt="Reflect"
+  />
+  
+  <Checkbox
+    id="debil-checkbox"
+    name="debil"
+    label="Debilitate"
+    checked={state.debil}
+    icon="/images/icons/debil.png"
+    iconAlt="Debilitate"
+  />
+  
+  <SelectMenu
+    id="sd-menu"
+    name="sd"
+    label="Shield Dome"
+    value={state.sd}
+    options={sdOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/sd.png"
+    iconAlt="Shield Dome"
+    inputWidth='w-32'
+  />
+  
+  <Checkbox
+    id="immort-checkbox"
+    name="immort"
+    label="Immortality"
+    checked={state.immort}
+    icon="/images/icons/immort.png"
+    iconAlt="Immortality"
+  />
+  
+  <Checkbox
+    id="anti-checkbox"
+    name="anti"
+    label="Anticipation"
+    checked={state.anti}
+    icon="/images/icons/anti.png"
+    iconAlt="Anticipation"
+  />
+  
+  <Checkbox
+    id="ful-checkbox"
+    name="ful"
+    label="Scripture of Ful"
+    checked={state.ful}
+    icon="/images/icons/ful.png"
+    iconAlt="Ful"
+  />
+  
+  <!-- Aura -->
+  <SelectMenu
+    id="aura-menu"
+    name="aura"
+    label="Aura"
+    value={state.aura}
+    options={auraOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/aegis.png"
+    iconAlt="Aura"
+    inputWidth='w-32'
+  />
+  
+  <!-- Offensive Modifiers -->
+  <Checkbox
+    id="zerk-checkbox"
+    name="zerk"
+    label="Berserker"
+    checked={state.zerk}
+    icon="/images/icons/zerk.png"
+    iconAlt="Zerk"
+  />
+  
+  <Checkbox
+    id="pulv-checkbox"
+    name="pulv"
+    label="Pulverize"
+    checked={state.pulv}
+    icon="/images/icons/pulv.png"
+    iconAlt="Pulverize"
+  />
+  
+  <Checkbox
+    id="sever-checkbox"
+    name="sever"
+    label="Sever"
+    checked={state.sever}
+    icon="/images/icons/sever.png"
+    iconAlt="Sever"
+  />
+  
+  <SelectMenu
+    id="absorb-menu"
+    name="absorb"
+    label="Absorbative"
+    value={state.absorb}
+    options={absorbOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/absorb.png"
+    iconAlt="Absorbative"
+    inputWidth='w-32'
+  />
+  
+  <Checkbox
+    id="enfeeble-checkbox"
+    name="enfeeble"
+    label="Enfeeble"
+    checked={state.enfeeble}
+    icon="/images/icons/enfeeble.png"
+    iconAlt="Enfeeble"
+  />
+  
+  <SelectMenu
+    id="emerald-menu"
+    name="emerald"
+    label="Emerald Aurora"
+    value={state.emerald}
+    options={emeraldOptions.map(o => ({ value: o, label: o }))}
+    icon="/images/icons/emerald.png"
+    iconAlt="Emerald"
+    inputWidth='w-32'
+  />
+  
+  <Checkbox
+    id="anchor-checkbox"
+    name="anchor"
+    label="Barrelchest Anchor"
+    checked={state.anchor}
+    icon="/images/icons/anchor.png"
+    iconAlt="Anchor"
+  />
+
+  <Checkbox
+    id="darklight-checkbox"
+    name="darklight"
+    label="Darklight"
+    checked={state.darklight}
+    icon="/images/icons/darklight.png"
+    iconAlt="Darklight"
+  />
+  
+  <Checkbox
+    id="darkness-checkbox"
+    name="darkness"
+    label="Power of Darkness"
+    checked={state.darkness}
+    icon="/images/icons/darkness.png"
+    iconAlt="Darkness"
+  />
+  
+  <Checkbox
+    id="deflect-checkbox"
+    name="deflect"
+    label="Deflect Prayer"
+    checked={state.deflect}
+    icon="/images/icons/deflect.png"
+    iconAlt="Deflect"
+  />
+  
+  <Checkbox
+    id="fort-checkbox"
+    name="fort"
+    label="Fortitude"
+    checked={state.fort}
+    icon="/images/icons/fort.png"
+    iconAlt="Fortitude"
+  />
+  
+  <Checkbox
+    id="dw-checkbox"
+    name="dw"
+    label="Death Ward"
+    checked={state.dw}
+    icon="/images/icons/dw.png"
+    iconAlt="Death Ward"
+  />
+  
+  <Checkbox
+    id="hh-checkbox"
+    name="hh"
+    label="Hellhound"
+    checked={state.hh}
+    icon="/images/icons/hh.png"
+    iconAlt="Hellhound"
+  />
+  
+  <Checkbox
+    id="phantom-checkbox"
+    name="phantom"
+    label="Phantom Guard"
+    checked={state.phantom}
+    icon="/images/icons/phantom.png"
+    iconAlt="Phantom"
+  />
+  
+  <Checkbox
+    id="ad-checkbox"
+    name="ad"
+    label="Animate Dead"
+    checked={state.ad}
+    icon="/images/icons/ad.png"
+    iconAlt="Animate Dead"
+  />
+</div>
+
+<script type="module">
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = value ?? '0';
+  };
+
+  const setSelectValue = (id, value) => {
+    const el = document.getElementById(id);
+      if (!el) return;
+      el.value = String(value);
+  };
+
+  const setCheckbox = (id, value) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.checked = Boolean(value);
+  };
+
+  const setInputValue = (id, value) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = value ?? '';
+  };
+
+  const fmt = (v) => (v != null ? v.toLocaleString() : '0');
+
+  function updateInputs() {
+    const state = calculatorState.getAll()
+
+    setCheckbox('disr-checkbox', state.disr)
+    setCheckbox('cade-checkbox', state.cade)
+    setSelectValue('divert_res_check-menu', state.divert_res_check)
+    setCheckbox('refl-checkbox', state.refl)
+    setCheckbox('debil-checkbox', state.debil)
+    setSelectValue('sd-menu', state.sd)
+    setCheckbox('immort-checkbox', state.immort)
+    setCheckbox('anti-checkbox', state.anti)
+    setCheckbox('ful-checkbox', state.ful)
+    setInputValue('aura-menu', state.aura)
+    setCheckbox('zerk-checkbox', state.zerk)
+    setCheckbox('pulv-checkbox', state.pulv)
+    setCheckbox('sever-checkbox', state.sever)
+    setInputValue('absorb-menu', state.absorb)
+    setCheckbox('enfeeble-checkbox', state.enfeeble)
+    setInputValue('emerald-menu', state.emerald)
+    setCheckbox('anchor-checkbox', state.anchor)
+    setCheckbox('darklight-checkbox', state.darklight)
+    setCheckbox('darkness-checkbox', state.darkness)
+    setCheckbox('deflect-checkbox', state.deflect)
+    setCheckbox('fort-checkbox', state.fort)
+    setCheckbox('dw-checkbox', state.dw)
+    setCheckbox('hh-checkbox', state.hh)
+    setCheckbox('phantom-checkbox', state.phantom)
+    setCheckbox('ad-checkbox', state.ad)
+    
+  }
+
+  document.addEventListener(
+    'calculator-results-updated',
+    (e) => {
+      updateInputs()    
+    }
+  );
+</script>
