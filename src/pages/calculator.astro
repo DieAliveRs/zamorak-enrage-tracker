@@ -2,12 +2,16 @@
 // src/pages/calculator.astro
 import LayoutSidebar from "../app/LayoutSidebar.astro";
 import Calculator from "../components/calculator/Calculator.astro";
+
+// // Resolve the bundled URL
+// const calculatorClientUrl = new URL(
+//   "../client/calculatorClient.js",
+//   import.meta.url
+// );
 ---
 
 <LayoutSidebar>
-  <Calculator />
+  <Calculator client:load />
 </LayoutSidebar>
 
-<script type="module">
-  import "../client/calculatorClient.js";
-</script>
+<script type="module" src="/client/calculatorClient.js"></script>
