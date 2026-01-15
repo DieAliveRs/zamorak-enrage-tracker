@@ -20,8 +20,10 @@ const teamsizeOptions = Array.from({ length: 5 }, (_, i) => ({
 // Spec options for Pad 4
 const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
 
-// let pad2Cd = state.cooldown;
-// let pad2Mode = "ticks"; // or "seconds"
+function getAssetPath(path) {
+  const base = import.meta.env.BASE_URL;
+  return `${base}${path}`.replace(/\/\//g, '/');
+}
 ---
 
 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-6">
@@ -106,7 +108,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
           <div class="grid grid-cols-2 gap-3">
             <div class="border border-green-300 dark:border-green-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
               <div class="flex items-center mb-1">
-                <img src="/images/icons/pad1_green.png" alt="pad1-green" class="w-5 h-5 mr-2" />
+                <img src={getAssetPath("/images/icons/pad1_green.png")} alt="pad1-green" class="w-5 h-5 mr-2" />
                 <span class="text-sm text-gray-700 dark:text-gray-300">Adrenaline Gained</span>
               </div>
               <div id="pad1-adren" class="text-lg font-bold text-green-700 dark:text-green-400 font-mono">
@@ -116,7 +118,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
             
             <div class="border border-red-300 dark:border-red-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
               <div class="flex items-center mb-1">
-                <img src="/images/icons/pad1_red.png" alt="pad1-red" class="w-5 h-5 mr-2" />
+                <img src={getAssetPath("/images/icons/pad1_red.png")} alt="pad1-red" class="w-5 h-5 mr-2" />
                 <span class="text-sm text-gray-700 dark:text-gray-300">Twinshot Damage</span>
               </div>
               <div id="pad1-tsdmg" class="text-lg font-bold text-red-700 dark:text-red-400 font-mono">
@@ -147,7 +149,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
           <div class="grid grid-cols-3 gap-3">
             <div class="border border-green-300 dark:border-green-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
               <div class="flex items-center mb-1">
-                <img src="/images/icons/pad6_green.png" alt="pad2-green" class="w-5 h-5 mr-2" />
+                <img src={getAssetPath("/images/icons/pad6_green.png")} alt="pad2-green" class="w-5 h-5 mr-2" />
                 <span class="text-sm text-gray-700 dark:text-gray-300">Final Cooldown</span>
               </div>
               <div id="pad2-cd-ticks" class="text-base font-bold text-gray-900 dark:text-white font-mono">
@@ -160,7 +162,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
             
             <div class="border border-red-300 dark:border-red-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
               <div class="flex items-center mb-1">
-                <img src="/images/icons/pad2_red.png" alt="pad2-red" class="w-5 h-5 mr-2" />
+                <img src={getAssetPath("/images/icons/pad2_red.png")} alt="pad2-red" class="w-5 h-5 mr-2" />
                 <span class="text-sm text-gray-700 dark:text-gray-300">Execute Threshold</span>
               </div>
               <div id="pad2-thresh" class="text-base font-bold text-red-700 dark:text-red-400 font-mono">
@@ -222,7 +224,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
           <div class="border border-purple-300 dark:border-purple-800 rounded p-3 bg-white dark:bg-gray-800 mt-2">
             <div class="flex items-center justify-between">
               <div class="flex items-center">
-                <img src="/images/icons/pad4_red.png" alt="pad4-red" class="w-5 h-5 mr-2" />
+                <img src={getAssetPath("/images/icons/pad4_red.png")} alt="pad4-red" class="w-5 h-5 mr-2" />
                 <span class="text-sm text-gray-700 dark:text-gray-300">Effectiveness</span>
               </div>
               <div id="pad4-effectiveness" class="text-lg font-bold text-purple-700 dark:text-purple-400 font-mono">
@@ -240,7 +242,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
         <div class="grid grid-cols-3 gap-3">
           <div class="border border-blue-300 dark:border-blue-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
             <div class="flex items-center mb-1">
-              <img src="/images/icons/maxhp.png" alt="pad6-hp" class="w-5 h-5 mr-2" />
+              <img src={getAssetPath("/images/icons/maxhp.png")} alt="pad6-hp" class="w-5 h-5 mr-2" />
               <span class="text-sm text-gray-700 dark:text-gray-300">HP Needed</span>
             </div>
             <div id="pad6-hpneeded" class="text-base font-bold text-blue-700 dark:text-blue-400 font-mono">
@@ -250,7 +252,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
           
           <div class="border border-green-300 dark:border-green-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
             <div class="flex items-center mb-1">
-              <img src="/images/icons/pad6_green.png" alt="pad6-green" class="w-5 h-5 mr-2" />
+              <img src={getAssetPath("/images/icons/pad6_green.png")} alt="pad6-green" class="w-5 h-5 mr-2" />
               <span class="text-sm text-gray-700 dark:text-gray-300">Damage Bonus</span>
             </div>
             <div id="pad6-dmgbonus" class="text-base font-bold text-green-700 dark:text-green-400 font-mono">
@@ -260,7 +262,7 @@ const specOptions = ["Other", "Smoke", "Decimation", "P7 Bomb"];
           
           <div class="border border-red-300 dark:border-red-800 rounded p-3 bg-white dark:bg-gray-800 space-y-1">
             <div class="flex items-center mb-1">
-              <img src="/images/icons/pad2_red.png" alt="pad6-red" class="w-5 h-5 mr-2" />
+              <img src={getAssetPath("/images/icons/pad2_red.png")} alt="pad6-red" class="w-5 h-5 mr-2" />
               <span class="text-sm text-gray-700 dark:text-gray-300">Healing Reduction</span>
             </div>
             <div id="pad6-healingred" class="text-base font-bold text-red-700 dark:text-red-400 font-mono">
