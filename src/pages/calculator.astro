@@ -1,4 +1,5 @@
 ---
+// src/pages/calculator.astro
 import LayoutSidebar from "../app/LayoutSidebar.astro";
 import Calculator from "../components/calculator/Calculator.astro";
 ---
@@ -7,7 +8,6 @@ import Calculator from "../components/calculator/Calculator.astro";
   <Calculator />
 </LayoutSidebar>
 
-<script
-  type="module"
-  src={`${import.meta.env.BASE_URL}client/calculatorClient.js`}
-></script>
+<script type="module">
+  import "../client/calculatorClient.js";
+</script>
