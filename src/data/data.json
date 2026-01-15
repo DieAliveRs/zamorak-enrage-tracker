@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-15T05:59:54.936627+00:00",
-    "count": 3542
+    "generated_at": "2026-01-15T06:48:28.776109+00:00",
+    "count": 3548
   },
   "records": [
     {
@@ -9876,6 +9876,16 @@
     },
     {
       "enrage": 16780,
+      "timeOfKill": 1768459170,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 513.60004
+    },
+    {
+      "enrage": 16780,
       "timeOfKill": 1752751860,
       "members": [
         {
@@ -9883,6 +9893,16 @@
         }
       ],
       "killTimeSeconds": 726.0
+    },
+    {
+      "enrage": 16770,
+      "timeOfKill": 1768458540,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 540.60004
     },
     {
       "enrage": 16770,
@@ -9896,6 +9916,16 @@
     },
     {
       "enrage": 16760,
+      "timeOfKill": 1768457940,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 544.80005
+    },
+    {
+      "enrage": 16760,
       "timeOfKill": 1752750240,
       "members": [
         {
@@ -9903,6 +9933,16 @@
         }
       ],
       "killTimeSeconds": 936.00006
+    },
+    {
+      "enrage": 16750,
+      "timeOfKill": 1768457100,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 666.0
     },
     {
       "enrage": 16750,
@@ -24306,6 +24346,16 @@
     },
     {
       "enrage": 9370,
+      "timeOfKill": 1768459526,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 733.80005
+    },
+    {
+      "enrage": 9370,
       "timeOfKill": 1759582740,
       "members": [
         {
@@ -24323,6 +24373,16 @@
         }
       ],
       "killTimeSeconds": 882.60004
+    },
+    {
+      "enrage": 9360,
+      "timeOfKill": 1768458600,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 865.2
     },
     {
       "enrage": 9360,
