@@ -1,6 +1,11 @@
 ---
 // src/components/calculator/ui/Checkbox.astro
 
+function getAssetPath(path) {
+  const base = import.meta.env.BASE_URL;
+  return `${base}${path}`.replace(/\/\//g, '/');
+}
+
 export interface Props {
   id?: string;
   name: string;
@@ -41,7 +46,7 @@ const labelFlexClass = labelFlex === 'grow' ? 'flex-1' : 'flex-shrink-0';
   {icon && (
     <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center">
       <img
-        src={icon}
+        src={getAssetPath(icon)}
         alt={iconAlt}
         class="max-w-full max-h-full object-contain"
       />
