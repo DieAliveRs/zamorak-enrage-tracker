@@ -1,9 +1,29 @@
 {
   "meta": {
-    "generated_at": "2026-01-16T15:53:46.137036+00:00",
-    "count": 3603
+    "generated_at": "2026-01-16T16:33:27.958204+00:00",
+    "count": 3605
   },
   "records": [
+    {
+      "enrage": 28330,
+      "timeOfKill": 1768580652,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 717.0
+    },
+    {
+      "enrage": 28320,
+      "timeOfKill": 1768579620,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 744.60004
+    },
     {
       "enrage": 28310,
       "timeOfKill": 1768575502,
