@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-17T19:58:13.855881+00:00",
-    "count": 3653
+    "generated_at": "2026-01-17T20:31:10.631799+00:00",
+    "count": 3654
   },
   "records": [
     {
@@ -9913,6 +9913,16 @@
         }
       ],
       "killTimeSeconds": 879.60004
+    },
+    {
+      "enrage": 17140,
+      "timeOfKill": 1768681113,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 673.2
     },
     {
       "enrage": 17140,
