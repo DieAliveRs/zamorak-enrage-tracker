@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-18T20:32:02.352448+00:00",
-    "count": 3721
+    "generated_at": "2026-01-18T20:50:32.807526+00:00",
+    "count": 3722
   },
   "records": [
     {
@@ -27113,6 +27113,16 @@
         }
       ],
       "killTimeSeconds": 815.4
+    },
+    {
+      "enrage": 9050,
+      "timeOfKill": 1768768678,
+      "members": [
+        {
+          "name": "Niebla"
+        }
+      ],
+      "killTimeSeconds": 538.2
     },
     {
       "enrage": 9050,
