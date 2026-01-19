@@ -1,9 +1,39 @@
 {
   "meta": {
-    "generated_at": "2026-01-19T16:36:31.109317+00:00",
-    "count": 3769
+    "generated_at": "2026-01-19T17:36:32.749073+00:00",
+    "count": 3775
   },
   "records": [
+    {
+      "enrage": 28730,
+      "timeOfKill": 1768843776,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 687.0
+    },
+    {
+      "enrage": 28720,
+      "timeOfKill": 1768842600,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 682.2
+    },
+    {
+      "enrage": 28710,
+      "timeOfKill": 1768840740,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 686.4
+    },
     {
       "enrage": 28700,
       "timeOfKill": 1768837743,
@@ -2673,6 +2703,26 @@
         }
       ],
       "killTimeSeconds": 800.4
+    },
+    {
+      "enrage": 24830,
+      "timeOfKill": 1768841811,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 843.60004
+    },
+    {
+      "enrage": 24820,
+      "timeOfKill": 1768840860,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 776.4
     },
     {
       "enrage": 24810,
@@ -9873,6 +9923,16 @@
         }
       ],
       "killTimeSeconds": 864.60004
+    },
+    {
+      "enrage": 17600,
+      "timeOfKill": 1768841442,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 683.4
     },
     {
       "enrage": 17600,
