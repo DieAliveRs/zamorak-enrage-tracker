@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-01-19T20:31:59.038331+00:00",
-    "count": 3781
+    "generated_at": "2026-01-19T20:52:44.469518+00:00",
+    "count": 3782
   },
   "records": [
     {
@@ -2703,6 +2703,16 @@
         }
       ],
       "killTimeSeconds": 800.4
+    },
+    {
+      "enrage": 24890,
+      "timeOfKill": 1768855333,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 975.60004
     },
     {
       "enrage": 24880,
