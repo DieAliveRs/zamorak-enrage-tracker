@@ -1927,37 +1927,49 @@ const playersData = {
     const sortedMain = [...mainKills].sort((a, b) => a.timeOfKill - b.timeOfKill);
     const sortedComp = [...comparisonKills].sort((a, b) => a.timeOfKill - b.timeOfKill);
     
-    let mainIdx = 0, compIdx = 0;
-    let currentMain = null, currentComp = null;
-    const differencePoints = [];
+    const points = [];
+    let mainIdx = 0;
+    let compIdx = 0;
+    let currentMainEnrage = null; // Assuming starting enrage is 0
+    let currentCompEnrage = null; // Assuming starting enrage is 0
     
-    while (mainIdx < sortedMain.length && compIdx < sortedComp.length) {
-      const mainTime = sortedMain[mainIdx].timeOfKill;
-      const compTime = sortedComp[compIdx].timeOfKill;
-      
-      if (mainTime <= compTime) {
-        currentMain = sortedMain[mainIdx].enrage;
-        mainIdx++;
-      }
-      
-      if (compTime <= mainTime) {
-        currentComp = sortedComp[compIdx].enrage;
-        compIdx++;
-      }
-      
-      if (currentMain !== null && currentComp !== null) {
-        differencePoints.push({
-          x: Math.min(mainTime, compTime) * 1000,
-          y: currentMain - currentComp,
-          mainEnrage: currentMain,
-          compEnrage: currentComp,
-          timeOfKill: Math.min(mainTime, compTime)
-        });
-      }
+    // Process both arrays in chronological order
+    while (mainIdx < sortedMain.length || compIdx < sortedComp.length) {
+        // Determine which event comes next
+        const mainTime = mainIdx < sortedMain.length ? sortedMain[mainIdx].timeOfKill : Infinity;
+        const compTime = compIdx < sortedComp.length ? sortedComp[compIdx].timeOfKill : Infinity;
+        
+        if (mainTime <= compTime) {
+            // Process main kill
+            currentMainEnrage = sortedMain[mainIdx].enrage;
+            if (currentMainEnrage !== null && currentCompEnrage !== null) {
+              points.push({
+                  x: mainTime * 1000,
+                  y: currentMainEnrage - currentCompEnrage,
+                  mainEnrage: currentMainEnrage,
+                  compEnrage: currentCompEnrage,
+                  timeOfKill: mainTime
+              });
+            }
+            mainIdx++;
+        } else {
+            // Process comparison kill
+            currentCompEnrage = sortedComp[compIdx].enrage;
+            if (currentMainEnrage !== null && currentCompEnrage !== null) {
+              points.push({
+                  x: compTime * 1000,
+                  y: currentMainEnrage - currentCompEnrage,
+                  mainEnrage: currentMainEnrage,
+                  compEnrage: currentCompEnrage,
+                  timeOfKill: compTime
+              });
+            }
+            compIdx++;
+        }
     }
     
-    return differencePoints;
-  }
+    return points;
+}
 
   function initializeDifferenceChart(mainKills, comparisonKills) {
     if (typeof Chart === 'undefined') {
