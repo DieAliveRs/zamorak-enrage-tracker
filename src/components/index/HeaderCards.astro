@@ -48,6 +48,81 @@ function getRSIconUrl(playerName: string): string | null {
 const highestPlayerAvatar = highestEnrageRecord ? getRSIconUrl(highestPlayer) : null;
 const mostRecentPlayerAvatar = mostRecentKill ? getRSIconUrl(mostRecentKill.members[0]?.name || 'Unknown') : null;
 
+function getEnrageColorClass(enrage) {
+  if (enrage >= 55000) return 'text-[#FF5B5A] dark:text-[#FF5B5A]';
+  if (enrage >= 50000) return 'text-[#F65B7C] dark:text-[#FF6E5F]';
+  if (enrage >= 45000) return 'text-[#E665A2] dark:text-[#FF8361]';
+  if (enrage >= 40000) return 'text-[#D065B8] dark:text-[#FF9A62]';
+  if (enrage >= 35000) return 'text-[#B06CBC] dark:text-[#FFB369]';
+  if (enrage >= 30000) return 'text-[#8E6CC0] dark:text-[#FFC870]';
+  if (enrage >= 25000) return 'text-[#766CC0] dark:text-[#FFD37E]';
+  if (enrage >= 20000) return 'text-[#6064A7] dark:text-[#FFE396]';
+  if (enrage >= 15000) return 'text-[#576190] dark:text-[#FFECAC]';
+  if (enrage >= 10000) return 'text-[#535974] dark:text-[#FFF1C1]';
+  if (enrage >= 5000) return 'text-[#474D64] dark:text-[#FFF5D1]';
+  return 'text-[#474D64] dark:text-[#FFF5D1]';
+}
+
+function getBracketProgressColor(minEnrage) {
+  if (minEnrage >= 55000) return 'bg-[#FF5B5A] dark:bg-[#FF5B5A]';
+  if (minEnrage >= 50000) return 'bg-[#F65B7C] dark:bg-[#FF6E5F]';
+  if (minEnrage >= 45000) return 'bg-[#E665A2] dark:bg-[#FF8361]';
+  if (minEnrage >= 40000) return 'bg-[#D065B8] dark:bg-[#FF9A62]';
+  if (minEnrage >= 35000) return 'bg-[#B06CBC] dark:bg-[#FFB369]';
+  if (minEnrage >= 30000) return 'bg-[#8E6CC0] dark:bg-[#FFC870]';
+  if (minEnrage >= 25000) return 'bg-[#766CC0] dark:bg-[#FFD37E]';
+  if (minEnrage >= 20000) return 'bg-[#6064A7] dark:bg-[#FFE396]';
+  if (minEnrage >= 15000) return 'bg-[#576190] dark:bg-[#FFECAC]';
+  if (minEnrage >= 10000) return 'bg-[#535974] dark:bg-[#FFF1C1]';
+  if (minEnrage >= 5000) return 'bg-[#474D64] dark:bg-[#FFF5D1]';
+  return 'bg-[#474D64] dark:bg-[#FFF5D1]';
+}
+
+function getEnrageCardClass(enrageValue) {
+  if (enrageValue >= 55000) return 'bg-gradient-to-br from-[#FFE8E8] to-[#FFD6D6] dark:from-[#FF5B5A]/20 dark:to-[#FF5B5A]/10 border-[#FF5B5A]/30 dark:border-[#FF5B5A]/30';
+  if (enrageValue >= 50000) return 'bg-gradient-to-br from-[#FFE8F0] to-[#FFD6E4] dark:from-[#FF6E5F]/20 dark:to-[#FF6E5F]/10 border-[#F65B7C]/30 dark:border-[#FF6E5F]/30';
+  if (enrageValue >= 45000) return 'bg-gradient-to-br from-[#F8E8F3] to-[#F3D6EB] dark:from-[#FF8361]/20 dark:to-[#FF8361]/10 border-[#E665A2]/30 dark:border-[#FF8361]/30';
+  if (enrageValue >= 40000) return 'bg-gradient-to-br from-[#F0E8F8] to-[#E8D6F8] dark:from-[#FF9A62]/20 dark:to-[#FF9A62]/10 border-[#D065B8]/30 dark:border-[#FF9A62]/30';
+  if (enrageValue >= 35000) return 'bg-gradient-to-br from-[#ECE8F8] to-[#E0D6F8] dark:from-[#FFB369]/20 dark:to-[#FFB369]/10 border-[#B06CBC]/30 dark:border-[#FFB369]/30';
+  if (enrageValue >= 30000) return 'bg-gradient-to-br from-[#E8E8F8] to-[#D8D6F8] dark:from-[#FFC870]/20 dark:to-[#FFC870]/10 border-[#8E6CC0]/30 dark:border-[#FFC870]/30';
+  if (enrageValue >= 25000) return 'bg-gradient-to-br from-[#E8E8F8] to-[#D6D6F8] dark:from-[#FFD37E]/20 dark:to-[#FFD37E]/10 border-[#766CC0]/30 dark:border-[#FFD37E]/30';
+  if (enrageValue >= 20000) return 'bg-gradient-to-br from-[#E8E8F5] to-[#D6D6F0] dark:from-[#FFE396]/20 dark:to-[#FFE396]/10 border-[#6064A7]/30 dark:border-[#FFE396]/30';
+  if (enrageValue >= 15000) return 'bg-gradient-to-br from-[#E8EAF5] to-[#D6D9F0] dark:from-[#FFECAC]/20 dark:to-[#FFECAC]/10 border-[#576190]/30 dark:border-[#FFECAC]/30';
+  if (enrageValue >= 10000) return 'bg-gradient-to-br from-[#E8EAF2] to-[#D6D9ED] dark:from-[#FFF1C1]/20 dark:to-[#FFF1C1]/10 border-[#535974]/30 dark:border-[#FFF1C1]/30';
+  if (enrageValue >= 5000) return 'bg-gradient-to-br from-[#E8E9F2] to-[#D6D8ED] dark:from-[#FFF5D1]/20 dark:to-[#FFF5D1]/10 border-[#474D64]/30 dark:border-[#FFF5D1]/30';
+  return 'bg-gradient-to-br from-[#E8E9F2] to-[#D6D8ED] dark:from-[#FFF5D1]/20 dark:to-[#FFF5D1]/10 border-[#474D64]/30 dark:border-[#FFF5D1]/30';
+}
+
+function getBorderColor(enrageValue) {
+  if (enrageValue >= 55000) return 'border-[#FF4A4A] dark:border-[#FF5B5A]';
+  if (enrageValue >= 50000) return 'border-[#E54A6E] dark:border-[#FF6E5F]';
+  if (enrageValue >= 45000) return 'border-[#D15592] dark:border-[#FF8361]';
+  if (enrageValue >= 40000) return 'border-[#C155A8] dark:border-[#FF9A62]';
+  if (enrageValue >= 35000) return 'border-[#A05CAC] dark:border-[#FFB369]';
+  if (enrageValue >= 30000) return 'border-[#7E5CB0] dark:border-[#FFC870]';
+  if (enrageValue >= 25000) return 'border-[#665CB0] dark:border-[#FFD37E]';
+  if (enrageValue >= 20000) return 'border-[#505497] dark:border-[#FFE396]';
+  if (enrageValue >= 15000) return 'border-[#475180] dark:border-[#FFECAC]';
+  if (enrageValue >= 10000) return 'border-[#434964] dark:border-[#FFF1C1]';
+  if (enrageValue >= 5000) return 'border-[#373D54] dark:border-[#FFF5D1]';
+  return 'border-[#373D54] dark:border-[#FFF5D1]';
+}
+
+function getIconGradient(enrageValue) {
+  if (enrageValue >= 55000) return 'from-[#FF6B6B] to-[#FF5B5A] dark:from-[#FF5B5A] dark:to-[#FF4A4A]';
+  if (enrageValue >= 50000) return 'from-[#FF6B8C] to-[#F65B7C] dark:from-[#FF6E5F] dark:to-[#FF5B4A]';
+  if (enrageValue >= 45000) return 'from-[#F675B2] to-[#E665A2] dark:from-[#FF8361] dark:to-[#FF704A]';
+  if (enrageValue >= 40000) return 'from-[#E075C8] to-[#D065B8] dark:from-[#FF9A62] dark:to-[#FF864A]';
+  if (enrageValue >= 35000) return 'from-[#C07CCC] to-[#B06CBC] dark:from-[#FFB369] dark:to-[#FF9C4A]';
+  if (enrageValue >= 30000) return 'from-[#9E7CD0] to-[#8E6CC0] dark:from-[#FFC870] dark:to-[#FFB24A]';
+  if (enrageValue >= 25000) return 'from-[#867CD0] to-[#766CC0] dark:from-[#FFD37E] dark:to-[#FFC74A]';
+  if (enrageValue >= 20000) return 'from-[#7074B7] to-[#6064A7] dark:from-[#FFE396] dark:to-[#FFDC4A]';
+  if (enrageValue >= 15000) return 'from-[#6771A0] to-[#576190] dark:from-[#FFECAC] dark:to-[#FFEC7A]';
+  if (enrageValue >= 10000) return 'from-[#636984] to-[#535974] dark:from-[#FFF1C1] dark:to-[#FFF19E]';
+  if (enrageValue >= 5000) return 'from-[#575D74] to-[#474D64] dark:from-[#FFF5D1] dark:to-[#FFF5BE]';
+  return 'from-[#575D74] to-[#474D64] dark:from-[#FFF5D1] dark:to-[#FFF5BE]';
+}
+
 // For client-side script
 const scriptData = {
   mostRecentKill,
@@ -59,10 +134,7 @@ const scriptData = {
 <!-- Header Cards Container -->
 <div class="px-4 pt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4" id="header-cards">
   <!-- Highest Enrage Card -->
-  <div class="bg-gradient-to-br from-red-50 to-red-100 
-              dark:bg-gradient-to-br dark:from-red-900/30 dark:to-red-800/20 
-              p-6 rounded-xl shadow-lg dark:shadow-gray-900/30
-              border-2 border-red-200 dark:border-red-900/30">
+  <div class={`${getEnrageCardClass(highestEnrage)} p-6 rounded-xl shadow-lg dark:shadow-gray-900/30 border-2`}>
     <div class="flex items-center">
       {highestEnrage <= 0 ? (
         <!-- No enrage data case -->
@@ -85,14 +157,14 @@ const scriptData = {
           <div class="mr-4">
             {highestPlayerAvatar ? (
               <img src={highestPlayerAvatar} alt={highestPlayer} 
-                   class="w-12 h-12 min-w-12 min-h-12 rounded-full border-2 border-yellow-400 dark:border-yellow-600 bg-white dark:bg-gray-800 shadow-lg transform hover:scale-105 transition-transform duration-200" />
+                   class={`w-12 h-12 min-w-12 min-h-12 rounded-full border-2 ${getBorderColor(highestEnrage)} bg-gradient-to-r ${getIconGradient(highestEnrage)} shadow-lg transform hover:scale-105 transition-transform duration-200`} />
             ) : (
               <div class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-600 dark:from-yellow-700 dark:to-yellow-800 flex items-center justify-center text-white shadow">👑</div>
             )}
           </div>
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">Highest Enrage</p>
-            <p class="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+            <p class={`text-3xl font-bold ${getEnrageColorClass(highestEnrage)} mt-1`}>
               {highestEnrage.toLocaleString()}%
             </p>
             <a 
@@ -116,14 +188,7 @@ const scriptData = {
           <span class="font-semibold text-gray-900 dark:text-white">Max: 60,000%</span>
         </div>
         <div class="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-          <div class="bg-gradient-to-r
-            from-blue-400
-            via-cyan-400
-            to-red-800
-            dark:from-blue-400
-            dark:via-cyan-400
-            dark:to-red-800
-            h-2 rounded-full"
+          <div class={`${getBracketProgressColor(highestEnrage)} h-2 rounded-full`}
             style={`width: ${Math.min(highestEnrage / 60000 * 100, 100)}%`}>
           </div>
         </div>
