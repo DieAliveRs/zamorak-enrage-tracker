@@ -1,7 +1,6 @@
 ---
 import killData from '../../data/data.json';
 
-// Helper functions moved to the top for clarity
 function normalizePlayerName(name) {
   if (!name) return name;
   
@@ -524,18 +523,18 @@ const playersData = {
   }
 
   function getEnrageColorClass(enrage) {
-    if (enrage >= 55000) return 'text-red-900 dark:text-red-800';
-    if (enrage >= 50000) return 'text-red-800 dark:text-red-700';
-    if (enrage >= 45000) return 'text-red-700 dark:text-red-500';
-    if (enrage >= 40000) return 'text-orange-700 dark:text-orange-600';
-    if (enrage >= 35000) return 'text-orange-600 dark:text-orange-400';
-    if (enrage >= 30000) return 'text-yellow-600 dark:text-yellow-500';
-    if (enrage >= 25000) return 'text-yellow-500 dark:text-yellow-400';
-    if (enrage >= 20000) return 'text-green-500 dark:text-green-400';
-    if (enrage >= 15000) return 'text-green-400 dark:text-green-300';
-    if (enrage >= 10000) return 'text-teal-400 dark:text-teal-300';
-    if (enrage >= 5000) return 'text-cyan-500 dark:text-cyan-400';
-    return 'text-blue-600 dark:text-blue-400';
+    if (enrage >= 55000) return 'text-[#FF5B5A] dark:text-[#FF5B5A]';
+    if (enrage >= 50000) return 'text-[#F65B7C] dark:text-[#FF6E5F]';
+    if (enrage >= 45000) return 'text-[#E665A2] dark:text-[#FF8361]';
+    if (enrage >= 40000) return 'text-[#D065B8] dark:text-[#FF9A62]';
+    if (enrage >= 35000) return 'text-[#B06CBC] dark:text-[#FFB369]';
+    if (enrage >= 30000) return 'text-[#8E6CC0] dark:text-[#FFC870]';
+    if (enrage >= 25000) return 'text-[#766CC0] dark:text-[#FFD37E]';
+    if (enrage >= 20000) return 'text-[#6064A7] dark:text-[#FFE396]';
+    if (enrage >= 15000) return 'text-[#576190] dark:text-[#FFECAC]';
+    if (enrage >= 10000) return 'text-[#535974] dark:text-[#FFF1C1]';
+    if (enrage >= 5000) return 'text-[#474D64] dark:text-[#FFF5D1]';
+    return 'text-[#474D64] dark:text-[#FFF5D1]';
   }
 
   function formatDuration(seconds) {
@@ -819,6 +818,25 @@ const playersData = {
     }
   }
 
+  function calculateETA(currentEnrage, bracketMin, bracketMax, avgEnragePerDay) {
+    if (!avgEnragePerDay || avgEnragePerDay <= 0 || currentEnrage > bracketMax) return 'N/A';
+    
+    const remainingEnrage = bracketMax - currentEnrage;
+    const daysRemaining = remainingEnrage / avgEnragePerDay;
+    
+    if (daysRemaining <= 0) return 'Complete';
+    if (daysRemaining < 1) return '<1 day';
+    
+    const weeks = Math.floor(daysRemaining / 7);
+    const remainingDays = Math.ceil(daysRemaining % 7);
+    
+    if (weeks > 0) {
+      return `${weeks} week${weeks !== 1 ? 's' : ''}${remainingDays > 0 ? ` ${remainingDays} day${remainingDays !== 1 ? 's' : ''}` : ''}`;
+    } else {
+      return `${Math.ceil(daysRemaining)} day${Math.ceil(daysRemaining) !== 1 ? 's' : ''}`;
+    }
+  }
+
   // ========== CARD COLOR FUNCTIONS ==========
   function updateHighestEnrageCardColors(enrage) {
     const card = document.getElementById('highest-enrage-card');
@@ -836,48 +854,48 @@ const playersData = {
   }
 
   function getEnrageCardClass(enrageValue) {
-    if (enrageValue >= 55000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-800/20 border-red-200 dark:border-red-900/30';
-    if (enrageValue >= 50000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-800/30 dark:to-red-700/20 border-red-200 dark:border-red-800/30';
-    if (enrageValue >= 45000) return 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-700/30 dark:to-red-600/20 border-red-200 dark:border-red-700/30';
-    if (enrageValue >= 40000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-800/30 dark:to-orange-700/20 border-orange-200 dark:border-orange-800/30';
-    if (enrageValue >= 35000) return 'bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-700/30 dark:to-orange-600/20 border-orange-200 dark:border-orange-700/30';
-    if (enrageValue >= 30000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-800/30 dark:to-yellow-700/20 border-yellow-200 dark:border-yellow-800/30';
-    if (enrageValue >= 25000) return 'bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-700/30 dark:to-yellow-600/20 border-yellow-200 dark:border-yellow-700/30';
-    if (enrageValue >= 20000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-800/30 dark:to-green-700/20 border-green-200 dark:border-green-800/30';
-    if (enrageValue >= 15000) return 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-700/30 dark:to-green-600/20 border-green-200 dark:border-green-700/30';
-    if (enrageValue >= 10000) return 'bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-800/30 dark:to-teal-700/20 border-teal-200 dark:border-teal-800/30';
-    if (enrageValue >= 5000) return 'bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-800/30 dark:to-cyan-700/20 border-cyan-200 dark:border-cyan-800/30';
-    return 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-800/30 dark:to-blue-700/20 border-blue-200 dark:border-blue-800/30';
+    if (enrageValue >= 55000) return 'bg-gradient-to-br from-[#FFE8E8] to-[#FFD6D6] dark:from-[#FF5B5A]/20 dark:to-[#FF5B5A]/10 border-[#FF5B5A]/30 dark:border-[#FF5B5A]/30';
+    if (enrageValue >= 50000) return 'bg-gradient-to-br from-[#FFE8F0] to-[#FFD6E4] dark:from-[#FF6E5F]/20 dark:to-[#FF6E5F]/10 border-[#F65B7C]/30 dark:border-[#FF6E5F]/30';
+    if (enrageValue >= 45000) return 'bg-gradient-to-br from-[#F8E8F3] to-[#F3D6EB] dark:from-[#FF8361]/20 dark:to-[#FF8361]/10 border-[#E665A2]/30 dark:border-[#FF8361]/30';
+    if (enrageValue >= 40000) return 'bg-gradient-to-br from-[#F0E8F8] to-[#E8D6F8] dark:from-[#FF9A62]/20 dark:to-[#FF9A62]/10 border-[#D065B8]/30 dark:border-[#FF9A62]/30';
+    if (enrageValue >= 35000) return 'bg-gradient-to-br from-[#ECE8F8] to-[#E0D6F8] dark:from-[#FFB369]/20 dark:to-[#FFB369]/10 border-[#B06CBC]/30 dark:border-[#FFB369]/30';
+    if (enrageValue >= 30000) return 'bg-gradient-to-br from-[#E8E8F8] to-[#D8D6F8] dark:from-[#FFC870]/20 dark:to-[#FFC870]/10 border-[#8E6CC0]/30 dark:border-[#FFC870]/30';
+    if (enrageValue >= 25000) return 'bg-gradient-to-br from-[#E8E8F8] to-[#D6D6F8] dark:from-[#FFD37E]/20 dark:to-[#FFD37E]/10 border-[#766CC0]/30 dark:border-[#FFD37E]/30';
+    if (enrageValue >= 20000) return 'bg-gradient-to-br from-[#E8E8F5] to-[#D6D6F0] dark:from-[#FFE396]/20 dark:to-[#FFE396]/10 border-[#6064A7]/30 dark:border-[#FFE396]/30';
+    if (enrageValue >= 15000) return 'bg-gradient-to-br from-[#E8EAF5] to-[#D6D9F0] dark:from-[#FFECAC]/20 dark:to-[#FFECAC]/10 border-[#576190]/30 dark:border-[#FFECAC]/30';
+    if (enrageValue >= 10000) return 'bg-gradient-to-br from-[#E8EAF2] to-[#D6D9ED] dark:from-[#FFF1C1]/20 dark:to-[#FFF1C1]/10 border-[#535974]/30 dark:border-[#FFF1C1]/30';
+    if (enrageValue >= 5000) return 'bg-gradient-to-br from-[#E8E9F2] to-[#D6D8ED] dark:from-[#FFF5D1]/20 dark:to-[#FFF5D1]/10 border-[#474D64]/30 dark:border-[#FFF5D1]/30';
+    return 'bg-gradient-to-br from-[#E8E9F2] to-[#D6D8ED] dark:from-[#FFF5D1]/20 dark:to-[#FFF5D1]/10 border-[#474D64]/30 dark:border-[#FFF5D1]/30';
   }
 
   function getBorderColor(enrageValue) {
-    if (enrageValue >= 55000) return 'border-red-900 dark:border-red-800';
-    if (enrageValue >= 50000) return 'border-red-800 dark:border-red-700';
-    if (enrageValue >= 45000) return 'border-red-700 dark:border-red-500';
-    if (enrageValue >= 40000) return 'border-orange-700 dark:border-orange-600';
-    if (enrageValue >= 35000) return 'border-orange-600 dark:border-orange-400';
-    if (enrageValue >= 30000) return 'border-yellow-600 dark:border-yellow-500';
-    if (enrageValue >= 25000) return 'border-yellow-500 dark:border-yellow-400';
-    if (enrageValue >= 20000) return 'border-green-500 dark:border-green-400';
-    if (enrageValue >= 15000) return 'border-green-400 dark:border-green-300';
-    if (enrageValue >= 10000) return 'border-teal-400 dark:border-teal-300';
-    if (enrageValue >= 5000) return 'border-cyan-500 dark:border-cyan-400';
-    return 'border-blue-600 dark:border-blue-400';
+    if (enrageValue >= 55000) return 'border-[#FF4A4A] dark:border-[#FF5B5A]';
+    if (enrageValue >= 50000) return 'border-[#E54A6E] dark:border-[#FF6E5F]';
+    if (enrageValue >= 45000) return 'border-[#D15592] dark:border-[#FF8361]';
+    if (enrageValue >= 40000) return 'border-[#C155A8] dark:border-[#FF9A62]';
+    if (enrageValue >= 35000) return 'border-[#A05CAC] dark:border-[#FFB369]';
+    if (enrageValue >= 30000) return 'border-[#7E5CB0] dark:border-[#FFC870]';
+    if (enrageValue >= 25000) return 'border-[#665CB0] dark:border-[#FFD37E]';
+    if (enrageValue >= 20000) return 'border-[#505497] dark:border-[#FFE396]';
+    if (enrageValue >= 15000) return 'border-[#475180] dark:border-[#FFECAC]';
+    if (enrageValue >= 10000) return 'border-[#434964] dark:border-[#FFF1C1]';
+    if (enrageValue >= 5000) return 'border-[#373D54] dark:border-[#FFF5D1]';
+    return 'border-[#373D54] dark:border-[#FFF5D1]';
   }
 
   function getIconGradient(enrageValue) {
-    if (enrageValue >= 55000) return 'from-red-500 to-red-600 dark:from-red-700 dark:to-red-800';
-    if (enrageValue >= 50000) return 'from-red-400 to-red-500 dark:from-red-600 dark:to-red-700';
-    if (enrageValue >= 45000) return 'from-red-300 to-red-400 dark:from-red-500 dark:to-red-600';
-    if (enrageValue >= 40000) return 'from-orange-400 to-orange-500 dark:from-orange-600 dark:to-orange-700';
-    if (enrageValue >= 35000) return 'from-orange-300 to-orange-400 dark:from-orange-500 dark:to-orange-600';
-    if (enrageValue >= 30000) return 'from-yellow-400 to-yellow-500 dark:from-yellow-600 dark:to-yellow-700';
-    if (enrageValue >= 25000) return 'from-yellow-300 to-yellow-400 dark:from-yellow-500 dark:to-yellow-600';
-    if (enrageValue >= 20000) return 'from-green-400 to-green-500 dark:from-green-600 dark:to-green-700';
-    if (enrageValue >= 15000) return 'from-green-300 to-green-400 dark:from-green-500 dark:to-green-600';
-    if (enrageValue >= 10000) return 'from-teal-400 to-teal-500 dark:from-teal-600 dark:to-teal-700';
-    if (enrageValue >= 5000) return 'from-cyan-400 to-cyan-500 dark:from-cyan-600 dark:to-cyan-700';
-    return 'from-blue-400 to-blue-500 dark:from-blue-600 dark:to-blue-700';
+    if (enrageValue >= 55000) return 'from-[#FF6B6B] to-[#FF5B5A] dark:from-[#FF5B5A] dark:to-[#FF4A4A]';
+    if (enrageValue >= 50000) return 'from-[#FF6B8C] to-[#F65B7C] dark:from-[#FF6E5F] dark:to-[#FF5B4A]';
+    if (enrageValue >= 45000) return 'from-[#F675B2] to-[#E665A2] dark:from-[#FF8361] dark:to-[#FF704A]';
+    if (enrageValue >= 40000) return 'from-[#E075C8] to-[#D065B8] dark:from-[#FF9A62] dark:to-[#FF864A]';
+    if (enrageValue >= 35000) return 'from-[#C07CCC] to-[#B06CBC] dark:from-[#FFB369] dark:to-[#FF9C4A]';
+    if (enrageValue >= 30000) return 'from-[#9E7CD0] to-[#8E6CC0] dark:from-[#FFC870] dark:to-[#FFB24A]';
+    if (enrageValue >= 25000) return 'from-[#867CD0] to-[#766CC0] dark:from-[#FFD37E] dark:to-[#FFC74A]';
+    if (enrageValue >= 20000) return 'from-[#7074B7] to-[#6064A7] dark:from-[#FFE396] dark:to-[#FFDC4A]';
+    if (enrageValue >= 15000) return 'from-[#6771A0] to-[#576190] dark:from-[#FFECAC] dark:to-[#FFEC7A]';
+    if (enrageValue >= 10000) return 'from-[#636984] to-[#535974] dark:from-[#FFF1C1] dark:to-[#FFF19E]';
+    if (enrageValue >= 5000) return 'from-[#575D74] to-[#474D64] dark:from-[#FFF5D1] dark:to-[#FFF5BE]';
+    return 'from-[#575D74] to-[#474D64] dark:from-[#FFF5D1] dark:to-[#FFF5BE]';
   }
 
   function resetHighestEnrageCard() {
@@ -1417,6 +1435,11 @@ const playersData = {
       if (bracketKills.length > 0 && bracketProgress < 1) {
         bracketProgress = 1;
       }
+
+      let etaToFinish = "N/A";
+      if (avgEnrageGainedPerDay > 0) {
+        etaToFinish = calculateETA(Math.max(...sortedKills.map(k => k.enrage)), range.min, range.max, avgEnrageGainedPerDay);
+      }
       
       return {
         ...range,
@@ -1435,6 +1458,7 @@ const playersData = {
         durationFormatted: durationFormatted,
         totalEnrageGained: totalEnrageGained,
         avgEnrageGainedPerDay: avgEnrageGainedPerDay,
+        etaToFinish: etaToFinish,
         
         maxEnrageGainedIn24h: maxEnrageGainedIn24h,
         maxEnrageGainedStartTime: maxEnrageGainedStartTime,
@@ -1507,12 +1531,20 @@ const playersData = {
             </p>
           </div>
           
-          <!-- Avg Enrage/Day -->
+          <!-- Avg Enrage/Day & ETA -->
           <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
             <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Avg Enrage/Day</p>
-            <p class="font-bold text-gray-900 dark:text-white text-lg">
+            <p class="font-bold text-gray-900 dark:text-white text-lg mb-1">
               ${bracket.avgEnrageGainedPerDay > 0 ? '+' : ''}${Math.round(bracket.avgEnrageGainedPerDay).toLocaleString()}%
             </p>
+            ${bracket.avgEnrageGainedPerDay > 0 && bracket.kills > 1 ? `
+              <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">ETA to ${bracket.max === Infinity ? 'next' : bracket.max.toLocaleString() + '%'}</p>
+                <p class="text-sm font-semibold text-black dark:text-white">
+                  ${bracket.etaToFinish}
+                </p>
+              </div>
+            ` : ''}
           </div>
           
           <!-- Avg Time -->
@@ -1529,7 +1561,7 @@ const playersData = {
           <!-- Max Enrage Gain in 24h -->
           <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3">
             <p class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Max Enrage/24h</p>
-            <p class="font-bold ${getEnrageColorClass(bracket.maxEnrageGainedIn24h)} text-lg mb-1">
+            <p class="font-bold ${getEnrageColorClass(bracket.min)} text-lg mb-1">
               ${bracket.maxEnrageGainedIn24h > 0 ? '+' : ''}${Math.round(bracket.maxEnrageGainedIn24h).toLocaleString()}%
             </p>
             ${bracket.formattedMaxEnrageGainPeriod !== '--' ? `
@@ -1622,33 +1654,33 @@ const playersData = {
   }
   
   function getBracketColorClass(minEnrage) {
-    if (minEnrage >= 55000) return 'bg-red-50 dark:bg-red-950/30 text-red-900 dark:text-red-300 border-red-200 dark:border-red-900';
-    if (minEnrage >= 50000) return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800';
-    if (minEnrage >= 45000) return 'bg-red-50 dark:bg-red-800/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800';
-    if (minEnrage >= 40000) return 'bg-orange-50 dark:bg-orange-800/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800';
-    if (minEnrage >= 35000) return 'bg-orange-50 dark:bg-orange-700/30 text-orange-600 dark:text-orange-300 border-orange-200 dark:border-orange-700';
-    if (minEnrage >= 30000) return 'bg-yellow-50 dark:bg-yellow-800/30 text-yellow-600 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800';
-    if (minEnrage >= 25000) return 'bg-yellow-50 dark:bg-yellow-700/30 text-yellow-500 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700';
-    if (minEnrage >= 20000) return 'bg-green-50 dark:bg-green-700/30 text-green-500 dark:text-green-300 border-green-200 dark:border-green-700';
-    if (minEnrage >= 15000) return 'bg-green-50 dark:bg-green-600/30 text-green-400 dark:text-green-300 border-green-200 dark:border-green-600';
-    if (minEnrage >= 10000) return 'bg-teal-50 dark:bg-teal-700/30 text-teal-400 dark:text-teal-300 border-teal-200 dark:border-teal-700';
-    if (minEnrage >= 5000) return 'bg-cyan-50 dark:bg-cyan-700/30 text-cyan-500 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700';
-    return 'bg-blue-50 dark:bg-blue-800/30 text-blue-600 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+    if (minEnrage >= 55000) return 'bg-[#FFE8E8] dark:bg-[#FF5B5A]/20 text-[#FF5B5A] dark:text-[#FF5B5A] border-[#FF5B5A]/30 dark:border-[#FF5B5A]/30';
+    if (minEnrage >= 50000) return 'bg-[#FFE8F0] dark:bg-[#FF6E5F]/20 text-[#F65B7C] dark:text-[#FF6E5F] border-[#F65B7C]/30 dark:border-[#FF6E5F]/30';
+    if (minEnrage >= 45000) return 'bg-[#F8E8F3] dark:bg-[#FF8361]/20 text-[#E665A2] dark:text-[#FF8361] border-[#E665A2]/30 dark:border-[#FF8361]/30';
+    if (minEnrage >= 40000) return 'bg-[#F0E8F8] dark:bg-[#FF9A62]/20 text-[#D065B8] dark:text-[#FF9A62] border-[#D065B8]/30 dark:border-[#FF9A62]/30';
+    if (minEnrage >= 35000) return 'bg-[#ECE8F8] dark:bg-[#FFB369]/20 text-[#B06CBC] dark:text-[#FFB369] border-[#B06CBC]/30 dark:border-[#FFB369]/30';
+    if (minEnrage >= 30000) return 'bg-[#E8E8F8] dark:bg-[#FFC870]/20 text-[#8E6CC0] dark:text-[#FFC870] border-[#8E6CC0]/30 dark:border-[#FFC870]/30';
+    if (minEnrage >= 25000) return 'bg-[#E8E8F8] dark:bg-[#FFD37E]/20 text-[#766CC0] dark:text-[#FFD37E] border-[#766CC0]/30 dark:border-[#FFD37E]/30';
+    if (minEnrage >= 20000) return 'bg-[#E8E8F5] dark:bg-[#FFE396]/20 text-[#6064A7] dark:text-[#FFE396] border-[#6064A7]/30 dark:border-[#FFE396]/30';
+    if (minEnrage >= 15000) return 'bg-[#E8EAF5] dark:bg-[#FFECAC]/20 text-[#576190] dark:text-[#FFECAC] border-[#576190]/30 dark:border-[#FFECAC]/30';
+    if (minEnrage >= 10000) return 'bg-[#E8EAF2] dark:bg-[#FFF1C1]/20 text-[#535974] dark:text-[#FFF1C1] border-[#535974]/30 dark:border-[#FFF1C1]/30';
+    if (minEnrage >= 5000) return 'bg-[#E8E9F2] dark:bg-[#FFF5D1]/20 text-[#474D64] dark:text-[#FFF5D1] border-[#474D64]/30 dark:border-[#FFF5D1]/30';
+    return 'bg-[#E8E9F2] dark:bg-[#FFF5D1]/20 text-[#474D64] dark:text-[#FFF5D1] border-[#474D64]/30 dark:border-[#FFF5D1]/30';
   }
 
   function getBracketProgressColor(minEnrage) {
-    if (minEnrage >= 55000) return 'bg-red-900';
-    if (minEnrage >= 50000) return 'bg-red-800';
-    if (minEnrage >= 45000) return 'bg-red-700';
-    if (minEnrage >= 40000) return 'bg-orange-700';
-    if (minEnrage >= 35000) return 'bg-orange-600';
-    if (minEnrage >= 30000) return 'bg-yellow-600';
-    if (minEnrage >= 25000) return 'bg-yellow-500';
-    if (minEnrage >= 20000) return 'bg-green-500';
-    if (minEnrage >= 15000) return 'bg-green-400';
-    if (minEnrage >= 10000) return 'bg-teal-400';
-    if (minEnrage >= 5000) return 'bg-cyan-500';
-    return 'bg-blue-600';
+    if (minEnrage >= 55000) return 'bg-[#FF5B5A] dark:bg-[#FF5B5A]';
+    if (minEnrage >= 50000) return 'bg-[#F65B7C] dark:bg-[#FF6E5F]';
+    if (minEnrage >= 45000) return 'bg-[#E665A2] dark:bg-[#FF8361]';
+    if (minEnrage >= 40000) return 'bg-[#D065B8] dark:bg-[#FF9A62]';
+    if (minEnrage >= 35000) return 'bg-[#B06CBC] dark:bg-[#FFB369]';
+    if (minEnrage >= 30000) return 'bg-[#8E6CC0] dark:bg-[#FFC870]';
+    if (minEnrage >= 25000) return 'bg-[#766CC0] dark:bg-[#FFD37E]';
+    if (minEnrage >= 20000) return 'bg-[#6064A7] dark:bg-[#FFE396]';
+    if (minEnrage >= 15000) return 'bg-[#576190] dark:bg-[#FFECAC]';
+    if (minEnrage >= 10000) return 'bg-[#535974] dark:bg-[#FFF1C1]';
+    if (minEnrage >= 5000) return 'bg-[#474D64] dark:bg-[#FFF5D1]';
+    return 'bg-[#474D64] dark:bg-[#FFF5D1]';
   }
 
   // ========== CHART FUNCTIONS ==========

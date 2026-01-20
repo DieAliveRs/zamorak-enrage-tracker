@@ -53,9 +53,37 @@ export function getTopPlayers(playerBestKills: PlayerBestKills, count: number = 
  * Gets latest kills sorted by most recent
  */
 export function getLatestKills(killData: KillData, count: number = 5): KillRecord[] {
-  return [...killData.records]
-    .sort((a, b) => b.timeOfKill - a.timeOfKill)
-    .slice(0, count);
+  const uniqueKills: KillRecord[] = [];
+  const seenKeys = new Set<string>();
+  
+  // Sort kills by most recent first
+  const sortedKills = [...killData.records]
+    .sort((a, b) => b.timeOfKill - a.timeOfKill);
+  
+  // Iterate through sorted kills until we have enough unique ones
+  for (const kill of sortedKills) {
+    if (uniqueKills.length >= count) break;
+    
+    const playerName = kill.members[0]?.name || 'Unknown';
+    const normalizedName = normalizePlayerName(playerName);
+    const enrage = kill.enrage;
+    
+    // Create a unique key combining normalized player name and enrage
+    const key = `${normalizedName}_${enrage}`;
+    
+    // If this combination doesn't exist yet, add it
+    if (!seenKeys.has(key)) {
+      seenKeys.add(key);
+      // Store the kill with normalized name for consistency
+      const killCopy = { ...kill };
+      if (killCopy.members && killCopy.members[0]) {
+        killCopy.members[0].name = normalizedName;
+      }
+      uniqueKills.push(killCopy);
+    }
+  }
+  
+  return uniqueKills;
 }
 
 /**
