@@ -1,9 +1,99 @@
 {
   "meta": {
-    "generated_at": "2026-02-01T03:24:42.082768+00:00",
-    "count": 4041
+    "generated_at": "2026-02-01T06:10:18.104545+00:00",
+    "count": 4050
   },
   "records": [
+    {
+      "enrage": 28970,
+      "timeOfKill": 1769925529,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 708.60004
+    },
+    {
+      "enrage": 28960,
+      "timeOfKill": 1769924580,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 692.4
+    },
+    {
+      "enrage": 28950,
+      "timeOfKill": 1769922360,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 757.2
+    },
+    {
+      "enrage": 28940,
+      "timeOfKill": 1769921520,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 726.0
+    },
+    {
+      "enrage": 28930,
+      "timeOfKill": 1769920740,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 702.60004
+    },
+    {
+      "enrage": 28920,
+      "timeOfKill": 1769919300,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 704.4
+    },
+    {
+      "enrage": 28910,
+      "timeOfKill": 1769918340,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 702.60004
+    },
+    {
+      "enrage": 28900,
+      "timeOfKill": 1769917560,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 717.60004
+    },
+    {
+      "enrage": 28890,
+      "timeOfKill": 1769916360,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 722.4
+    },
     {
       "enrage": 28880,
       "timeOfKill": 1769872463,
