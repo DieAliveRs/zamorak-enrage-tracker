@@ -1,9 +1,39 @@
 {
   "meta": {
-    "generated_at": "2026-02-04T16:00:53.231154+00:00",
-    "count": 4137
+    "generated_at": "2026-02-04T17:05:22.145920+00:00",
+    "count": 4144
   },
   "records": [
+    {
+      "enrage": 29630,
+      "timeOfKill": 1770224680,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 668.4
+    },
+    {
+      "enrage": 29620,
+      "timeOfKill": 1770223920,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 756.0
+    },
+    {
+      "enrage": 29610,
+      "timeOfKill": 1770221280,
+      "members": [
+        {
+          "name": "Chikorita"
+        }
+      ],
+      "killTimeSeconds": 673.80005
+    },
     {
       "enrage": 29600,
       "timeOfKill": 1770219549,
@@ -3336,6 +3366,16 @@
     },
     {
       "enrage": 26270,
+      "timeOfKill": 1770223665,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 738.0
+    },
+    {
+      "enrage": 26270,
       "timeOfKill": 1767188880,
       "members": [
         {
@@ -3343,6 +3383,16 @@
         }
       ],
       "killTimeSeconds": 894.60004
+    },
+    {
+      "enrage": 26260,
+      "timeOfKill": 1770222840,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 816.60004
     },
     {
       "enrage": 26260,
@@ -3356,6 +3406,16 @@
     },
     {
       "enrage": 26250,
+      "timeOfKill": 1770221940,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 758.4
+    },
+    {
+      "enrage": 26250,
       "timeOfKill": 1750996680,
       "members": [
         {
@@ -3363,6 +3423,16 @@
         }
       ],
       "killTimeSeconds": 648.60004
+    },
+    {
+      "enrage": 26240,
+      "timeOfKill": 1770221100,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 787.2
     },
     {
       "enrage": 26240,
