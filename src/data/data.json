@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-02-10T05:46:06.695712+00:00",
-    "count": 4244
+    "generated_at": "2026-02-10T06:49:02.916258+00:00",
+    "count": 4250
   },
   "records": [
     {
@@ -11836,6 +11836,16 @@
     },
     {
       "enrage": 18660,
+      "timeOfKill": 1770705925,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 533.4
+    },
+    {
+      "enrage": 18660,
       "timeOfKill": 1757219340,
       "members": [
         {
@@ -11843,6 +11853,16 @@
         }
       ],
       "killTimeSeconds": 732.60004
+    },
+    {
+      "enrage": 18650,
+      "timeOfKill": 1770705300,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 532.80005
     },
     {
       "enrage": 18650,
@@ -11856,6 +11876,16 @@
     },
     {
       "enrage": 18640,
+      "timeOfKill": 1770704640,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 555.60004
+    },
+    {
+      "enrage": 18640,
       "timeOfKill": 1757217720,
       "members": [
         {
@@ -11863,6 +11893,16 @@
         }
       ],
       "killTimeSeconds": 781.80005
+    },
+    {
+      "enrage": 18630,
+      "timeOfKill": 1770704040,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 533.4
     },
     {
       "enrage": 18630,
@@ -11876,6 +11916,16 @@
     },
     {
       "enrage": 18620,
+      "timeOfKill": 1770703380,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 523.80005
+    },
+    {
+      "enrage": 18620,
       "timeOfKill": 1757131200,
       "members": [
         {
@@ -11883,6 +11933,16 @@
         }
       ],
       "killTimeSeconds": 745.2
+    },
+    {
+      "enrage": 18610,
+      "timeOfKill": 1770702660,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 544.80005
     },
     {
       "enrage": 18610,
