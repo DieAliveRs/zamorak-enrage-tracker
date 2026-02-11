@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-02-11T21:05:30.488634+00:00",
-    "count": 4281
+    "generated_at": "2026-02-11T21:47:43.433626+00:00",
+    "count": 4283
   },
   "records": [
     {
@@ -3326,6 +3326,16 @@
     },
     {
       "enrage": 26680,
+      "timeOfKill": 1770845146,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 825.00006
+    },
+    {
+      "enrage": 26680,
       "timeOfKill": 1767714269,
       "members": [
         {
@@ -3333,6 +3343,16 @@
         }
       ],
       "killTimeSeconds": 705.60004
+    },
+    {
+      "enrage": 26670,
+      "timeOfKill": 1770843960,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 970.80005
     },
     {
       "enrage": 26670,
