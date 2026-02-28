@@ -111,6 +111,8 @@ export class CalculatorStorage {
    */
   static save(state) {
     try {
+      if (typeof localStorage === 'undefined') return false;
+      
       const serializable = this.prepareForStorage(state);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(serializable));
       
@@ -124,6 +126,7 @@ export class CalculatorStorage {
       
       // Try sessionStorage as fallback
       try {
+        if (typeof sessionStorage === 'undefined') return false;
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         return true;
       } catch (sessionError) {
@@ -133,11 +136,13 @@ export class CalculatorStorage {
     }
   }
   
-  /**
-   * Load state from browser cache
-   */
   static load() {
     try {
+      // Return defaults if running in SSR/build environment
+      if (typeof localStorage === 'undefined') {
+        return { ...DEFAULT_STATE };
+      }
+
       // Try localStorage first
       let data = localStorage.getItem(STORAGE_KEY);
       
