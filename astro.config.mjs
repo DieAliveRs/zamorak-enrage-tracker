@@ -1,6 +1,5 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
-import sitemap from "@astrojs/sitemap";
 
 const DEV_PORT = 4321;
 const isCI = process.env.CI === "true";
@@ -22,7 +21,6 @@ export default defineConfig({
   },
 
   integrations: [
-    sitemap(),
     tailwind(),
   ],
 });
