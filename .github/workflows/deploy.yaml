@@ -1,4 +1,4 @@
-name: Flowbite Admin Dashboard — Deploy to Demo to GitHub Pages
+name: Flowbite Admin Dashboard — Deploy GitHub Pages
 
 on:
   push:

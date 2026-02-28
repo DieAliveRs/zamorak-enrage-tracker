@@ -22,8 +22,7 @@
 	"repository": "https://github.com/DieAliveRs/zamorak-enrage-tracker.git",
 	"license": "MIT",
 	"author": "Die Alive",
-	"contributors": [
-	],
+	"contributors": [],
 	"type": "module",
 	"scripts": {
 		"astro": "astro",
@@ -33,7 +32,7 @@
 		"start": "astro dev"
 	},
 	"dependencies": {
-		"@astrojs/sitemap": "^1.1.0",
+		"@astrojs/sitemap": "^1.4.0",
 		"@astrojs/tailwind": "^3.0.1",
 		"@faker-js/faker": "^7.6.0",
 		"apexcharts": "^3.37.2",
