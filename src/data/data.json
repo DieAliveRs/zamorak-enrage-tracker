@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-03-09T14:38:21.168293+00:00",
-    "count": 4376
+    "generated_at": "2026-03-09T15:40:04.777277+00:00",
+    "count": 4378
   },
   "records": [
     {
@@ -30346,10 +30346,30 @@
     },
     {
       "enrage": 10000,
+      "timeOfKill": 1749325747,
+      "members": [
+        {
+          "name": "Novita\u00a0Lam"
+        }
+      ],
+      "killTimeSeconds": 820.80005
+    },
+    {
+      "enrage": 10000,
       "timeOfKill": 1749325740,
       "members": [
         {
           "name": "Vylence"
+        }
+      ],
+      "killTimeSeconds": 820.80005
+    },
+    {
+      "enrage": 10000,
+      "timeOfKill": 1749325740,
+      "members": [
+        {
+          "name": "Novita Lam"
         }
       ],
       "killTimeSeconds": 820.80005
