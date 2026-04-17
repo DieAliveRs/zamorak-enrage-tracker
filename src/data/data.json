@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-17T04:23:27.374492+00:00",
-    "count": 4521
+    "generated_at": "2026-04-17T06:19:54.812446+00:00",
+    "count": 4535
   },
   "records": [
     {
@@ -10826,6 +10826,16 @@
     },
     {
       "enrage": 20480,
+      "timeOfKill": 1776406245,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 507.6
+    },
+    {
+      "enrage": 20480,
       "timeOfKill": 1762642260,
       "members": [
         {
@@ -10833,6 +10843,16 @@
         }
       ],
       "killTimeSeconds": 721.80005
+    },
+    {
+      "enrage": 20470,
+      "timeOfKill": 1776405600,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 515.4
     },
     {
       "enrage": 20470,
@@ -10846,6 +10866,16 @@
     },
     {
       "enrage": 20460,
+      "timeOfKill": 1776405060,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 502.2
+    },
+    {
+      "enrage": 20460,
       "timeOfKill": 1762372320,
       "members": [
         {
@@ -10853,6 +10883,16 @@
         }
       ],
       "killTimeSeconds": 828.00006
+    },
+    {
+      "enrage": 20450,
+      "timeOfKill": 1776404040,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 501.6
     },
     {
       "enrage": 20450,
@@ -10866,6 +10906,16 @@
     },
     {
       "enrage": 20440,
+      "timeOfKill": 1776403200,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 486.00003
+    },
+    {
+      "enrage": 20440,
       "timeOfKill": 1762370580,
       "members": [
         {
@@ -10873,6 +10923,16 @@
         }
       ],
       "killTimeSeconds": 742.2
+    },
+    {
+      "enrage": 20430,
+      "timeOfKill": 1776402540,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 495.6
     },
     {
       "enrage": 20430,
@@ -10886,6 +10946,16 @@
     },
     {
       "enrage": 20420,
+      "timeOfKill": 1776401940,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 507.00003
+    },
+    {
+      "enrage": 20420,
       "timeOfKill": 1761961020,
       "members": [
         {
@@ -10893,6 +10963,16 @@
         }
       ],
       "killTimeSeconds": 747.60004
+    },
+    {
+      "enrage": 20410,
+      "timeOfKill": 1776401400,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 508.2
     },
     {
       "enrage": 20410,
@@ -30116,6 +30196,16 @@
     },
     {
       "enrage": 10500,
+      "timeOfKill": 1776405142,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 700.80005
+    },
+    {
+      "enrage": 10500,
       "timeOfKill": 1768330344,
       "members": [
         {
@@ -30156,6 +30246,16 @@
     },
     {
       "enrage": 10490,
+      "timeOfKill": 1776404280,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 699.0
+    },
+    {
+      "enrage": 10490,
       "timeOfKill": 1768329469,
       "members": [
         {
@@ -30186,6 +30286,16 @@
     },
     {
       "enrage": 10480,
+      "timeOfKill": 1776403380,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 667.2
+    },
+    {
+      "enrage": 10480,
       "timeOfKill": 1768328520,
       "members": [
         {
@@ -30206,6 +30316,16 @@
     },
     {
       "enrage": 10470,
+      "timeOfKill": 1776402540,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 682.80005
+    },
+    {
+      "enrage": 10470,
       "timeOfKill": 1768327620,
       "members": [
         {
@@ -30223,6 +30343,16 @@
         }
       ],
       "killTimeSeconds": 736.80005
+    },
+    {
+      "enrage": 10460,
+      "timeOfKill": 1776400980,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 682.2
     },
     {
       "enrage": 10460,
@@ -30253,6 +30383,16 @@
         }
       ],
       "killTimeSeconds": 562.2
+    },
+    {
+      "enrage": 10450,
+      "timeOfKill": 1776400140,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 703.2
     },
     {
       "enrage": 10450,
