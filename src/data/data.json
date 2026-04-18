@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-18T19:54:39.179404+00:00",
-    "count": 4582
+    "generated_at": "2026-04-18T20:40:24.995438+00:00",
+    "count": 4584
   },
   "records": [
     {
@@ -10516,6 +10516,16 @@
     },
     {
       "enrage": 20790,
+      "timeOfKill": 1776542797,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 510.6
+    },
+    {
+      "enrage": 20790,
       "timeOfKill": 1763650080,
       "members": [
         {
@@ -10523,6 +10533,16 @@
         }
       ],
       "killTimeSeconds": 835.80005
+    },
+    {
+      "enrage": 20780,
+      "timeOfKill": 1776542040,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 501.00003
     },
     {
       "enrage": 20780,
