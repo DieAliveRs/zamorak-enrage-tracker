@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-22T22:29:53.107839+00:00",
-    "count": 4717
+    "generated_at": "2026-04-22T23:28:30.051810+00:00",
+    "count": 4721
   },
   "records": [
     {
@@ -29906,6 +29906,26 @@
     },
     {
       "enrage": 11450,
+      "timeOfKill": 1776900055,
+      "members": [
+        {
+          "name": "Sliske\u00a0Suck"
+        }
+      ],
+      "killTimeSeconds": 790.80005
+    },
+    {
+      "enrage": 11450,
+      "timeOfKill": 1776900000,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 790.80005
+    },
+    {
+      "enrage": 11450,
       "timeOfKill": 1767179520,
       "members": [
         {
@@ -30053,6 +30073,16 @@
         }
       ],
       "killTimeSeconds": 489.6
+    },
+    {
+      "enrage": 11350,
+      "timeOfKill": 1776898920,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 676.2
     },
     {
       "enrage": 11350,
@@ -33323,6 +33353,16 @@
         }
       ],
       "killTimeSeconds": 627.0
+    },
+    {
+      "enrage": 10100,
+      "timeOfKill": 1776899038,
+      "members": [
+        {
+          "name": "Midor_i"
+        }
+      ],
+      "killTimeSeconds": 994.80005
     },
     {
       "enrage": 10100,
