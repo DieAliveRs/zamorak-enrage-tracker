@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-22T20:39:04.042852+00:00",
-    "count": 4711
+    "generated_at": "2026-04-22T21:36:22.911362+00:00",
+    "count": 4713
   },
   "records": [
     {
@@ -30673,6 +30673,26 @@
         }
       ],
       "killTimeSeconds": 496.2
+    },
+    {
+      "enrage": 10950,
+      "timeOfKill": 1776891068,
+      "members": [
+        {
+          "name": "Sliske\u00a0Suck"
+        }
+      ],
+      "killTimeSeconds": 768.0
+    },
+    {
+      "enrage": 10950,
+      "timeOfKill": 1776891060,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 768.0
     },
     {
       "enrage": 10950,
