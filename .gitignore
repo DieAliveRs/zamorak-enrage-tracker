@@ -34,4 +34,6 @@ __pycache__/
 
 credentials.json
 
+data_cleaning.ipynb
+zam_hiscore_raw.csv
 
