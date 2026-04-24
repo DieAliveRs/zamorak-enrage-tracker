@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-24T17:35:05.560782+00:00",
-    "count": 4864
+    "generated_at": "2026-04-24T18:27:10.602481+00:00",
+    "count": 4865
   },
   "records": [
     {
@@ -34743,6 +34743,16 @@
         }
       ],
       "killTimeSeconds": 627.0
+    },
+    {
+      "enrage": 10100,
+      "timeOfKill": 1777052401,
+      "members": [
+        {
+          "name": "Vylence"
+        }
+      ],
+      "killTimeSeconds": 948.00006
     },
     {
       "enrage": 10100,
