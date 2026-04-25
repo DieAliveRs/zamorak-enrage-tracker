@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-25T13:49:13.752792+00:00",
-    "count": 9205
+    "generated_at": "2026-04-25T14:33:23.371267+00:00",
+    "count": 9208
   },
   "records": [
     {
@@ -9426,6 +9426,16 @@
     },
     {
       "enrage": 23400,
+      "timeOfKill": 1777125987,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 739.80005
+    },
+    {
+      "enrage": 23400,
       "timeOfKill": 1776758690,
       "members": [
         {
@@ -9543,6 +9553,16 @@
         }
       ],
       "killTimeSeconds": 781.2
+    },
+    {
+      "enrage": 23300,
+      "timeOfKill": 1777125060,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 729.60004
     },
     {
       "enrage": 23300,
@@ -40503,6 +40523,16 @@
         }
       ],
       "killTimeSeconds": 1053.6001
+    },
+    {
+      "enrage": 10400,
+      "timeOfKill": 1777127503,
+      "members": [
+        {
+          "name": "Vylence"
+        }
+      ],
+      "killTimeSeconds": 835.80005
     },
     {
       "enrage": 10400,
