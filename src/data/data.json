@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-27T22:28:54.443427+00:00",
-    "count": 9422
+    "generated_at": "2026-04-27T23:29:32.940845+00:00",
+    "count": 9428
   },
   "records": [
     {
@@ -26836,6 +26836,26 @@
     },
     {
       "enrage": 15350,
+      "timeOfKill": 1777331478,
+      "members": [
+        {
+          "name": "Sliske\u00a0Suck"
+        }
+      ],
+      "killTimeSeconds": 805.80005
+    },
+    {
+      "enrage": 15350,
+      "timeOfKill": 1777331460,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 805.80005
+    },
+    {
+      "enrage": 15350,
       "timeOfKill": 1767459587,
       "members": [
         {
@@ -27166,6 +27186,16 @@
     },
     {
       "enrage": 15250,
+      "timeOfKill": 1777330560,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 699.60004
+    },
+    {
+      "enrage": 15250,
       "timeOfKill": 1750420800,
       "members": [
         {
@@ -27453,6 +27483,16 @@
         }
       ],
       "killTimeSeconds": 1191.6001
+    },
+    {
+      "enrage": 15150,
+      "timeOfKill": 1777329720,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 726.0
     },
     {
       "enrage": 15150,
@@ -44443,6 +44483,26 @@
         }
       ],
       "killTimeSeconds": 1110.6001
+    },
+    {
+      "enrage": 10000,
+      "timeOfKill": 1777330101,
+      "members": [
+        {
+          "name": "Crit\u00a0Savage"
+        }
+      ],
+      "killTimeSeconds": 1080.0
+    },
+    {
+      "enrage": 10000,
+      "timeOfKill": 1777330080,
+      "members": [
+        {
+          "name": "Crit Savage"
+        }
+      ],
+      "killTimeSeconds": 1080.0
     },
     {
       "enrage": 10000,
