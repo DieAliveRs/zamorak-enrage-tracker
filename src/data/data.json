@@ -1,9 +1,89 @@
 {
   "meta": {
-    "generated_at": "2026-04-28T04:46:49.511720+00:00",
-    "count": 9434
+    "generated_at": "2026-04-28T07:23:18.094268+00:00",
+    "count": 9450
   },
   "records": [
+    {
+      "enrage": 40000,
+      "timeOfKill": 1777359409,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 755.4
+    },
+    {
+      "enrage": 39900,
+      "timeOfKill": 1777358340,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 744.0
+    },
+    {
+      "enrage": 39800,
+      "timeOfKill": 1777356840,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 748.2
+    },
+    {
+      "enrage": 39700,
+      "timeOfKill": 1777356060,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 738.0
+    },
+    {
+      "enrage": 39600,
+      "timeOfKill": 1777355220,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 775.80005
+    },
+    {
+      "enrage": 39500,
+      "timeOfKill": 1777354200,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 703.80005
+    },
+    {
+      "enrage": 39400,
+      "timeOfKill": 1777352520,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 745.2
+    },
+    {
+      "enrage": 39300,
+      "timeOfKill": 1777351680,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 757.80005
+    },
     {
       "enrage": 39200,
       "timeOfKill": 1777350053,
@@ -616,6 +696,16 @@
     },
     {
       "enrage": 33100,
+      "timeOfKill": 1777359833,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 856.2
+    },
+    {
+      "enrage": 33100,
       "timeOfKill": 1777158180,
       "members": [
         {
@@ -623,6 +713,16 @@
         }
       ],
       "killTimeSeconds": 687.0
+    },
+    {
+      "enrage": 33000,
+      "timeOfKill": 1777358700,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 830.4
     },
     {
       "enrage": 33000,
@@ -636,6 +736,16 @@
     },
     {
       "enrage": 32900,
+      "timeOfKill": 1777356720,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 823.80005
+    },
+    {
+      "enrage": 32900,
       "timeOfKill": 1777147620,
       "members": [
         {
@@ -643,6 +753,16 @@
         }
       ],
       "killTimeSeconds": 743.4
+    },
+    {
+      "enrage": 32800,
+      "timeOfKill": 1777355280,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 925.2
     },
     {
       "enrage": 32800,
@@ -656,6 +776,16 @@
     },
     {
       "enrage": 32700,
+      "timeOfKill": 1777354140,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 1105.8
+    },
+    {
+      "enrage": 32700,
       "timeOfKill": 1777145870,
       "members": [
         {
@@ -663,6 +793,16 @@
         }
       ],
       "killTimeSeconds": 744.60004
+    },
+    {
+      "enrage": 32600,
+      "timeOfKill": 1777352520,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 839.4
     },
     {
       "enrage": 32600,
@@ -3916,6 +4056,16 @@
     },
     {
       "enrage": 27720,
+      "timeOfKill": 1777356068,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 924.60004
+    },
+    {
+      "enrage": 27720,
       "timeOfKill": 1768271520,
       "members": [
         {
@@ -4033,6 +4183,16 @@
         }
       ],
       "killTimeSeconds": 733.80005
+    },
+    {
+      "enrage": 27620,
+      "timeOfKill": 1777355040,
+      "members": [
+        {
+          "name": "Dyanne"
+        }
+      ],
+      "killTimeSeconds": 792.00006
     },
     {
       "enrage": 27620,
