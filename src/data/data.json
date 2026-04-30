@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-04-30T20:18:22.959954+00:00",
-    "count": 9662
+    "generated_at": "2026-04-30T21:29:44.291701+00:00",
+    "count": 9666
   },
   "records": [
     {
@@ -34846,6 +34846,16 @@
     },
     {
       "enrage": 13300,
+      "timeOfKill": 1777582188,
+      "members": [
+        {
+          "name": "Vylence"
+        }
+      ],
+      "killTimeSeconds": 772.80005
+    },
+    {
+      "enrage": 13300,
       "timeOfKill": 1776910560,
       "members": [
         {
@@ -35113,6 +35123,16 @@
         }
       ],
       "killTimeSeconds": 1385.4
+    },
+    {
+      "enrage": 13200,
+      "timeOfKill": 1777580760,
+      "members": [
+        {
+          "name": "Vylence"
+        }
+      ],
+      "killTimeSeconds": 843.00006
     },
     {
       "enrage": 13200,
@@ -46273,6 +46293,26 @@
         }
       ],
       "killTimeSeconds": 1131.6001
+    },
+    {
+      "enrage": 10100,
+      "timeOfKill": 1777582909,
+      "members": [
+        {
+          "name": "Tiny\u00a0Birbs"
+        }
+      ],
+      "killTimeSeconds": 561.0
+    },
+    {
+      "enrage": 10100,
+      "timeOfKill": 1777582860,
+      "members": [
+        {
+          "name": "Tiny Birbs"
+        }
+      ],
+      "killTimeSeconds": 561.0
     },
     {
       "enrage": 10100,
