@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-01T12:00:58.404015+00:00",
-    "count": 9708
+    "generated_at": "2026-05-01T13:51:43.588172+00:00",
+    "count": 9719
   },
   "records": [
     {
@@ -376,6 +376,16 @@
     },
     {
       "enrage": 42400,
+      "timeOfKill": 1777642645,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 880.80005
+    },
+    {
+      "enrage": 42400,
       "timeOfKill": 1777486740,
       "members": [
         {
@@ -383,6 +393,16 @@
         }
       ],
       "killTimeSeconds": 761.4
+    },
+    {
+      "enrage": 42300,
+      "timeOfKill": 1777641540,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 865.80005
     },
     {
       "enrage": 42300,
@@ -396,6 +416,16 @@
     },
     {
       "enrage": 42200,
+      "timeOfKill": 1777640580,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 850.2
+    },
+    {
+      "enrage": 42200,
       "timeOfKill": 1777484940,
       "members": [
         {
@@ -403,6 +433,16 @@
         }
       ],
       "killTimeSeconds": 775.80005
+    },
+    {
+      "enrage": 42100,
+      "timeOfKill": 1777639620,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 848.4
     },
     {
       "enrage": 42100,
@@ -24946,6 +24986,16 @@
     },
     {
       "enrage": 16960,
+      "timeOfKill": 1777639097,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 447.6
+    },
+    {
+      "enrage": 16960,
       "timeOfKill": 1768629420,
       "members": [
         {
@@ -25153,6 +25203,16 @@
         }
       ],
       "killTimeSeconds": 750.0
+    },
+    {
+      "enrage": 16860,
+      "timeOfKill": 1777638480,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 572.4
     },
     {
       "enrage": 16860,
@@ -34566,6 +34626,16 @@
     },
     {
       "enrage": 13540,
+      "timeOfKill": 1777642919,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 835.2
+    },
+    {
+      "enrage": 13540,
       "timeOfKill": 1748286480,
       "members": [
         {
@@ -34793,6 +34863,16 @@
         }
       ],
       "killTimeSeconds": 1496.4
+    },
+    {
+      "enrage": 13440,
+      "timeOfKill": 1777639860,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 588.0
     },
     {
       "enrage": 13440,
@@ -35136,6 +35216,16 @@
     },
     {
       "enrage": 13340,
+      "timeOfKill": 1777639200,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 667.2
+    },
+    {
+      "enrage": 13340,
       "timeOfKill": 1766525940,
       "members": [
         {
@@ -35423,6 +35513,16 @@
         }
       ],
       "killTimeSeconds": 1400.4
+    },
+    {
+      "enrage": 13240,
+      "timeOfKill": 1777638480,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 605.4
     },
     {
       "enrage": 13240,
@@ -35773,6 +35873,16 @@
         }
       ],
       "killTimeSeconds": 1383.6001
+    },
+    {
+      "enrage": 13140,
+      "timeOfKill": 1777637220,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 615.0
     },
     {
       "enrage": 13140,
