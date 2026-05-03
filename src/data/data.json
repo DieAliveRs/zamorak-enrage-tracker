@@ -1,9 +1,29 @@
 {
   "meta": {
-    "generated_at": "2026-05-03T16:26:30.541561+00:00",
-    "count": 9920
+    "generated_at": "2026-05-03T17:26:43.404904+00:00",
+    "count": 9927
   },
   "records": [
+    {
+      "enrage": 51900,
+      "timeOfKill": 1777828599,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 804.60004
+    },
+    {
+      "enrage": 51800,
+      "timeOfKill": 1777825680,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 853.2
+    },
     {
       "enrage": 51700,
       "timeOfKill": 1777824741,
@@ -22416,6 +22436,16 @@
     },
     {
       "enrage": 18640,
+      "timeOfKill": 1777828303,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 661.2
+    },
+    {
+      "enrage": 18640,
       "timeOfKill": 1770704640,
       "members": [
         {
@@ -22646,6 +22676,16 @@
     },
     {
       "enrage": 18540,
+      "timeOfKill": 1777826700,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 721.2
+    },
+    {
+      "enrage": 18540,
       "timeOfKill": 1770601151,
       "members": [
         {
@@ -22863,6 +22903,16 @@
         }
       ],
       "killTimeSeconds": 732.60004
+    },
+    {
+      "enrage": 18440,
+      "timeOfKill": 1777825920,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 635.4
     },
     {
       "enrage": 18440,
@@ -36676,6 +36726,16 @@
     },
     {
       "enrage": 13440,
+      "timeOfKill": 1777827406,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 718.80005
+    },
+    {
+      "enrage": 13440,
       "timeOfKill": 1777639860,
       "members": [
         {
@@ -37023,6 +37083,16 @@
         }
       ],
       "killTimeSeconds": 1499.4
+    },
+    {
+      "enrage": 13340,
+      "timeOfKill": 1777826580,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 724.80005
     },
     {
       "enrage": 13340,
