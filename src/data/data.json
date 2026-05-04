@@ -1,9 +1,39 @@
 {
   "meta": {
-    "generated_at": "2026-05-04T21:38:35.355999+00:00",
-    "count": 10031
+    "generated_at": "2026-05-04T22:37:24.070326+00:00",
+    "count": 10036
   },
   "records": [
+    {
+      "enrage": 55800,
+      "timeOfKill": 1777933901,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 865.2
+    },
+    {
+      "enrage": 55700,
+      "timeOfKill": 1777932720,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 848.4
+    },
+    {
+      "enrage": 55600,
+      "timeOfKill": 1777931160,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 905.4
+    },
     {
       "enrage": 55500,
       "timeOfKill": 1777930125,
@@ -33846,6 +33876,16 @@
     },
     {
       "enrage": 14640,
+      "timeOfKill": 1777934002,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 724.80005
+    },
+    {
+      "enrage": 14640,
       "timeOfKill": 1777702200,
       "members": [
         {
@@ -34203,6 +34243,16 @@
         }
       ],
       "killTimeSeconds": 1371.0
+    },
+    {
+      "enrage": 14540,
+      "timeOfKill": 1777931280,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 742.80005
     },
     {
       "enrage": 14540,
