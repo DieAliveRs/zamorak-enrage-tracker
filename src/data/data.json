@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-04T12:58:56.032848+00:00",
-    "count": 9999
+    "generated_at": "2026-05-04T15:15:03.591080+00:00",
+    "count": 10006
   },
   "records": [
     {
@@ -226,6 +226,16 @@
     },
     {
       "enrage": 52100,
+      "timeOfKill": 1777901000,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 934.80005
+    },
+    {
+      "enrage": 52100,
       "timeOfKill": 1777831108,
       "members": [
         {
@@ -233,6 +243,16 @@
         }
       ],
       "killTimeSeconds": 1161.0
+    },
+    {
+      "enrage": 52000,
+      "timeOfKill": 1777899540,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 1143.6001
     },
     {
       "enrage": 52000,
@@ -20586,6 +20606,16 @@
     },
     {
       "enrage": 19740,
+      "timeOfKill": 1777904826,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 738.0
+    },
+    {
+      "enrage": 19740,
       "timeOfKill": 1775929740,
       "members": [
         {
@@ -20806,6 +20836,16 @@
     },
     {
       "enrage": 19640,
+      "timeOfKill": 1777903980,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 640.80005
+    },
+    {
+      "enrage": 19640,
       "timeOfKill": 1775881335,
       "members": [
         {
@@ -21013,6 +21053,16 @@
         }
       ],
       "killTimeSeconds": 740.4
+    },
+    {
+      "enrage": 19540,
+      "timeOfKill": 1777903320,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 654.60004
     },
     {
       "enrage": 19540,
@@ -21243,6 +21293,16 @@
         }
       ],
       "killTimeSeconds": 715.80005
+    },
+    {
+      "enrage": 19440,
+      "timeOfKill": 1777899600,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 644.4
     },
     {
       "enrage": 19440,
@@ -36883,6 +36943,16 @@
         }
       ],
       "killTimeSeconds": 1432.8
+    },
+    {
+      "enrage": 13640,
+      "timeOfKill": 1777906862,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 759.0
     },
     {
       "enrage": 13640,
