@@ -1,9 +1,29 @@
 {
   "meta": {
-    "generated_at": "2026-05-06T01:15:07.443589+00:00",
-    "count": 10104
+    "generated_at": "2026-05-06T04:45:44.397433+00:00",
+    "count": 10116
   },
   "records": [
+    {
+      "enrage": 58000,
+      "timeOfKill": 1778042314,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 874.80005
+    },
+    {
+      "enrage": 57900,
+      "timeOfKill": 1778041380,
+      "members": [
+        {
+          "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 877.2
+    },
     {
       "enrage": 57800,
       "timeOfKill": 1778005269,
@@ -296,6 +316,16 @@
     },
     {
       "enrage": 54900,
+      "timeOfKill": 1778041349,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 996.00006
+    },
+    {
+      "enrage": 54900,
       "timeOfKill": 1777922460,
       "members": [
         {
@@ -303,6 +333,16 @@
         }
       ],
       "killTimeSeconds": 850.2
+    },
+    {
+      "enrage": 54800,
+      "timeOfKill": 1778038860,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 945.00006
     },
     {
       "enrage": 54800,
@@ -316,6 +356,16 @@
     },
     {
       "enrage": 54700,
+      "timeOfKill": 1778037840,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 982.2
+    },
+    {
+      "enrage": 54700,
       "timeOfKill": 1777913837,
       "members": [
         {
@@ -323,6 +373,16 @@
         }
       ],
       "killTimeSeconds": 877.80005
+    },
+    {
+      "enrage": 54600,
+      "timeOfKill": 1778034600,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 936.60004
     },
     {
       "enrage": 54600,
@@ -336,6 +396,16 @@
     },
     {
       "enrage": 54500,
+      "timeOfKill": 1778031840,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 1024.8
+    },
+    {
+      "enrage": 54500,
       "timeOfKill": 1777911540,
       "members": [
         {
@@ -343,6 +413,16 @@
         }
       ],
       "killTimeSeconds": 870.60004
+    },
+    {
+      "enrage": 54400,
+      "timeOfKill": 1778030640,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 964.2
     },
     {
       "enrage": 54400,
@@ -18243,6 +18323,16 @@
         }
       ],
       "killTimeSeconds": 885.00006
+    },
+    {
+      "enrage": 21040,
+      "timeOfKill": 1778039292,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 655.80005
     },
     {
       "enrage": 21040,
@@ -49166,6 +49256,26 @@
     },
     {
       "enrage": 10410,
+      "timeOfKill": 1778039318,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 666.0
+    },
+    {
+      "enrage": 10410,
+      "timeOfKill": 1778039280,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 666.0
+    },
+    {
+      "enrage": 10410,
       "timeOfKill": 1776393420,
       "members": [
         {
@@ -49573,6 +49683,16 @@
         }
       ],
       "killTimeSeconds": 568.2
+    },
+    {
+      "enrage": 10310,
+      "timeOfKill": 1778030160,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 628.80005
     },
     {
       "enrage": 10310,
