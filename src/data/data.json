@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-08T14:27:39.566638+00:00",
-    "count": 10277
+    "generated_at": "2026-05-08T16:00:01.811730+00:00",
+    "count": 10283
   },
   "records": [
     {
@@ -17746,6 +17746,16 @@
     },
     {
       "enrage": 21960,
+      "timeOfKill": 1778255121,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 565.80005
+    },
+    {
+      "enrage": 21960,
       "timeOfKill": 1765232520,
       "members": [
         {
@@ -17873,6 +17883,16 @@
         }
       ],
       "killTimeSeconds": 747.0
+    },
+    {
+      "enrage": 21860,
+      "timeOfKill": 1778253720,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 493.80002
     },
     {
       "enrage": 21860,
@@ -18013,6 +18033,16 @@
         }
       ],
       "killTimeSeconds": 790.80005
+    },
+    {
+      "enrage": 21760,
+      "timeOfKill": 1778253180,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 539.4
     },
     {
       "enrage": 21760,
@@ -26216,6 +26246,16 @@
     },
     {
       "enrage": 18140,
+      "timeOfKill": 1778255352,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 762.60004
+    },
+    {
+      "enrage": 18140,
       "timeOfKill": 1777813080,
       "members": [
         {
@@ -32243,6 +32283,26 @@
         }
       ],
       "killTimeSeconds": 708.60004
+    },
+    {
+      "enrage": 15750,
+      "timeOfKill": 1778251811,
+      "members": [
+        {
+          "name": "Sliske\u00a0Suck"
+        }
+      ],
+      "killTimeSeconds": 729.60004
+    },
+    {
+      "enrage": 15750,
+      "timeOfKill": 1778251800,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 729.60004
     },
     {
       "enrage": 15750,
