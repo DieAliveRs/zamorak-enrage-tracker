@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-08T01:24:05.959383+00:00",
-    "count": 10246
+    "generated_at": "2026-05-08T04:37:39.747329+00:00",
+    "count": 10258
   },
   "records": [
     {
@@ -46,6 +46,16 @@
     },
     {
       "enrage": 59600,
+      "timeOfKill": 1778211061,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 993.00006
+    },
+    {
+      "enrage": 59600,
       "timeOfKill": 1778088420,
       "members": [
         {
@@ -53,6 +63,16 @@
         }
       ],
       "killTimeSeconds": 877.2
+    },
+    {
+      "enrage": 59500,
+      "timeOfKill": 1778209920,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 961.2
     },
     {
       "enrage": 59500,
@@ -66,6 +86,16 @@
     },
     {
       "enrage": 59400,
+      "timeOfKill": 1778208840,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 1017.00006
+    },
+    {
+      "enrage": 59400,
       "timeOfKill": 1778086500,
       "members": [
         {
@@ -76,6 +106,16 @@
     },
     {
       "enrage": 59300,
+      "timeOfKill": 1778205540,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 973.80005
+    },
+    {
+      "enrage": 59300,
       "timeOfKill": 1778085540,
       "members": [
         {
@@ -83,6 +123,16 @@
         }
       ],
       "killTimeSeconds": 888.60004
+    },
+    {
+      "enrage": 59200,
+      "timeOfKill": 1778203560,
+      "members": [
+        {
+          "name": "Miner49er"
+        }
+      ],
+      "killTimeSeconds": 949.80005
     },
     {
       "enrage": 59200,
@@ -43626,6 +43676,26 @@
     },
     {
       "enrage": 12210,
+      "timeOfKill": 1778214165,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 709.2
+    },
+    {
+      "enrage": 12210,
+      "timeOfKill": 1778214120,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 709.2
+    },
+    {
+      "enrage": 12210,
       "timeOfKill": 1769119493,
       "members": [
         {
@@ -43953,6 +44023,16 @@
         }
       ],
       "killTimeSeconds": 761.4
+    },
+    {
+      "enrage": 12110,
+      "timeOfKill": 1778210220,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 752.4
     },
     {
       "enrage": 12110,
@@ -45866,6 +45946,26 @@
     },
     {
       "enrage": 11600,
+      "timeOfKill": 1778213519,
+      "members": [
+        {
+          "name": "Tiny\u00a0Birbs"
+        }
+      ],
+      "killTimeSeconds": 597.0
+    },
+    {
+      "enrage": 11600,
+      "timeOfKill": 1778213460,
+      "members": [
+        {
+          "name": "Tiny Birbs"
+        }
+      ],
+      "killTimeSeconds": 597.0
+    },
+    {
+      "enrage": 11600,
       "timeOfKill": 1777306440,
       "members": [
         {
@@ -46236,6 +46336,16 @@
     },
     {
       "enrage": 11500,
+      "timeOfKill": 1778212680,
+      "members": [
+        {
+          "name": "Tiny Birbs"
+        }
+      ],
+      "killTimeSeconds": 593.4
+    },
+    {
+      "enrage": 11500,
       "timeOfKill": 1777304864,
       "members": [
         {
@@ -46533,6 +46643,16 @@
         }
       ],
       "killTimeSeconds": 757.80005
+    },
+    {
+      "enrage": 11400,
+      "timeOfKill": 1778212020,
+      "members": [
+        {
+          "name": "Tiny Birbs"
+        }
+      ],
+      "killTimeSeconds": 608.4
     },
     {
       "enrage": 11400,
