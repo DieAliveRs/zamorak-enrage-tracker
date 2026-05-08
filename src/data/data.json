@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-08T17:42:30.381174+00:00",
-    "count": 10290
+    "generated_at": "2026-05-08T20:10:58.388011+00:00",
+    "count": 10305
   },
   "records": [
     {
@@ -16496,6 +16496,16 @@
     },
     {
       "enrage": 22960,
+      "timeOfKill": 1778270230,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 555.60004
+    },
+    {
+      "enrage": 22960,
       "timeOfKill": 1766482080,
       "members": [
         {
@@ -16613,6 +16623,16 @@
         }
       ],
       "killTimeSeconds": 811.2
+    },
+    {
+      "enrage": 22860,
+      "timeOfKill": 1778269560,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 592.2
     },
     {
       "enrage": 22860,
@@ -16746,6 +16766,16 @@
     },
     {
       "enrage": 22760,
+      "timeOfKill": 1778268900,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 518.4
+    },
+    {
+      "enrage": 22760,
       "timeOfKill": 1766461680,
       "members": [
         {
@@ -16876,6 +16906,16 @@
     },
     {
       "enrage": 22660,
+      "timeOfKill": 1778268120,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 507.6
+    },
+    {
+      "enrage": 22660,
       "timeOfKill": 1766276700,
       "members": [
         {
@@ -16993,6 +17033,16 @@
         }
       ],
       "killTimeSeconds": 738.60004
+    },
+    {
+      "enrage": 22560,
+      "timeOfKill": 1778267520,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 493.80002
     },
     {
       "enrage": 22560,
@@ -17126,6 +17176,16 @@
     },
     {
       "enrage": 22460,
+      "timeOfKill": 1778266320,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 481.80002
+    },
+    {
+      "enrage": 22460,
       "timeOfKill": 1766027040,
       "members": [
         {
@@ -17246,6 +17306,16 @@
     },
     {
       "enrage": 22360,
+      "timeOfKill": 1778265780,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 513.60004
+    },
+    {
+      "enrage": 22360,
       "timeOfKill": 1765953240,
       "members": [
         {
@@ -17363,6 +17433,16 @@
         }
       ],
       "killTimeSeconds": 718.2
+    },
+    {
+      "enrage": 22260,
+      "timeOfKill": 1778265060,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 540.0
     },
     {
       "enrage": 22260,
@@ -24116,6 +24196,16 @@
     },
     {
       "enrage": 19040,
+      "timeOfKill": 1778266852,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 768.60004
+    },
+    {
+      "enrage": 19040,
       "timeOfKill": 1777877460,
       "members": [
         {
@@ -24343,6 +24433,16 @@
         }
       ],
       "killTimeSeconds": 724.2
+    },
+    {
+      "enrage": 18940,
+      "timeOfKill": 1778264460,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 781.80005
     },
     {
       "enrage": 18940,
@@ -24586,6 +24686,16 @@
     },
     {
       "enrage": 18840,
+      "timeOfKill": 1778263560,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 781.2
+    },
+    {
+      "enrage": 18840,
       "timeOfKill": 1777870800,
       "members": [
         {
@@ -24823,6 +24933,16 @@
         }
       ],
       "killTimeSeconds": 857.4
+    },
+    {
+      "enrage": 18740,
+      "timeOfKill": 1778262660,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 750.60004
     },
     {
       "enrage": 18740,
@@ -42396,6 +42516,26 @@
     },
     {
       "enrage": 12710,
+      "timeOfKill": 1778268850,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 690.0
+    },
+    {
+      "enrage": 12710,
+      "timeOfKill": 1778268840,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 690.0
+    },
+    {
+      "enrage": 12710,
       "timeOfKill": 1765831740,
       "members": [
         {
@@ -42723,6 +42863,16 @@
         }
       ],
       "killTimeSeconds": 1429.8
+    },
+    {
+      "enrage": 12610,
+      "timeOfKill": 1778267940,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 642.0
     },
     {
       "enrage": 12610,
