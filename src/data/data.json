@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-11T14:06:24.888977+00:00",
-    "count": 10420
+    "generated_at": "2026-05-11T16:44:56.850151+00:00",
+    "count": 10426
   },
   "records": [
     {
@@ -17426,6 +17426,16 @@
     },
     {
       "enrage": 22440,
+      "timeOfKill": 1778517223,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 748.2
+    },
+    {
+      "enrage": 22440,
       "timeOfKill": 1778352321,
       "members": [
         {
@@ -17563,6 +17573,16 @@
         }
       ],
       "killTimeSeconds": 804.60004
+    },
+    {
+      "enrage": 22340,
+      "timeOfKill": 1778515020,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 759.0
     },
     {
       "enrage": 22340,
@@ -17716,6 +17736,16 @@
     },
     {
       "enrage": 22240,
+      "timeOfKill": 1778514180,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 781.2
+    },
+    {
+      "enrage": 22240,
       "timeOfKill": 1778337823,
       "members": [
         {
@@ -17856,6 +17886,16 @@
     },
     {
       "enrage": 22140,
+      "timeOfKill": 1778512200,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 766.2
+    },
+    {
+      "enrage": 22140,
       "timeOfKill": 1778337117,
       "members": [
         {
@@ -17993,6 +18033,16 @@
         }
       ],
       "killTimeSeconds": 884.4
+    },
+    {
+      "enrage": 22040,
+      "timeOfKill": 1778511360,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 753.60004
     },
     {
       "enrage": 22040,
@@ -18143,6 +18193,16 @@
         }
       ],
       "killTimeSeconds": 879.60004
+    },
+    {
+      "enrage": 21940,
+      "timeOfKill": 1778510280,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 757.80005
     },
     {
       "enrage": 21940,
