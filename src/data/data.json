@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-11T00:10:35.745663+00:00",
-    "count": 10412
+    "generated_at": "2026-05-11T04:39:10.535709+00:00",
+    "count": 10414
   },
   "records": [
     {
@@ -33173,6 +33173,26 @@
         }
       ],
       "killTimeSeconds": 739.2
+    },
+    {
+      "enrage": 15710,
+      "timeOfKill": 1778472842,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 720.60004
+    },
+    {
+      "enrage": 15710,
+      "timeOfKill": 1778472840,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 720.60004
     },
     {
       "enrage": 15710,
