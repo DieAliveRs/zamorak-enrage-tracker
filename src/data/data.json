@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-11T16:44:56.850151+00:00",
-    "count": 10426
+    "generated_at": "2026-05-11T18:30:13.932916+00:00",
+    "count": 10429
   },
   "records": [
     {
@@ -17136,6 +17136,16 @@
     },
     {
       "enrage": 22640,
+      "timeOfKill": 1778523566,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 753.60004
+    },
+    {
+      "enrage": 22640,
       "timeOfKill": 1778365380,
       "members": [
         {
@@ -17273,6 +17283,16 @@
         }
       ],
       "killTimeSeconds": 695.4
+    },
+    {
+      "enrage": 22540,
+      "timeOfKill": 1778522460,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 746.4
     },
     {
       "enrage": 22540,
@@ -32163,6 +32183,16 @@
         }
       ],
       "killTimeSeconds": 810.60004
+    },
+    {
+      "enrage": 16110,
+      "timeOfKill": 1778523945,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 768.0
     },
     {
       "enrage": 16110,
