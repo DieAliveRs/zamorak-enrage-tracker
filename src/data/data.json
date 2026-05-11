@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-10T22:10:32.678186+00:00",
-    "count": 10408
+    "generated_at": "2026-05-11T00:10:35.745663+00:00",
+    "count": 10412
   },
   "records": [
     {
@@ -16393,6 +16393,16 @@
         }
       ],
       "killTimeSeconds": 720.60004
+    },
+    {
+      "enrage": 23140,
+      "timeOfKill": 1778454797,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 704.4
     },
     {
       "enrage": 23140,
@@ -33426,6 +33436,26 @@
     },
     {
       "enrage": 15610,
+      "timeOfKill": 1778457415,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 677.4
+    },
+    {
+      "enrage": 15610,
+      "timeOfKill": 1778457360,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 677.4
+    },
+    {
+      "enrage": 15610,
       "timeOfKill": 1767679680,
       "members": [
         {
@@ -33693,6 +33723,16 @@
         }
       ],
       "killTimeSeconds": 892.2
+    },
+    {
+      "enrage": 15510,
+      "timeOfKill": 1778454480,
+      "members": [
+        {
+          "name": "RS Sparkles"
+        }
+      ],
+      "killTimeSeconds": 679.80005
     },
     {
       "enrage": 15510,
