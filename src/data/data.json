@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-12T08:03:17.332231+00:00",
-    "count": 10448
+    "generated_at": "2026-05-12T10:40:50.454733+00:00",
+    "count": 10452
   },
   "records": [
     {
@@ -13926,6 +13926,16 @@
     },
     {
       "enrage": 24860,
+      "timeOfKill": 1778581818,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 500.40002
+    },
+    {
+      "enrage": 24860,
       "timeOfKill": 1768851880,
       "members": [
         {
@@ -14076,6 +14086,16 @@
     },
     {
       "enrage": 24760,
+      "timeOfKill": 1778581200,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 555.60004
+    },
+    {
+      "enrage": 24760,
       "timeOfKill": 1768786980,
       "members": [
         {
@@ -14216,6 +14236,16 @@
     },
     {
       "enrage": 24660,
+      "timeOfKill": 1778580600,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 505.2
+    },
+    {
+      "enrage": 24660,
       "timeOfKill": 1768694940,
       "members": [
         {
@@ -14353,6 +14383,16 @@
         }
       ],
       "killTimeSeconds": 788.4
+    },
+    {
+      "enrage": 24560,
+      "timeOfKill": 1778580000,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 498.00003
     },
     {
       "enrage": 24560,
