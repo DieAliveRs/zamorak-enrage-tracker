@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-12T21:02:25.793557+00:00",
-    "count": 10475
+    "generated_at": "2026-05-12T22:21:18.375598+00:00",
+    "count": 10482
   },
   "records": [
     {
@@ -14466,6 +14466,16 @@
     },
     {
       "enrage": 24540,
+      "timeOfKill": 1778623856,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 777.60004
+    },
+    {
+      "enrage": 24540,
       "timeOfKill": 1768085622,
       "members": [
         {
@@ -14606,6 +14616,16 @@
     },
     {
       "enrage": 24440,
+      "timeOfKill": 1778622960,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 770.4
+    },
+    {
+      "enrage": 24440,
       "timeOfKill": 1767906420,
       "members": [
         {
@@ -14743,6 +14763,16 @@
         }
       ],
       "killTimeSeconds": 799.80005
+    },
+    {
+      "enrage": 24340,
+      "timeOfKill": 1778620680,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 762.60004
     },
     {
       "enrage": 24340,
@@ -31136,6 +31166,26 @@
     },
     {
       "enrage": 16650,
+      "timeOfKill": 1778623662,
+      "members": [
+        {
+          "name": "Sliske\u00a0Suck"
+        }
+      ],
+      "killTimeSeconds": 761.4
+    },
+    {
+      "enrage": 16650,
+      "timeOfKill": 1778623620,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 761.4
+    },
+    {
+      "enrage": 16650,
       "timeOfKill": 1768290218,
       "members": [
         {
@@ -31416,6 +31466,16 @@
     },
     {
       "enrage": 16550,
+      "timeOfKill": 1778622780,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 706.2
+    },
+    {
+      "enrage": 16550,
       "timeOfKill": 1768191960,
       "members": [
         {
@@ -31683,6 +31743,16 @@
         }
       ],
       "killTimeSeconds": 702.60004
+    },
+    {
+      "enrage": 16450,
+      "timeOfKill": 1778622000,
+      "members": [
+        {
+          "name": "Sliske Suck"
+        }
+      ],
+      "killTimeSeconds": 785.4
     },
     {
       "enrage": 16450,
