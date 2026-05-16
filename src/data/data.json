@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-16T01:22:26.785469+00:00",
-    "count": 10544
+    "generated_at": "2026-05-16T04:54:14.700123+00:00",
+    "count": 10545
   },
   "records": [
     {
@@ -29943,6 +29943,16 @@
         }
       ],
       "killTimeSeconds": 951.00006
+    },
+    {
+      "enrage": 17310,
+      "timeOfKill": 1778904528,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 682.80005
     },
     {
       "enrage": 17310,
