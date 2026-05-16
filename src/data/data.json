@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-16T10:36:26.939184+00:00",
-    "count": 10548
+    "generated_at": "2026-05-16T11:34:57.900000+00:00",
+    "count": 10549
   },
   "records": [
     {
@@ -7403,6 +7403,16 @@
         }
       ],
       "killTimeSeconds": 720.0
+    },
+    {
+      "enrage": 28840,
+      "timeOfKill": 1778927982,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 766.2
     },
     {
       "enrage": 28840,
