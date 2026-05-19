@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-19T04:36:50.616511+00:00",
-    "count": 10564
+    "generated_at": "2026-05-19T08:04:38.073441+00:00",
+    "count": 10567
   },
   "records": [
     {
@@ -6493,6 +6493,16 @@
         }
       ],
       "killTimeSeconds": 679.80005
+    },
+    {
+      "enrage": 29660,
+      "timeOfKill": 1779177540,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 509.40002
     },
     {
       "enrage": 29660,
@@ -29566,6 +29576,16 @@
     },
     {
       "enrage": 17510,
+      "timeOfKill": 1779168526,
+      "members": [
+        {
+          "name": "RS\u00a0Sparkles"
+        }
+      ],
+      "killTimeSeconds": 735.60004
+    },
+    {
+      "enrage": 17510,
       "timeOfKill": 1768796400,
       "members": [
         {
@@ -40173,6 +40193,16 @@
         }
       ],
       "killTimeSeconds": 1422.0
+    },
+    {
+      "enrage": 14100,
+      "timeOfKill": 1779175713,
+      "members": [
+        {
+          "name": "Tiny\u00a0Birbs"
+        }
+      ],
+      "killTimeSeconds": 631.80005
     },
     {
       "enrage": 14100,
