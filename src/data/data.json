@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-22T21:21:57.589053+00:00",
-    "count": 10594
+    "generated_at": "2026-05-22T22:34:22.017672+00:00",
+    "count": 10596
   },
   "records": [
     {
@@ -4403,6 +4403,16 @@
         }
       ],
       "killTimeSeconds": 769.2
+    },
+    {
+      "enrage": 38040,
+      "timeOfKill": 1779489137,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 807.00006
     },
     {
       "enrage": 38000,
@@ -36763,6 +36773,16 @@
         }
       ],
       "killTimeSeconds": 885.00006
+    },
+    {
+      "enrage": 15100,
+      "timeOfKill": 1779489220,
+      "members": [
+        {
+          "name": "Tiny\u00a0Birbs"
+        }
+      ],
+      "killTimeSeconds": 607.2
     },
     {
       "enrage": 15100,
