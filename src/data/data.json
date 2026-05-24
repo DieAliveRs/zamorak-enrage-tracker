@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-24T17:44:48.053501+00:00",
-    "count": 10608
+    "generated_at": "2026-05-24T18:53:10.143253+00:00",
+    "count": 10609
   },
   "records": [
     {
@@ -3920,6 +3920,16 @@
       "members": [
         {
           "name": "NoxiousMinds"
+        }
+      ],
+      "killTimeSeconds": 829.2
+    },
+    {
+      "enrage": 40440,
+      "timeOfKill": 1779648699,
+      "members": [
+        {
+          "name": "Draganothi"
         }
       ],
       "killTimeSeconds": 829.2
