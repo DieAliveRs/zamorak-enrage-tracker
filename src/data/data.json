@@ -1,9 +1,19 @@
 {
   "meta": {
-    "generated_at": "2026-05-24T23:29:06.103053+00:00",
-    "count": 10612
+    "generated_at": "2026-05-25T01:33:32.670668+00:00",
+    "count": 10613
   },
   "records": [
+    {
+      "enrage": 60000,
+      "timeOfKill": 1778736630,
+      "members": [
+        {
+          "name": "Nmber1throwr"
+        }
+      ],
+      "killTimeSeconds": 645.60004
+    },
     {
       "enrage": 60000,
       "timeOfKill": 1778239497,
