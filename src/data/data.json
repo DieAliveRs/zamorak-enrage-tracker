@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-05-30T20:39:46.629453+00:00",
-    "count": 10646
+    "generated_at": "2026-05-30T21:41:45.690769+00:00",
+    "count": 10648
   },
   "records": [
     {
@@ -2613,6 +2613,16 @@
         }
       ],
       "killTimeSeconds": 832.2
+    },
+    {
+      "enrage": 47040,
+      "timeOfKill": 1780175639,
+      "members": [
+        {
+          "name": "Draganothi"
+        }
+      ],
+      "killTimeSeconds": 859.2
     },
     {
       "enrage": 47000,
@@ -5703,6 +5713,16 @@
         }
       ],
       "killTimeSeconds": 720.60004
+    },
+    {
+      "enrage": 34060,
+      "timeOfKill": 1780175515,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 498.00003
     },
     {
       "enrage": 34040,
