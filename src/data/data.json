@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-06-04T21:01:49.793146+00:00",
-    "count": 10672
+    "generated_at": "2026-06-04T22:42:34.625472+00:00",
+    "count": 10673
   },
   "records": [
     {
@@ -24153,6 +24153,16 @@
         }
       ],
       "killTimeSeconds": 810.00006
+    },
+    {
+      "enrage": 20000,
+      "timeOfKill": 1780608464,
+      "members": [
+        {
+          "name": "Tiny\u00a0Birbs"
+        }
+      ],
+      "killTimeSeconds": 663.60004
     },
     {
       "enrage": 20000,
