@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-07-02T00:15:18.546094+00:00",
-    "count": 10734
+    "generated_at": "2026-07-02T04:33:34.587893+00:00",
+    "count": 10736
   },
   "records": [
     {
@@ -17013,6 +17013,16 @@
         }
       ],
       "killTimeSeconds": 775.2
+    },
+    {
+      "enrage": 24040,
+      "timeOfKill": 1782960405,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 720.60004
     },
     {
       "enrage": 24040,
@@ -35063,6 +35073,16 @@
         }
       ],
       "killTimeSeconds": 793.2
+    },
+    {
+      "enrage": 16000,
+      "timeOfKill": 1782953446,
+      "members": [
+        {
+          "name": "K\u00a0H\u00a0R\u00a0I\u00a0S"
+        }
+      ],
+      "killTimeSeconds": 717.0
     },
     {
       "enrage": 16000,
