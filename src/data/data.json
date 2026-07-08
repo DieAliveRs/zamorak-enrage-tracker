@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-07-08T11:27:54.575466+00:00",
-    "count": 10761
+    "generated_at": "2026-07-08T13:10:01.598900+00:00",
+    "count": 10762
   },
   "records": [
     {
@@ -15583,6 +15583,16 @@
         }
       ],
       "killTimeSeconds": 835.2
+    },
+    {
+      "enrage": 24940,
+      "timeOfKill": 1783513527,
+      "members": [
+        {
+          "name": "Lallelal"
+        }
+      ],
+      "killTimeSeconds": 685.80005
     },
     {
       "enrage": 24940,
