@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-07-08T04:28:31.053107+00:00",
-    "count": 10758
+    "generated_at": "2026-07-08T07:06:22.572740+00:00",
+    "count": 10760
   },
   "records": [
     {
@@ -26626,6 +26626,16 @@
     },
     {
       "enrage": 19200,
+      "timeOfKill": 1783488086,
+      "members": [
+        {
+          "name": "K\u00a0H\u00a0R\u00a0I\u00a0S"
+        }
+      ],
+      "killTimeSeconds": 679.80005
+    },
+    {
+      "enrage": 19200,
       "timeOfKill": 1780472649,
       "members": [
         {
@@ -46093,6 +46103,16 @@
         }
       ],
       "killTimeSeconds": 1396.8
+    },
+    {
+      "enrage": 12900,
+      "timeOfKill": 1783492727,
+      "members": [
+        {
+          "name": "Raw"
+        }
+      ],
+      "killTimeSeconds": 450.00003
     },
     {
       "enrage": 12900,
