@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-08-30T15:28:23.689872+00:00",
-    "count": 10894
+    "generated_at": "2026-08-30T18:45:42.968171+00:00",
+    "count": 10895
   },
   "records": [
     {
@@ -6373,6 +6373,16 @@
         }
       ],
       "killTimeSeconds": 744.60004
+    },
+    {
+      "enrage": 34360,
+      "timeOfKill": 1788104259,
+      "members": [
+        {
+          "name": "Sejearian"
+        }
+      ],
+      "killTimeSeconds": 525.0
     },
     {
       "enrage": 34340,
