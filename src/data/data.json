@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-09-19T13:19:13.286309+00:00",
-    "count": 10912
+    "generated_at": "2026-09-19T16:35:10.003462+00:00",
+    "count": 10913
   },
   "records": [
     {
@@ -16203,6 +16203,16 @@
         }
       ],
       "killTimeSeconds": 873.60004
+    },
+    {
+      "enrage": 25000,
+      "timeOfKill": 1789835186,
+      "members": [
+        {
+          "name": "K\u00a0H\u00a0R\u00a0I\u00a0S"
+        }
+      ],
+      "killTimeSeconds": 724.80005
     },
     {
       "enrage": 25000,
