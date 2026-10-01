@@ -1,9 +1,19 @@
 {
   "meta": {
-    "generated_at": "2026-10-01T05:38:49.911946+00:00",
-    "count": 10935
+    "generated_at": "2026-10-01T11:48:45.853843+00:00",
+    "count": 10937
   },
   "records": [
+    {
+      "enrage": 60000,
+      "timeOfKill": 1788030111,
+      "members": [
+        {
+          "name": "MindBoglins"
+        }
+      ],
+      "killTimeSeconds": 526.80005
+    },
     {
       "enrage": 60000,
       "timeOfKill": 1781369533,
@@ -16210,6 +16220,16 @@
       "members": [
         {
           "name": "K\u00a0H\u00a0R\u00a0I\u00a0S"
+        }
+      ],
+      "killTimeSeconds": 724.80005
+    },
+    {
+      "enrage": 25000,
+      "timeOfKill": 1789835186,
+      "members": [
+        {
+          "name": "Spooktopher"
         }
       ],
       "killTimeSeconds": 724.80005
