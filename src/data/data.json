@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-10-07T16:48:33.491456+00:00",
-    "count": 10944
+    "generated_at": "2026-10-07T21:38:48.127472+00:00",
+    "count": 10946
   },
   "records": [
     {
@@ -11036,6 +11036,16 @@
     },
     {
       "enrage": 27500,
+      "timeOfKill": 1791404771,
+      "members": [
+        {
+          "name": "Brunterfly"
+        }
+      ],
+      "killTimeSeconds": 519.0
+    },
+    {
+      "enrage": 27500,
       "timeOfKill": 1777206180,
       "members": [
         {
@@ -15533,6 +15543,16 @@
         }
       ],
       "killTimeSeconds": 765.60004
+    },
+    {
+      "enrage": 25400,
+      "timeOfKill": 1791401458,
+      "members": [
+        {
+          "name": "Spooktopher"
+        }
+      ],
+      "killTimeSeconds": 758.4
     },
     {
       "enrage": 25400,
