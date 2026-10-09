@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-10-08T20:32:56.418931+00:00",
-    "count": 10948
+    "generated_at": "2026-10-09T00:38:02.939075+00:00",
+    "count": 10949
   },
   "records": [
     {
@@ -10043,6 +10043,16 @@
         }
       ],
       "killTimeSeconds": 722.4
+    },
+    {
+      "enrage": 28200,
+      "timeOfKill": 1791492778,
+      "members": [
+        {
+          "name": "Brunterfly"
+        }
+      ],
+      "killTimeSeconds": 538.80005
     },
     {
       "enrage": 28200,
