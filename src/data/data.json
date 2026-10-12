@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-10-11T22:47:18.354822+00:00",
-    "count": 10957
+    "generated_at": "2026-10-12T01:50:42.259657+00:00",
+    "count": 10958
   },
   "records": [
     {
@@ -10653,6 +10653,16 @@
         }
       ],
       "killTimeSeconds": 697.80005
+    },
+    {
+      "enrage": 27800,
+      "timeOfKill": 1791769065,
+      "members": [
+        {
+          "name": "Raw"
+        }
+      ],
+      "killTimeSeconds": 510.6
     },
     {
       "enrage": 27800,
