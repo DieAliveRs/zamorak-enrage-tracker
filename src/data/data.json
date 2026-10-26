@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-10-26T17:26:44.562993+00:00",
-    "count": 10978
+    "generated_at": "2026-10-26T21:47:19.695841+00:00",
+    "count": 10980
   },
   "records": [
     {
@@ -7096,6 +7096,16 @@
     },
     {
       "enrage": 32100,
+      "timeOfKill": 1793041797,
+      "members": [
+        {
+          "name": "Brunterfly"
+        }
+      ],
+      "killTimeSeconds": 544.2
+    },
+    {
+      "enrage": 32100,
       "timeOfKill": 1777337042,
       "members": [
         {
@@ -9800,6 +9810,16 @@
       "members": [
         {
           "name": "dyanne"
+        }
+      ],
+      "killTimeSeconds": 970.80005
+    },
+    {
+      "enrage": 28500,
+      "timeOfKill": 1792900736,
+      "members": [
+        {
+          "name": "Dyanne"
         }
       ],
       "killTimeSeconds": 970.80005
