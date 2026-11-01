@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-01T00:50:04.010507+00:00",
-    "count": 10985
+    "generated_at": "2026-11-01T06:57:25.536991+00:00",
+    "count": 10986
   },
   "records": [
     {
@@ -13580,6 +13580,16 @@
       "members": [
         {
           "name": "Spooktopher"
+        }
+      ],
+      "killTimeSeconds": 842.4
+    },
+    {
+      "enrage": 26500,
+      "timeOfKill": 1793079078,
+      "members": [
+        {
+          "name": "K\u00a0H\u00a0R\u00a0I\u00a0S"
         }
       ],
       "killTimeSeconds": 842.4
