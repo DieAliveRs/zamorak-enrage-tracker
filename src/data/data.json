@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-07T16:17:24.491944+00:00",
-    "count": 10993
+    "generated_at": "2026-11-07T20:18:38.306358+00:00",
+    "count": 10994
   },
   "records": [
     {
@@ -5873,6 +5873,16 @@
         }
       ],
       "killTimeSeconds": 771.00006
+    },
+    {
+      "enrage": 36300,
+      "timeOfKill": 1794079873,
+      "members": [
+        {
+          "name": "Brunn"
+        }
+      ],
+      "killTimeSeconds": 566.4
     },
     {
       "enrage": 36300,
