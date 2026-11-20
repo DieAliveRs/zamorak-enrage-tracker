@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated_at": "2026-11-19T23:51:43.254605+00:00",
-    "count": 11010
+    "generated_at": "2026-11-20T06:15:49.737396+00:00",
+    "count": 11012
   },
   "records": [
     {
@@ -4703,6 +4703,16 @@
         }
       ],
       "killTimeSeconds": 785.4
+    },
+    {
+      "enrage": 40500,
+      "timeOfKill": 1795141451,
+      "members": [
+        {
+          "name": "Brunn"
+        }
+      ],
+      "killTimeSeconds": 573.60004
     },
     {
       "enrage": 40500,
@@ -12583,6 +12593,16 @@
         }
       ],
       "killTimeSeconds": 720.60004
+    },
+    {
+      "enrage": 27000,
+      "timeOfKill": 1795141463,
+      "members": [
+        {
+          "name": "K\u00a0H\u00a0R\u00a0I\u00a0S"
+        }
+      ],
+      "killTimeSeconds": 727.2
     },
     {
       "enrage": 27000,
